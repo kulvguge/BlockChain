@@ -11,4 +11,9 @@
         <attr name="ltext" format="string"></attr>
         <attr name="rtext" format="string"></attr>
     </declare-styleable>
+    <declare-styleable name="CommonInfoView">
+        <attr name="l_icon" format="reference"></attr>
+        <attr name="r_icon" format="reference"></attr>
+        <attr name="c_txt" format="string"></attr>
+    </declare-styleable>
 </resources>

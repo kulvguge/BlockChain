@@ -3,6 +3,7 @@ package block.com.blockchain;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import block.com.blockchain.activity.BaseActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

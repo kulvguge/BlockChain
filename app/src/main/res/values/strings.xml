@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">BlockChain</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <!--首页-->
+    <string name="title_home">首页</string>
+    <string name="title_friend">好友列表</string>
+    <string name="title_info">个人中心</string>
+    <string name="title_help">帮助</string>
 
     <!--PersonalActivity-->
     <string name="person_nick_name">昵称</string>
@@ -12,4 +15,11 @@
     <string name="person_birthday">生日</string>
     <string name="person_work">单位</string>
     <string name="person_signature">个性签名</string>
+
+
+    <!--Login-->
+    <string name="login_phone">输入手机号</string>
+    <string name="login_psd">输入密码</string>
+    <string name="login_psd_agin">再次输入密码</string>
+    <string name="login_code">输入验证码</string>
 </resources>
