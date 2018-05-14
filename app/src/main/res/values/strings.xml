@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">BlockChain</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!--PersonalActivity-->
+    <string name="person_nick_name">昵称</string>
+    <string name="person_name">真实姓名</string>
+    <string name="person_phone">手机号码</string>
+    <string name="person_sex">性别</string>
+    <string name="person_birthday">生日</string>
+    <string name="person_work">单位</string>
+    <string name="person_signature">个性签名</string>
+</resources>
