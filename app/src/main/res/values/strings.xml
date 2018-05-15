@@ -36,4 +36,9 @@
     <string name="mine_motify">修改个人信息</string>
     <!--friendFragment-->
     <string name="friend_list">好友列表</string>
+    <!--MessageCenterActivity-->
+    <string name="msg_title">消息中心</string>
+    <string name="msg_new_friend">新的朋友</string>
+    <string name="msg_permit">同意</string>
+    <string name="msg_has_permit">已同意</string>
 </resources>
