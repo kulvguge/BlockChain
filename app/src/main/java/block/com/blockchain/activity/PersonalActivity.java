@@ -16,6 +16,7 @@ public class PersonalActivity extends BaseActivity {
     @BindView(R.id.person_nick_name)
     TextView personNickName;
     @BindView(R.id.person_name)
+
     BasicInfoView personName;
     @BindView(R.id.person_phone)
     BasicInfoView personPhone;
