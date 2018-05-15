@@ -1,5 +1,6 @@
 package block.com.blockchain.activity;
 
+
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,10 +13,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by ts on 2018/5/15.
+ * Created by ts on 2018/5/12.
  */
 
-public class LoginActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
     @BindView(R.id.phone)
     TextInputEditText phone;
     @BindView(R.id.phone_layout)
@@ -24,31 +25,38 @@ public class LoginActivity extends BaseActivity {
     TextInputEditText psd;
     @BindView(R.id.psd_layout)
     TextInputLayout psdLayout;
-    @BindView(R.id.login)
-    TextView login;
-    @BindView(R.id.change_to_reg)
-    TextView to_reg;
+    @BindView(R.id.psd_again)
+    TextInputEditText psdAgain;
+    @BindView(R.id.psd_again_layout)
+    TextInputLayout psdAgainLayout;
+    @BindView(R.id.code)
+    TextInputEditText code;
+    @BindView(R.id.code_layout)
+    TextInputLayout codeLayout;
+    @BindView(R.id.time)
+    TextView timeBtn;
+    @BindView(R.id.change_to_login)
+    TextView tologin;
 
     @Override
     public void init() {
-        setContentView(R.layout.activity_login);
+        super.init();
+        setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.change_to_reg, R.id.login})
+    @OnClick({R.id.register, R.id.change_to_login})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.change_to_reg:
-                intent = new Intent(this, RegisterActivity.class);
-                startActivity(intent);
-
+                intent = new Intent(this, MainActivity.class);
                 break;
             case R.id.login:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                intent = new Intent(this, LoginActivity.class);
                 break;
         }
-
+        startActivity(intent);
+        finish();
     }
 }

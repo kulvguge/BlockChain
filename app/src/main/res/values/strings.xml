@@ -16,10 +16,24 @@
     <string name="person_work">单位</string>
     <string name="person_signature">个性签名</string>
 
-
-    <!--Login-->
-    <string name="login_phone">输入手机号</string>
+    <!--RegisterActivity-->
+    <string name="register_phone">输入手机号</string>
+    <string name="register_psd">输入密码</string>
+    <string name="register_psd_agin">再次输入密码</string>
+    <string name="register_code">输入验证码</string>
+    <string name="register_now">立即注册</string>
+    <string name="register_get_code">获取验证码</string>
+    <string name="register_to_login">登录</string>
+    <!--LoginActivity-->
+    <string name="login_phone">输入手机号/账号</string>
     <string name="login_psd">输入密码</string>
-    <string name="login_psd_agin">再次输入密码</string>
-    <string name="login_code">输入验证码</string>
+    <string name="login_now">立即登录</string>
+    <string name="login_to_reg">注册</string>
+    <!--personFragment-->
+    <string name="mine_title">我的</string>
+    <string name="mine_work">技术岗位</string>
+    <string name="mine_qr">点击二维码获取邀请码</string>
+    <string name="mine_motify">修改个人信息</string>
+    <!--friendFragment-->
+    <string name="friend_list">好友列表</string>
 </resources>

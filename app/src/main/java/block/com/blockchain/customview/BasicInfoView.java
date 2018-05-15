@@ -1,4 +1,4 @@
-package block.com.blockchain;
+package block.com.blockchain.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import block.com.blockchain.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

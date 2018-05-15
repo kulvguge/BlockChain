@@ -7,4 +7,8 @@
 
     <!--分割线颜色-->
     <color name="grayLine">#E0E0E0</color>
+
+    <color name="blue">#00AAFF</color>
+    <color name="gray">#BABABC</color>
+
 </resources>

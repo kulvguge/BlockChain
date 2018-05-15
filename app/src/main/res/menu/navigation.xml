@@ -3,20 +3,20 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@mipmap/icon_gg_wsq"
+        android:icon="@mipmap/home"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_friend"
-        android:icon="@mipmap/group22x"
+        android:icon="@mipmap/friend"
         android:title="@string/title_friend" />
 
     <item
         android:id="@+id/navigation_info"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@mipmap/person"
         android:title="@string/title_info" />
     <item
         android:id="@+id/navigation_help"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@mipmap/help"
         android:title="@string/title_help" />
 </menu>

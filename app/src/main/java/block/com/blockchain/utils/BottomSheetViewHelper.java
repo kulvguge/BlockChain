@@ -48,8 +48,8 @@ public class BottomSheetViewHelper {
                 new int[]{android.R.attr.state_checked}
         };
 
-        int[] colors = new int[]{context.getResources().getColor(R.color.colorAccent),
-                context.getResources().getColor(R.color.colorPrimary)
+        int[] colors = new int[]{context.getResources().getColor(R.color.gray),
+                context.getResources().getColor(R.color.blue)
         };
         ColorStateList csl = new ColorStateList(states, colors);
         boo.setItemTextColor(csl);

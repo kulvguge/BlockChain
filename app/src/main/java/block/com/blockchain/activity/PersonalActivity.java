@@ -1,9 +1,10 @@
-package block.com.blockchain;
+package block.com.blockchain.activity;
 
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-import block.com.blockchain.activity.BaseActivity;
+import block.com.blockchain.R;
+import block.com.blockchain.customview.BasicInfoView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

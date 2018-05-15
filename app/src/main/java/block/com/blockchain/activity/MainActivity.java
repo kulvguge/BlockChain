@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity {
         list.add(new HelpFragment());
         adapter=new FragmentViewPagerAdapter(manager,list);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
 
     }
 }
