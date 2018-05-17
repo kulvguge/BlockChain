@@ -3,9 +3,10 @@
 
     <item
         android:id="@+id/navigation_more"
-        android:icon="@mipmap/home"
+        android:icon="@mipmap/login_out"
         app:showAsAction="always"
-        android:title="@string/title_home" />
+        android:title=""
+       />
 
 
 </menu>

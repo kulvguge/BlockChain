@@ -7,13 +7,13 @@
         android:id="@+id/action_search"
         android:icon="@mipmap/search"
         android:orderInCategory="100"
-        android:title="settings"
+        android:title=""
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_share"
+        android:id="@+id/action_msg_center"
         android:icon="@mipmap/message"
         android:orderInCategory="100"
-        android:title="cc"
+        android:title=""
         app:showAsAction="ifRoom"/>
 </menu>
 

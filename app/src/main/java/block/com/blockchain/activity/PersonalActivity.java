@@ -9,14 +9,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2018/5/14.
+ * Created by ts on 2018/5/14.
  */
 
 public class PersonalActivity extends BaseActivity {
     @BindView(R.id.person_nick_name)
     TextView personNickName;
     @BindView(R.id.person_name)
-
     BasicInfoView personName;
     @BindView(R.id.person_phone)
     BasicInfoView personPhone;
@@ -35,6 +34,5 @@ public class PersonalActivity extends BaseActivity {
     public void init() {
         setContentView(R.layout.activity_personal);
         ButterKnife.bind(this);
-
     }
 }

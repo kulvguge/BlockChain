@@ -4,10 +4,19 @@ package block.com.blockchain.activity;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import block.com.blockchain.R;
+import block.com.blockchain.bean.ResultInfo;
+import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.customview.TimeButton;
+import block.com.blockchain.request.NetWork;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,9 +43,10 @@ public class RegisterActivity extends BaseActivity {
     @BindView(R.id.code_layout)
     TextInputLayout codeLayout;
     @BindView(R.id.time)
-    TextView timeBtn;
+    TimeButton timeBtn;
     @BindView(R.id.change_to_login)
     TextView tologin;
+    private Intent intent = null;
 
     @Override
     public void init() {
@@ -45,18 +55,96 @@ public class RegisterActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.register, R.id.change_to_login})
+    @OnClick({R.id.register, R.id.change_to_login, R.id.time})
     public void onClick(View view) {
-        Intent intent = null;
+
         switch (view.getId()) {
-            case R.id.change_to_reg:
-                intent = new Intent(this, MainActivity.class);
-                break;
-            case R.id.login:
+            case R.id.register:
+                if (hasComplete())
+
+                    break;
+            case R.id.change_to_login:
                 intent = new Intent(this, LoginActivity.class);
                 break;
+            case R.id.time:
+                if (TextUtils.isEmpty(phone.getText().toString())) {
+                    phoneLayout.setErrorEnabled(true);
+                    phoneLayout.setError(this.getResources().getString(R.string.warn_phone));
+                    return;
+                } else {
+                    phoneLayout.setErrorEnabled(false);
+                }
+                NetWork.ApiSubscribe(NetWork.getRequestApi().getMsgCode(1, phone.getText().toString()), observer);
+                return;
         }
         startActivity(intent);
         finish();
     }
+
+    /**
+     * 信息完整性检查
+     */
+    private boolean hasComplete() {
+        if (TextUtils.isEmpty(phone.getText().toString())) {
+            phoneLayout.setErrorEnabled(true);
+            phoneLayout.setError(this.getResources().getString(R.string.warn_phone));
+            return false;
+        } else {
+            phoneLayout.setErrorEnabled(false);
+        }
+        if (TextUtils.isEmpty(psd.getText().toString())) {
+            psdLayout.setErrorEnabled(true);
+            psdLayout.setError(this.getResources().getString(R.string.warn_psd));
+            return false;
+        } else {
+            psdLayout.setErrorEnabled(false);
+        }
+        if (TextUtils.isEmpty(psdAgain.getText().toString())) {
+            psdAgainLayout.setErrorEnabled(true);
+            psdAgainLayout.setError(this.getResources().getString(R.string.warn_psd_agin));
+            return false;
+        } else {
+            psdAgainLayout.setErrorEnabled(false);
+        }
+        if (TextUtils.isEmpty(code.getText().toString())) {
+            codeLayout.setErrorEnabled(true);
+            codeLayout.setError(this.getResources().getString(R.string.warn_code));
+            return false;
+        } else {
+            codeLayout.setErrorEnabled(false);
+        }
+        if (!psd.getText().toString().equals(psdAgain.getText().toString())) {
+            psdAgainLayout.setErrorEnabled(true);
+            psdAgainLayout.setError(this.getResources().getString(R.string.warn_no_same));
+            return false;
+        } else {
+            psdAgainLayout.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    Subscriber<ResultInfo<UserBean>> observer = new Subscriber<ResultInfo<UserBean>>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(ResultInfo<UserBean> resultInfo) {
+
+            intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
 }

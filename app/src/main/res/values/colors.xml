@@ -4,11 +4,15 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
-
+    <color name="black">#000000</color>
     <!--分割线颜色-->
     <color name="grayLine">#E0E0E0</color>
 
     <color name="blue">#00AAFF</color>
     <color name="gray">#BABABC</color>
-
+    <color name="no_color">#00000000</color>
+    <color name="dialog_titile">#3C3C3C</color>
+    <color name="dialog_content">#666666</color>
+    <color name="dialog_btn">#3E332C</color>
+    <color name="text_color">#757575</color>
 </resources>

@@ -3,10 +3,18 @@ package block.com.blockchain.activity;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import block.com.blockchain.R;
+import block.com.blockchain.bean.ResultInfo;
+import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.request.NetWork;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +36,7 @@ public class LoginActivity extends BaseActivity {
     TextView login;
     @BindView(R.id.change_to_reg)
     TextView to_reg;
+    private Intent intent = null;
 
     @Override
     public void init() {
@@ -37,18 +46,60 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick({R.id.change_to_reg, R.id.login})
     public void onClick(View view) {
-        Intent intent = null;
+
         switch (view.getId()) {
             case R.id.change_to_reg:
+
                 intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
 
                 break;
             case R.id.login:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                if (TextUtils.isEmpty(phone.getText().toString())) {
+                    phoneLayout.setErrorEnabled(true);
+                    phoneLayout.setError(this.getResources().getString(R.string.warn_phone));
+                    return;
+                } else {
+                    phoneLayout.setErrorEnabled(false);
+                }
+                if (TextUtils.isEmpty(psd.getText().toString())) {
+                    psdLayout.setErrorEnabled(true);
+                    psdLayout.setError(this.getResources().getString(R.string.warn_psd));
+                    return;
+                } else {
+                    psdLayout.setErrorEnabled(false);
+                }
+                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
+                                .toString()),
+                        observer);
+
                 break;
         }
 
     }
+
+    Subscriber<ResultInfo<UserBean>> observer = new Subscriber<ResultInfo<UserBean>>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(ResultInfo<UserBean> resultInfo) {
+
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
 }

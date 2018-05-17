@@ -6,4 +6,6 @@
     <dimen name="bladeview_popup_height">80dp</dimen>
     <dimen name="bladeview_fontsize">12sp</dimen>
     <dimen name="bladeview_popup_fontsize">15sp</dimen>
+    <dimen name="divider_height">1sp</dimen>
+
 </resources>

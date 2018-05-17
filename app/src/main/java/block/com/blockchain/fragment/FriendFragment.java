@@ -1,12 +1,12 @@
 package block.com.blockchain.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.activity.MessageCenterActivity;
 import block.com.blockchain.bean.PersonaBean;
 import block.com.blockchain.mainpage.LetterAdapter;
 import block.com.blockchain.utils.GroupUtils;
@@ -53,7 +54,15 @@ public class FriendFragment extends BaseFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                switch (item.getItemId()) {
+                    case R.id.action_search:
+                        break;
+                    case R.id.action_msg_center:
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), MessageCenterActivity.class);
+                        startActivity(intent);
+                        break;
+                }
                 return false;
             }
         });

@@ -54,7 +54,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/help"/>
+                android:src="@mipmap/right_gray_arrow"/>
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
@@ -108,23 +108,27 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:c_txt="110"
+        app:r_icon="@mipmap/right_gray_arrow"
         app:l_icon="@mipmap/phone"/>
     <block.com.blockchain.customview.CommonInfoView
         android:id="@+id/layout_work"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:r_icon="@mipmap/right_gray_arrow"
         app:c_txt="技术岗位"
         app:l_icon="@mipmap/work"/>
     <block.com.blockchain.customview.CommonInfoView
         android:id="@+id/layout_qrcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:r_icon="@mipmap/qr_little"
         app:c_txt="点击二维码获取邀请码"
         app:l_icon="@mipmap/qr"/>
     <block.com.blockchain.customview.CommonInfoView
         android:id="@+id/layout_motify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:r_icon="@mipmap/right_gray_arrow"
         app:c_txt="修改个人信息"
         app:l_icon="@mipmap/motify"/>
 </LinearLayout>

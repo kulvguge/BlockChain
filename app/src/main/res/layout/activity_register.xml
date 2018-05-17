@@ -1,144 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<ScrollView -->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical"-->
-<!--&gt;-->
+<ScrollView
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+<LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/logo"/>
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/phone_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:counterMaxLength="11">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/phone"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:drawableLeft="@mipmap/register_user"
-                android:drawablePadding="10dp"
-                android:hint="@string/register_phone"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="14sp"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/psd_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/psd"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-
-                android:drawableLeft="@mipmap/register_psd"
-                android:drawablePadding="10dp"
-                android:hint="@string/register_psd"
-                android:paddingLeft="10dp"
-                android:inputType="textPassword"
-                android:paddingRight="10dp"
-                android:textSize="14sp"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/psd_again_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-
-            android:layout_marginRight="16dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/psd_again"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:drawableLeft="@mipmap/register_psd"
-                android:drawablePadding="10dp"
-                android:inputType="textPassword"
-                android:hint="@string/register_psd_agin"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="14sp"/>
-        </android.support.design.widget.TextInputLayout>
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp">
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/code_layout"
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/code"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:drawableLeft="@mipmap/register_code"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/register_code"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textSize="14sp"/>
-            </android.support.design.widget.TextInputLayout>
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="100dp"
-                android:layout_height="35dp"
-                android:layout_alignParentRight="true"
-
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/btn_common_round_stroke_blue"
-                android:gravity="center"
-                android:textColor="@color/blue"
-                android:text="@string/register_get_code"/>
-        </RelativeLayout>
-        <TextView
-            android:id="@+id/register"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:gravity="center"
-            android:background="@drawable/btn_common_round_blue"
-            android:text="@string/register_now"
-            android:textColor="@color/white"
-            android:layout_height="55dp"/>
-        <View android:layout_width="wrap_content" android:layout_height="0dp"
-        android:layout_weight="1"></View>
-        <TextView
-            android:id="@+id/change_to_login"
-            android:layout_gravity="center_horizontal"
+        android:layout_height="200dp"
+        android:gravity="center">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_common_round_stroke_blue"
-            android:paddingBottom="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="10dp"
-            android:text="@string/register_to_login"
-            android:textColor="@color/blue"
-            android:textSize="14sp"/>
+            android:src="@mipmap/logo"/>
     </LinearLayout>
-<!--</ScrollView>-->
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/phone_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:counterMaxLength="11">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:drawableLeft="@mipmap/register_user"
+            android:drawablePadding="10dp"
+            android:hint="@string/register_phone"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="14sp"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/psd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/psd"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+
+            android:drawableLeft="@mipmap/register_psd"
+            android:drawablePadding="10dp"
+            android:hint="@string/register_psd"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="14sp"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/psd_again_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+
+        android:layout_marginRight="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/psd_again"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:drawableLeft="@mipmap/register_psd"
+            android:drawablePadding="10dp"
+            android:hint="@string/register_psd_agin"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="14sp"/>
+    </android.support.design.widget.TextInputLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/code_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:drawableLeft="@mipmap/register_code"
+                android:drawablePadding="10dp"
+                android:hint="@string/register_code"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="14sp"/>
+        </android.support.design.widget.TextInputLayout>
+        <block.com.blockchain.customview.TimeButton
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textColor="@color/blue"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_common_round_blue"
+        android:gravity="center"
+        android:text="@string/register_now"
+        android:textColor="@color/white"/>
+    <View android:layout_width="wrap_content" android:layout_height="0dp"
+          android:layout_weight="1"></View>
+    <TextView
+        android:id="@+id/change_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btn_common_round_stroke_blue"
+        android:paddingBottom="10dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/register_to_login"
+        android:textColor="@color/blue"
+        android:textSize="14sp"/>
+</LinearLayout>
+    </ScrollView>
