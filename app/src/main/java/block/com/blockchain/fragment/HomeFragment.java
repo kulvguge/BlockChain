@@ -81,8 +81,8 @@ public class HomeFragment extends BaseFragment {
             RelativeLayout.LayoutParams marginLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams
                     .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             baseX = i * averageArea + averageArea / 2 + random.nextInt(waveArea);
-            if(width-baseX<100){
-                baseX=width-100;
+            if(width-baseX<200){
+                baseX=width-200;
             }
             baseY = height / 2 + random.nextInt(height / 4);
             marginLayoutParams.leftMargin = baseX;
@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment {
 //            });
 //            textView.setOnClickListener(this);
             cc.addView(textView, marginLayoutParams);
-            cc(textView, i * 200 + 100);
+            cc(textView, i);
         }
     }
 
@@ -122,9 +122,9 @@ public class HomeFragment extends BaseFragment {
         PropertyValuesHolder propertyValuesHolder = PropertyValuesHolder.ofFloat("translationY", 0f, -40);
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(view, propertyValuesHolder);
-        objectAnimator.setDuration(1000);
+        objectAnimator.setDuration(1000+i*100);
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        objectAnimator.setRepeatCount(1000);
+        objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
         objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
         objectAnimator.start();
     }

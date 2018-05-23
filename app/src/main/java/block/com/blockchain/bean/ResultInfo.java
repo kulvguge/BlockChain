@@ -7,5 +7,5 @@ package block.com.blockchain.bean;
 public class ResultInfo<T> {
     public T data;
     public String message;
-    public int status;
+    public String  status;
 }

@@ -13,6 +13,8 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import block.com.blockchain.R;
+import block.com.blockchain.bean.BaseBean;
+import block.com.blockchain.bean.CodeBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.TimeButton;
@@ -61,7 +63,7 @@ public class RegisterActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.register:
                 if (hasComplete())
-
+                    NetWork.ApiSubscribe(NetWork.getRequestApi().register(phone.getText().toString(),code.getText().toString(),"",psd.getText().toString(),psdAgain.getText().toString()), registerObserver);
                     break;
             case R.id.change_to_login:
                 intent = new Intent(this, LoginActivity.class);
@@ -123,7 +125,29 @@ public class RegisterActivity extends BaseActivity {
         return true;
     }
 
-    Subscriber<ResultInfo<UserBean>> observer = new Subscriber<ResultInfo<UserBean>>() {
+    Subscriber<ResultInfo<CodeBean>> observer = new Subscriber<ResultInfo<CodeBean>>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(ResultInfo<CodeBean> resultInfo) {
+            Toast.makeText(RegisterActivity.this,getResources().getString(R.string.register_has_send_code), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+
+    Subscriber<ResultInfo<UserBean>> registerObserver = new Subscriber<ResultInfo<UserBean>>() {
         @Override
         public void onSubscribe(Subscription s) {
             s.request(1);
@@ -131,10 +155,14 @@ public class RegisterActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<UserBean> resultInfo) {
+                  if(resultInfo.status.equals("success")){
+                      intent = new Intent(RegisterActivity.this, MainActivity.class);
+                      startActivity(intent);
+                      finish();
+                  }else{
+                      Toast.makeText(RegisterActivity.this,resultInfo.message, Toast.LENGTH_SHORT).show();
+                  }
 
-            intent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
         }
 
         @Override

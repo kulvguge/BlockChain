@@ -64,7 +64,7 @@ public class BladeView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (showBkg) {
-            canvas.drawColor(Color.parseColor("#FFFFFF"));
+            canvas.drawColor(Color.parseColor("#00FFFFFF"));
         }
 
         int height = getHeight();
@@ -83,16 +83,16 @@ public class BladeView extends View {
                 paint.setColor(Color.parseColor("#3399ff"));
             }
 
-            if (i == 0) {
-                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_location_navigation);
-                float xPos = width / 2 - bmp.getWidth() / 2;
-                float yPos = 0;
-                canvas.drawBitmap(bmp, xPos, yPos, paint);
-            } else {
+//            if (i == 0) {
+//                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_location_navigation);
+//                float xPos = width / 2 - bmp.getWidth() / 2;
+//                float yPos = 0;
+//                canvas.drawBitmap(bmp, xPos, yPos, paint);
+//            } else {
                 float xPos = width / 2 - paint.measureText(b[i]) / 2;
                 float yPos = singleHeight * i + singleHeight;
                 canvas.drawText(b[i], xPos, yPos, paint);
-            }
+      //      }
 
             paint.reset();
         }

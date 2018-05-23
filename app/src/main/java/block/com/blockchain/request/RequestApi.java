@@ -1,6 +1,8 @@
 package block.com.blockchain.request;
 
+import block.com.blockchain.bean.BaseBean;
 import block.com.blockchain.bean.MessageBean;
+import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -24,7 +26,7 @@ public interface RequestApi {
      */
     @FormUrlEncoded
     @POST("sms")
-    Flowable<MessageBean> getMsgCode(@Field("type") int type, @Field("mobile") String mobile);
+    Flowable<ResultInfo<BaseBean>> getMsgCode(@Field("type") int type, @Field("mobile") String mobile);
 
     /**
      * 注册接口
@@ -38,7 +40,7 @@ public interface RequestApi {
      */
     @FormUrlEncoded
     @POST("register")
-    Observable<MessageBean> register(@Field("mobile") String mobile, @Field("valid_code") String valid_code, @Field
+    Flowable<ResultInfo<UserBean>> register(@Field("mobile") String mobile, @Field("valid_code") String valid_code, @Field
             ("invite_code") String invite_code, @Field("pwd") String pwd, @Field("pwd_confirmation") String
                                              pwd_confirmation);
 

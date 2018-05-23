@@ -6,5 +6,5 @@ package block.com.blockchain.request;
 
 public class HttpConstant {
 
-    public static final String HTTPHOST="http://localhost/";
+    public static final String HTTPHOST="https://dapp.goldcavetech.com/api/";
 }
