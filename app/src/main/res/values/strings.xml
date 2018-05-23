@@ -14,6 +14,8 @@
     <string name="person_sex">性别</string>
     <string name="person_birthday">生日</string>
     <string name="person_work">单位</string>
+    <string name="person_sex_man">男</string>
+    <string name="person_sex_woman">女</string>
     <string name="person_signature">个性签名</string>
 
     <!--RegisterActivity-->

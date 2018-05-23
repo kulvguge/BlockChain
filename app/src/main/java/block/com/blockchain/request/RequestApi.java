@@ -95,7 +95,7 @@ public interface RequestApi {
      * @return
      */
     @GET("user/info")
-    Observable<MessageBean> queryUserInfo(@Field("type") int type, @Field("mobile") String mobile, @Field
+    Flowable<MessageBean> queryUserInfo(@Field("type") int type, @Field("mobile") String mobile, @Field
             ("Authorization") String Authorization);
 
     /**

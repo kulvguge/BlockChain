@@ -19,11 +19,15 @@
         >
             <RelativeLayout android:layout_width="match_parent"
                             android:layout_height="320dp">
-                <ImageView android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/big_img"
+                    android:layout_width="match_parent"
                            android:layout_height="275dp"
                            android:scaleType="centerCrop"
                            android:src="@mipmap/ic_launcher"/>
-                <ImageView android:layout_width="100dp"
+                <ImageView
+                    android:id="@+id/small_img"
+                    android:layout_width="100dp"
                            android:layout_height="100dp"
                            android:layout_alignParentBottom="true"
                            android:layout_centerHorizontal="true"

@@ -3,6 +3,7 @@ package block.com.blockchain.customview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,5 +54,11 @@ public class BasicInfoView extends LinearLayout {
         if (typedArray != null)
             typedArray.recycle();
         addView(view);
+    }
+    public void setRightMsg(String msg){
+        rightMsg.setText(msg);
+    }
+    public void setRightMsg(@StringRes int  msg){
+        rightMsg.setText(msg);
     }
 }
