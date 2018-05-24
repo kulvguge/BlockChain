@@ -14,7 +14,9 @@ import block.com.blockchain.R;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.BasicInfoView;
+import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.NetWork;
+import block.com.blockchain.utils.SPUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

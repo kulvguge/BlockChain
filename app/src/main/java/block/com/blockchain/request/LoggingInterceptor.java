@@ -27,7 +27,13 @@ public class LoggingInterceptor implements Interceptor {
         //这个chain里面包含了request和response，所以你要什么都可以从这里拿
         //=========发送===========
         Request request = chain.request();
-
+        Request.Builder builder = request.newBuilder();
+        builder.addHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Accept-Encoding","gzip, deflate")
+                .addHeader("Connection","keep-alive")
+                .addHeader("Accept","*/*")
+                .addHeader("X-HB-Client-Type","ayb-android")
+                .addHeader("Content-Type","multipart/form-data; boundary=7db372eb000e2");
         HttpUrl requestUrl = request.url();
         if (request.method().equals("POST")) {
             RequestBody requestBody = request.body();
@@ -49,7 +55,7 @@ public class LoggingInterceptor implements Interceptor {
         if (!TextUtils.isEmpty(AUTH)) {
             //打印发送信息
             Log.e("发送==requestUrl=Header", "(" + AUTH + ")");
-            Request.Builder builder = request.newBuilder().header("Authorization", "Bearer " + AUTH);
+            builder.header("Authorization", "Bearer " + AUTH);
             request = builder.build();
         }
         Response response = chain.proceed(request);

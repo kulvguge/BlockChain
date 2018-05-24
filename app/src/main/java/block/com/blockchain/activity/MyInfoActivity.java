@@ -47,12 +47,12 @@ public class MyInfoActivity extends BaseActivity {
     @BindView(R.id.person_title)
     Toolbar personTitle;
     private String moblie = "";
-
     @Override
     public void init() {
         setContentView(R.layout.activity_personal);
         ButterKnife.bind(this);
         moblie= (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE,"");
+
         NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(1, moblie), subscriber);
     }
 

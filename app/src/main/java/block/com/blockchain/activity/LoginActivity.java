@@ -124,8 +124,9 @@ public class LoginActivity extends BaseActivity {
         public void onNext(TokenBean resultInfo) {
             if (resultInfo.getAccess_token() != null) {
                 SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
+                Log.e("login_expires", "(" + resultInfo.getExpires_in() + ")");
                 Log.e("login_token", "(" + resultInfo.getAccess_token() + ")");
-                Log.e("login_token_type", "(" + resultInfo.getToken_type() + ")");
+                Log.e("login_token_refresh", "(" + resultInfo.getRefresh_token() + ")");
                 String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
                 Log.e("login_token", "(" + AUTH + ")");
                 NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()

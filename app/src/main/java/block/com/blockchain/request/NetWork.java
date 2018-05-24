@@ -2,8 +2,9 @@ package block.com.blockchain.request;
 
 import org.reactivestreams.Subscriber;
 
+import block.com.blockchain.BuildConfig;
 import io.reactivex.Flowable;
-import io.reactivex.android.BuildConfig;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
@@ -63,11 +64,11 @@ public class NetWork {
     private static OkHttpClient getHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true);//错误重连
+
         //调试模式打印Log日志
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(new LoggingInterceptor());
         }
-
         OkHttpClient client = builder.build();
         return client;
     }

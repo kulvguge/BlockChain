@@ -12,6 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -107,8 +108,7 @@ public interface RequestApi {
      * @return
      */
     @GET("user/info")
-    Flowable<ResultInfo<UserBean>> queryUserInfo(@Query("type") int type, @Query("mobile")
-            String mobile,@Header("Authorization") String contentRange);
+    Flowable<ResultInfo<UserBean>> queryUserInfo(@Query("type") int type, @Query("mobile") String mobile);
 
     /**
      * 修改用户资料
@@ -118,5 +118,9 @@ public interface RequestApi {
      */
     @POST("user/edit")
     Observable<MessageBean> motifyUseInfo(@Body UserBean userBean);
+
+    @GET("friend/get_application")
+    Flowable<ResultInfo<MessageBean>> getApplyFriend();
+
 
 }
