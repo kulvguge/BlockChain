@@ -2,8 +2,8 @@ package block.com.blockchain.request;
 
 import org.reactivestreams.Subscriber;
 
-import block.com.blockchain.BuildConfig;
 import io.reactivex.Flowable;
+import io.reactivex.android.BuildConfig;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;

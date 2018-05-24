@@ -16,6 +16,7 @@ import java.util.List;
 import block.com.blockchain.R;
 import block.com.blockchain.activity.MessageCenterActivity;
 import block.com.blockchain.bean.PersonaBean;
+import block.com.blockchain.callback.OnItemClickListener;
 import block.com.blockchain.mainpage.LetterAdapter;
 import block.com.blockchain.utils.GroupUtils;
 import block.com.blockchain.utils.pinneheader.BladeView;
@@ -38,7 +39,7 @@ public class FriendFragment extends BaseFragment {
     private int[] counts;
     private MySectionIndexer mIndexer;
     private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "MyInfoActivity",
             "N", "O", "P", "Q", "R", "S", "TokenBean", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
@@ -125,6 +126,13 @@ public class FriendFragment extends BaseFragment {
 
                     }
                 }
+
+            }
+        });
+
+        adapter.setOnItemClickListener(new OnItemClickListener<PersonaBean>() {
+            @Override
+            public void onclik(PersonaBean personaBean) {
 
             }
         });

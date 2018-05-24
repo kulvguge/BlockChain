@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import block.com.blockchain.R;
 import block.com.blockchain.activity.LoginActivity;
-import block.com.blockchain.activity.PersonalActivity;
+import block.com.blockchain.activity.MyInfoActivity;
 import block.com.blockchain.activity.ScoreActivity;
 import block.com.blockchain.callback.SelectListener;
 import block.com.blockchain.customview.CommonInfoView;
@@ -99,7 +99,7 @@ public class PersonFragment extends BaseFragment {
             case R.id.layout_motify:
                 break;
             case R.id.mine_to_person:
-                Intent intent = new Intent(getActivity(), PersonalActivity.class);
+                Intent intent = new Intent(getActivity(), MyInfoActivity.class);
                 startActivity(intent);
                 break;
             case R.id.layout_score:

@@ -10,7 +10,8 @@ public class UserBean  extends BaseBean{
     private String mobile;
     private String url;
     private int sex;
-
+    private String  id_card;
+    private int  lock;
     private String self_sign;
 
     private String birthday;
@@ -91,5 +92,21 @@ public class UserBean  extends BaseBean{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getId_card() {
+        return id_card;
+    }
+
+    public void setId_card(String id_card) {
+        this.id_card = id_card;
+    }
+
+    public int getLock() {
+        return lock;
+    }
+
+    public void setLock(int lock) {
+        this.lock = lock;
     }
 }

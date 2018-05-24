@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import block.com.blockchain.utils.SPUtils;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -44,17 +45,15 @@ public class LoggingInterceptor implements Interceptor {
             Log.e("发送==requestUrl=", requestUrl.toString());
         }
 
-
-        if (!TextUtils.isEmpty(HttpConstant.Authorization)) {
+        String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
+        if (!TextUtils.isEmpty(AUTH)) {
             //打印发送信息
-            Log.e("发送==requestUrl=Header", "(" + HttpConstant.Authorization + ")");
-            Request.Builder builder = request.newBuilder().addHeader("Authorization", HttpConstant.Authorization);
+            Log.e("发送==requestUrl=Header", "(" + AUTH + ")");
+            Request.Builder builder = request.newBuilder().header("Authorization", "Bearer " + AUTH);
             request = builder.build();
         }
-        //打印发送信息
-
         Response response = chain.proceed(request);
-        //打印Log用,因為body().String只能調用一次
+        //   打印Log用,因為body().String只能調用一次
         Response response1 = chain.proceed(request);
         String content = response1.body().string();
         response1 = null;

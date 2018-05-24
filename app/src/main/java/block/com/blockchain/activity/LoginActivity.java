@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import block.com.blockchain.bean.TokenBean;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.NetWork;
+import block.com.blockchain.utils.SPUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -71,10 +73,11 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     psdLayout.setErrorEnabled(false);
                 }
-                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
-                                .toString()),
-                        observer);
 
+                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
+                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
+                                .toString()),
+                        observerToken);
                 break;
         }
 
@@ -89,10 +92,11 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onNext(ResultInfo<UserBean> resultInfo) {
             if (resultInfo.status.equals("success")) {
-                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
-                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
-                                .toString()),
-                        observerToken);
+                SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, phone.getText().toString());
+
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(LoginActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
             }
@@ -119,10 +123,15 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onNext(TokenBean resultInfo) {
             if (resultInfo.getAccess_token() != null) {
-                HttpConstant.Authorization = resultInfo.getAccess_token();
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
+                Log.e("login_token", "(" + resultInfo.getAccess_token() + ")");
+                Log.e("login_token_type", "(" + resultInfo.getToken_type() + ")");
+                String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
+                Log.e("login_token", "(" + AUTH + ")");
+                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
+                                .toString()),
+                        observer);
+
             } else {
                 Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
                         .login_failure), Toast
