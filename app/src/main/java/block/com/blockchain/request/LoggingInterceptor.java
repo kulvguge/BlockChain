@@ -28,15 +28,23 @@ public class LoggingInterceptor implements Interceptor {
         Request request = chain.request();
 
         HttpUrl requestUrl = request.url();
-        RequestBody requestBody = request.body();
-        Buffer buffer = new Buffer();
-        requestBody.writeTo(buffer);
-        Charset charset = Charset.forName("UTF-8");
-        MediaType contentType = requestBody.contentType();
-        if (contentType != null) {
-            charset = contentType.charset(charset);
+        if (request.method().equals("POST")) {
+            RequestBody requestBody = request.body();
+            Buffer buffer = new Buffer();
+            requestBody.writeTo(buffer);
+            Charset charset = Charset.forName("UTF-8");
+            MediaType contentType = requestBody.contentType();
+            if (contentType != null) {
+                charset = contentType.charset(charset);
+            }
+            String paramsStr = buffer.readString(charset);
+            Log.e("发送==requestUrl=", requestUrl.toString());
+            Log.e("发送==requestUrl_body=", paramsStr);
+        } else if (request.method().equals("GET")) {
+            Log.e("发送==requestUrl=", requestUrl.toString());
         }
-        String paramsStr = buffer.readString(charset);
+
+
         if (!TextUtils.isEmpty(HttpConstant.Authorization)) {
             //打印发送信息
             Log.e("发送==requestUrl=Header", "(" + HttpConstant.Authorization + ")");
@@ -44,11 +52,10 @@ public class LoggingInterceptor implements Interceptor {
             request = builder.build();
         }
         //打印发送信息
-        Log.e("发送==requestUrl=", requestUrl.toString());
-        Log.e("发送==requestUrl_body=", paramsStr);
-        Response response = chain.proceed(chain.request());
+
+        Response response = chain.proceed(request);
         //打印Log用,因為body().String只能調用一次
-        Response response1 = chain.proceed(chain.request());
+        Response response1 = chain.proceed(request);
         String content = response1.body().string();
         response1 = null;
         //打印接收信息
