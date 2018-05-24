@@ -87,15 +87,6 @@ public class HomeFragment extends BaseFragment {
             baseY = height / 2 + random.nextInt(height / 4);
             marginLayoutParams.leftMargin = baseX;
             marginLayoutParams.topMargin = baseY;
-//            textView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    view.setVisibility(View.INVISIBLE);
-//                    constraintLayout.removeView(view);
-//                    initPhotoDialog();
-//                }
-//            });
-//            textView.setOnClickListener(this);
             cc.addView(textView, marginLayoutParams);
             cc(textView, i);
         }

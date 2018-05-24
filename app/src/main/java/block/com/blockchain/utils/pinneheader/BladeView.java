@@ -23,7 +23,7 @@ public class BladeView extends View {
     private OnItemClickListener mOnItemClickListener;
     String[] b = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K",
-            "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
+            "L", "M", "N", "O", "P", "Q", "R", "S", "TokenBean", "U", "V", "W", "X",
             "Y", "Z"};
     int choose = -1;
     Paint paint = new Paint();

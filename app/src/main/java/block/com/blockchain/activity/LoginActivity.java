@@ -13,7 +13,9 @@ import org.reactivestreams.Subscription;
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.ResultInfo;
+import block.com.blockchain.bean.TokenBean;
 import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.NetWork;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,10 +88,48 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<UserBean> resultInfo) {
+            if (resultInfo.status.equals("success")) {
+                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
+                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
+                                .toString()),
+                        observerToken);
+            } else {
+                Toast.makeText(LoginActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
+            }
 
-            intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
+    Subscriber<TokenBean> observerToken = new Subscriber<TokenBean>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(TokenBean resultInfo) {
+            if (resultInfo.getAccess_token() != null) {
+                HttpConstant.Authorization = resultInfo.getAccess_token();
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
+                        .login_failure), Toast
+                        .LENGTH_SHORT)
+                        .show();
+            }
+
         }
 
         @Override

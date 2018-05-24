@@ -39,7 +39,7 @@ public class FriendFragment extends BaseFragment {
     private MySectionIndexer mIndexer;
     private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+            "N", "O", "P", "Q", "R", "S", "TokenBean", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
 

@@ -2,14 +2,11 @@ package block.com.blockchain.request;
 
 import org.reactivestreams.Subscriber;
 
-
 import block.com.blockchain.BuildConfig;
 import io.reactivex.Flowable;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -39,6 +36,20 @@ public class NetWork {
         }
         return requestApi;
     }
+
+    public static RequestApi getTokenApi() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl(HttpConstant.TOKENHTTP)
+                .addConverterFactory(gsonConverterFactory)
+                .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                .build();
+        RequestApi requestApiT = retrofit.create(RequestApi.class);
+
+        return requestApiT;
+    }
+
     /**
      * 封装线程管理和订阅的过程
      */
@@ -48,7 +59,8 @@ public class NetWork {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-    private static OkHttpClient  getHttpClient() {
+
+    private static OkHttpClient getHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(true);//错误重连
         //调试模式打印Log日志

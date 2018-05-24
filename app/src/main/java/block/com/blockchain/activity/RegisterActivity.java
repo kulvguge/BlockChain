@@ -13,7 +13,6 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import block.com.blockchain.R;
-import block.com.blockchain.bean.BaseBean;
 import block.com.blockchain.bean.CodeBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
@@ -63,8 +62,10 @@ public class RegisterActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.register:
                 if (hasComplete())
-                    NetWork.ApiSubscribe(NetWork.getRequestApi().register(phone.getText().toString(),code.getText().toString(),"",psd.getText().toString(),psdAgain.getText().toString()), registerObserver);
-                    break;
+                    NetWork.ApiSubscribe(NetWork.getRequestApi().register(phone.getText().toString(), code.getText()
+                                    .toString(), null, psd.getText().toString(), psdAgain.getText().toString()),
+                            registerObserver);
+                return;
             case R.id.change_to_login:
                 intent = new Intent(this, LoginActivity.class);
                 break;
@@ -133,7 +134,8 @@ public class RegisterActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<CodeBean> resultInfo) {
-            Toast.makeText(RegisterActivity.this,getResources().getString(R.string.register_has_send_code), Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_has_send_code), Toast
+                    .LENGTH_SHORT).show();
         }
 
         @Override
@@ -155,13 +157,14 @@ public class RegisterActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<UserBean> resultInfo) {
-                  if(resultInfo.status.equals("success")){
-                      intent = new Intent(RegisterActivity.this, MainActivity.class);
-                      startActivity(intent);
-                      finish();
-                  }else{
-                      Toast.makeText(RegisterActivity.this,resultInfo.message, Toast.LENGTH_SHORT).show();
-                  }
+            if (resultInfo.status.equals("success")) {
+                Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_success), Toast
+                        .LENGTH_SHORT)
+                        .show();
+                finish();
+            } else {
+                Toast.makeText(RegisterActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
+            }
 
         }
 

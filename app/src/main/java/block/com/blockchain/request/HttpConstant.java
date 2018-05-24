@@ -7,8 +7,9 @@ package block.com.blockchain.request;
 public class HttpConstant {
 
     public static final String HTTPHOST="https://dapp.goldcavetech.com/api/";
+    public static final String TOKENHTTP="https://dapp.goldcavetech.com/";
     /**
      * 认证信息
      */
-    public static  String  Authorization="";
+    public static   String  Authorization="";
 }

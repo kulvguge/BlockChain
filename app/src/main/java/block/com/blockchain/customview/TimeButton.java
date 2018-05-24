@@ -31,7 +31,6 @@ public class TimeButton extends TextView {
             TimeButton.this.setText(textAfter + time / 1000 + textAfter1);
             time -= 1000;
             if (time < 0) {
-
                 TimeButton.this.setText(textBefore);
                 TimeButton.this.setBackgroundResource(R.drawable.btn_common_round_stroke_blue);
                 clearTimer();
@@ -51,6 +50,7 @@ public class TimeButton extends TextView {
     }
 
     public void clearTimer() {
+        time = 0;
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
@@ -59,6 +59,7 @@ public class TimeButton extends TextView {
             timer.cancel();
             timer = null;
         }
+
     }
 
     public TimeButton(Context context, AttributeSet attrs) {
@@ -73,8 +74,6 @@ public class TimeButton extends TextView {
         initTimer();
         this.time = Math.abs(time);
         timer.schedule(timerTask, 0, 1000);
-        this.setText(textAfter + time + textAfter1);
-
         this.setBackgroundResource(R.drawable.btn_common_round_stroke_blue);
     }
 
@@ -94,8 +93,8 @@ public class TimeButton extends TextView {
     }
 
     public void reset() {
+        clearTimer();
         TimeButton.this.setText(textBefore);
         TimeButton.this.setBackgroundResource(R.drawable.btn_common_round_stroke_blue);
-        clearTimer();
     }
 }

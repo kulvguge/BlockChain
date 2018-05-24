@@ -14,12 +14,9 @@ import block.com.blockchain.R;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.BasicInfoView;
-import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.NetWork;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Function;
 
 /**
  * Created by ts on 2018/5/14.
@@ -47,20 +44,22 @@ public class PersonalActivity extends BaseActivity {
     BasicInfoView personSignature;
     @BindView(R.id.person_title)
     Toolbar personTitle;
-    private String moblie="";
+    private String moblie = "";
+
     @Override
     public void init() {
         setContentView(R.layout.activity_personal);
         ButterKnife.bind(this);
-        moblie=getIntent().getStringExtra("intent");
-        NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(2,moblie, HttpConstant.Authorization),subscriber);
+        moblie = getIntent().getStringExtra("intent");
+        NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(2, moblie), subscriber);
     }
-    private void dataSet(UserBean userBean){
+
+    private void dataSet(UserBean userBean) {
         personNickName.setText(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
-        if(userBean.getSex()==1){
+        if (userBean.getSex() == 1) {
             personSex.setRightMsg(R.string.person_sex_man);
-        }else if(userBean.getSex()==2){
+        } else if (userBean.getSex() == 2) {
             personSex.setRightMsg(R.string.person_sex_woman);
         }
         personPhone.setRightMsg(userBean.getMobile());
@@ -71,7 +70,7 @@ public class PersonalActivity extends BaseActivity {
         Glide.with(this).load(userBean.getUrl()).into(smallImg);
     }
 
-    Subscriber<ResultInfo<UserBean>> subscriber=new Subscriber<ResultInfo<UserBean>>() {
+    Subscriber<ResultInfo<UserBean>> subscriber = new Subscriber<ResultInfo<UserBean>>() {
         @Override
         public void onSubscribe(Subscription s) {
             s.request(1);
@@ -79,11 +78,11 @@ public class PersonalActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<UserBean> userBeanResultInfo) {
-             if(userBeanResultInfo.status.equals("success")){
-                 dataSet(userBeanResultInfo.data);
-             }else{
-                 Toast.makeText(PersonalActivity.this, userBeanResultInfo.message, Toast.LENGTH_SHORT).show();
-             }
+            if (userBeanResultInfo.status.equals("success")) {
+                dataSet(userBeanResultInfo.data);
+            } else {
+                Toast.makeText(PersonalActivity.this, userBeanResultInfo.message, Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
