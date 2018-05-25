@@ -47,13 +47,14 @@ public class MyInfoActivity extends BaseActivity {
     @BindView(R.id.person_title)
     Toolbar personTitle;
     private String moblie = "";
+
     @Override
     public void init() {
         setContentView(R.layout.activity_personal);
         ButterKnife.bind(this);
-        moblie= (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE,"");
-
-        NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(1, moblie), subscriber);
+        moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
+        NetWork.ApiSubscribe(NetWork.getRequestApi().querySession(), subscriber);
+        // NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(1, moblie), subscriber);
     }
 
     private void dataSet(UserBean userBean) {
@@ -72,6 +73,31 @@ public class MyInfoActivity extends BaseActivity {
         Glide.with(this).load(userBean.getUrl()).into(smallImg);
     }
 
+    Subscriber<ResultInfo<UserBean>> subscriber1 = new Subscriber<ResultInfo<UserBean>>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(ResultInfo<UserBean> userBeanResultInfo) {
+            if (userBeanResultInfo.status.equals("success")) {
+                Toast.makeText(MyInfoActivity.this, "sssss", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MyInfoActivity.this, userBeanResultInfo.status, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(MyInfoActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
     Subscriber<ResultInfo<UserBean>> subscriber = new Subscriber<ResultInfo<UserBean>>() {
         @Override
         public void onSubscribe(Subscription s) {
@@ -83,7 +109,7 @@ public class MyInfoActivity extends BaseActivity {
             if (userBeanResultInfo.status.equals("success")) {
                 dataSet(userBeanResultInfo.data);
             } else {
-                Toast.makeText(MyInfoActivity.this, userBeanResultInfo.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyInfoActivity.this, userBeanResultInfo.status, Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -11,8 +11,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -68,7 +66,7 @@ public interface RequestApi {
     @FormUrlEncoded
     @POST("login")
     Flowable<ResultInfo<UserBean>> loginPwd(@Field("type") int type, @Field("mobile") String mobile, @Field("pwd")
-            String pwd);
+            String pwd,@Field("valid_code") String valid);
 
     /**
      * 验证码登录
@@ -109,6 +107,14 @@ public interface RequestApi {
      */
     @GET("user/info")
     Flowable<ResultInfo<UserBean>> queryUserInfo(@Query("type") int type, @Query("mobile") String mobile);
+
+    /**
+     * sessions
+     *
+     * @return
+     */
+    @GET("is_session")
+    Flowable<ResultInfo<UserBean>> querySession();
 
     /**
      * 修改用户资料

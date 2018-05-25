@@ -73,16 +73,44 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     psdLayout.setErrorEnabled(false);
                 }
+                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
+                                .toString(),"44301"),
+                        observer);
 
-                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
-                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
-                                .toString()),
-                        observerToken);
                 break;
         }
 
     }
 
+    Subscriber<ResultInfo<UserBean>> observer2 = new Subscriber<ResultInfo<UserBean>>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+            s.request(1);
+        }
+
+        @Override
+        public void onNext(ResultInfo<UserBean> resultInfo) {
+            if (resultInfo.status.equals("success")) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, resultInfo.status, Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    };
     Subscriber<ResultInfo<UserBean>> observer = new Subscriber<ResultInfo<UserBean>>() {
         @Override
         public void onSubscribe(Subscription s) {
@@ -93,10 +121,10 @@ public class LoginActivity extends BaseActivity {
         public void onNext(ResultInfo<UserBean> resultInfo) {
             if (resultInfo.status.equals("success")) {
                 SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, phone.getText().toString());
-
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
+                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
+                                .toString()),
+                        observerToken);
             } else {
                 Toast.makeText(LoginActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
             }
@@ -124,14 +152,8 @@ public class LoginActivity extends BaseActivity {
         public void onNext(TokenBean resultInfo) {
             if (resultInfo.getAccess_token() != null) {
                 SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
-                Log.e("login_expires", "(" + resultInfo.getExpires_in() + ")");
-                Log.e("login_token", "(" + resultInfo.getAccess_token() + ")");
-                Log.e("login_token_refresh", "(" + resultInfo.getRefresh_token() + ")");
-                String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
-                Log.e("login_token", "(" + AUTH + ")");
-                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
-                                .toString()),
-                        observer);
+                Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
+                NetWork.ApiSubscribe(NetWork.getRequestApi().querySession(), observer2);
 
             } else {
                 Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
@@ -152,4 +174,6 @@ public class LoginActivity extends BaseActivity {
 
         }
     };
+
+
 }
