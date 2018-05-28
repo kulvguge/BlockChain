@@ -2,7 +2,6 @@ package block.com.blockchain.activity;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.fragment.BaseFragment;
 import block.com.blockchain.fragment.FriendFragment;
 import block.com.blockchain.fragment.HelpFragment;
 import block.com.blockchain.fragment.HomeFragment;
@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView navigation;
     FragmentViewPagerAdapter adapter;
     FragmentManager manager;
-    List<Fragment> list=new ArrayList();
+    List<BaseFragment> list=new ArrayList();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

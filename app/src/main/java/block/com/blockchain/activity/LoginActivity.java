@@ -9,15 +9,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.TokenBean;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.request.HttpConstant;
-import block.com.blockchain.request.NetWork;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.SPUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,7 @@ public class LoginActivity extends BaseActivity {
     public void init() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        String auth = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
     }
 
     @OnClick({R.id.change_to_reg, R.id.login})
@@ -53,10 +55,8 @@ public class LoginActivity extends BaseActivity {
 
         switch (view.getId()) {
             case R.id.change_to_reg:
-
                 intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
-
                 break;
             case R.id.login:
                 if (TextUtils.isEmpty(phone.getText().toString())) {
@@ -73,107 +73,98 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     psdLayout.setErrorEnabled(false);
                 }
-                NetWork.ApiSubscribe(NetWork.getRequestApi().loginPwd(2, phone.getText().toString(), psd.getText()
-                                .toString(),"44301"),
-                        observer);
-
+                getToken();
                 break;
         }
 
     }
 
-    Subscriber<ResultInfo<UserBean>> observer2 = new Subscriber<ResultInfo<UserBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
+    private void getToken() {
+        AjaxParams params = new AjaxParams();
+        params.put("client_id", 2 + "");
+        params.put("grant_type", "password");
+        params.put("client_secret", "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6");
+        params.put("scope", "*");
+        params.put("username", phone.getText().toString());
+        params.put("password", psd.getText().toString());
+        HttpSendClass.getInstance().post(params, SenUrlClass.TOKEN, new
+                AjaxCallBack<TokenBean>() {
+                    @Override
+                    public void onSuccess(TokenBean resultInfo) {
+                        super.onSuccess(resultInfo);
+                        if (resultInfo.getAccess_token() != null) {
+                            SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
+                            Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
+                            beginLogin();
+                        } else {
+                            Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R
+                                    .string
+                                    .login_failure), Toast
+                                    .LENGTH_SHORT)
+                                    .show();
+                        }
 
-        @Override
-        public void onNext(ResultInfo<UserBean> resultInfo) {
-            if (resultInfo.status.equals("success")) {
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(LoginActivity.this, resultInfo.status, Toast.LENGTH_SHORT).show();
-            }
+                    }
 
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
-        }
+    private void beginLogin() {
+        AjaxParams params = new AjaxParams();
+        params.put("type", 2 + "");
+        params.put("mobile", phone.getText().toString());
+        params.put("pwd", psd.getText().toString());
+        HttpSendClass.getInstance().post(params, SenUrlClass.LOGIN, new
+                AjaxCallBack<ResultInfo<UserBean>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<UserBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                        if (resultInfo.status.equals("success")) {
+                            seesion();
+                        } else {
+                            Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
+                                    .login_failure), Toast
+                                    .LENGTH_SHORT)
+                                    .show();
+                        }
 
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
+                    }
 
-        @Override
-        public void onComplete() {
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
-        }
-    };
-    Subscriber<ResultInfo<UserBean>> observer = new Subscriber<ResultInfo<UserBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
+    private void seesion() {
+        AjaxParams params = new AjaxParams();
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.IS_SESSION, new
+                AjaxCallBack<ResultInfo<UserBean>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<UserBean> s) {
+                        super.onSuccess(s);
+                        if (s.status.equals("success")) {
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "登录异常", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-        @Override
-        public void onNext(ResultInfo<UserBean> resultInfo) {
-            if (resultInfo.status.equals("success")) {
-                SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, phone.getText().toString());
-                NetWork.ApiSubscribe(NetWork.getTokenApi().getToken(2, "password",
-                        "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6", "*", phone.getText().toString(), psd.getText()
-                                .toString()),
-                        observerToken);
-            } else {
-                Toast.makeText(LoginActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
-    Subscriber<TokenBean> observerToken = new Subscriber<TokenBean>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
-
-        @Override
-        public void onNext(TokenBean resultInfo) {
-            if (resultInfo.getAccess_token() != null) {
-                SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
-                Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
-                NetWork.ApiSubscribe(NetWork.getRequestApi().querySession(), observer2);
-
-            } else {
-                Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
-                        .login_failure), Toast
-                        .LENGTH_SHORT)
-                        .show();
-            }
-
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                    }
+                });
+    }
 
 
 }

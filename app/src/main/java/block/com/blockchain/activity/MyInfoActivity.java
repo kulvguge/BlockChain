@@ -7,16 +7,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.customview.BasicEditInfoView;
 import block.com.blockchain.customview.BasicInfoView;
-import block.com.blockchain.request.HttpConstant;
-import block.com.blockchain.request.NetWork;
-import block.com.blockchain.utils.SPUtils;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,28 +33,50 @@ public class MyInfoActivity extends BaseActivity {
     @BindView(R.id.person_nick_name)
     TextView personNickName;
     @BindView(R.id.person_name)
-    BasicInfoView personName;
+    BasicEditInfoView personName;
     @BindView(R.id.person_phone)
-    BasicInfoView personPhone;
+    BasicEditInfoView personPhone;
     @BindView(R.id.person_sex)
     BasicInfoView personSex;
     @BindView(R.id.person_birthday)
     BasicInfoView personBirthday;
     @BindView(R.id.person_work)
-    BasicInfoView personWork;
+    BasicEditInfoView personWork;
     @BindView(R.id.person_signature)
-    BasicInfoView personSignature;
+    BasicEditInfoView personSignature;
     @BindView(R.id.person_title)
     Toolbar personTitle;
-    private String moblie = "";
 
     @Override
     public void init() {
-        setContentView(R.layout.activity_personal);
+        setContentView(R.layout.activity_my_info);
         ButterKnife.bind(this);
-        moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
-        NetWork.ApiSubscribe(NetWork.getRequestApi().querySession(), subscriber);
-        // NetWork.ApiSubscribe(NetWork.getRequestApi().queryUserInfo(1, moblie), subscriber);
+
+        getUserInfo();
+    }
+
+    private void getUserInfo() {
+        AjaxParams params = new AjaxParams();
+        params.put("type", 1 + "");
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+                AjaxCallBack<ResultInfo<UserBean>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<UserBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                        if (resultInfo.status.equals("success")) {
+                            dataSet(resultInfo.data);
+                        } else {
+                            Toast.makeText(MyInfoActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(MyInfoActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void dataSet(UserBean userBean) {
@@ -69,58 +91,7 @@ public class MyInfoActivity extends BaseActivity {
         personBirthday.setRightMsg(userBean.getBirthday());
         personWork.setRightMsg(userBean.getEnterprise());
         personSignature.setRightMsg(userBean.getSelf_sign());
-        Glide.with(this).load(userBean.getUrl()).into(bigImg);
-        Glide.with(this).load(userBean.getUrl()).into(smallImg);
+        Glide.with(this).load(userBean.getPic_url()).into(bigImg);
+        Glide.with(this).load(userBean.getPic_url()).into(smallImg);
     }
-
-    Subscriber<ResultInfo<UserBean>> subscriber1 = new Subscriber<ResultInfo<UserBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
-
-        @Override
-        public void onNext(ResultInfo<UserBean> userBeanResultInfo) {
-            if (userBeanResultInfo.status.equals("success")) {
-                Toast.makeText(MyInfoActivity.this, "sssss", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MyInfoActivity.this, userBeanResultInfo.status, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(MyInfoActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
-    Subscriber<ResultInfo<UserBean>> subscriber = new Subscriber<ResultInfo<UserBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
-
-        @Override
-        public void onNext(ResultInfo<UserBean> userBeanResultInfo) {
-            if (userBeanResultInfo.status.equals("success")) {
-                dataSet(userBeanResultInfo.data);
-            } else {
-                Toast.makeText(MyInfoActivity.this, userBeanResultInfo.status, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(MyInfoActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
 }

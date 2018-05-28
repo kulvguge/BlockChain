@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+    >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+        >
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="320dp">
+                <ImageView
+                    android:id="@+id/big_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="275dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher"/>
+                <ImageView
+                    android:id="@+id/small_img"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/white"
+                    android:padding="2dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/person_nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/person_nick_name"/>
+            <block.com.blockchain.customview.BasicEditInfoView
+                android:id="@+id/person_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_name"/>
+            <block.com.blockchain.customview.BasicEditInfoView
+                android:id="@+id/person_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_phone"/>
+            <block.com.blockchain.customview.BasicInfoView
+                android:id="@+id/person_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_sex"/>
+            <block.com.blockchain.customview.BasicInfoView
+                android:id="@+id/person_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_birthday"/>
+            <block.com.blockchain.customview.BasicEditInfoView
+                android:id="@+id/person_work"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_work"/>
+            <block.com.blockchain.customview.BasicEditInfoView
+                android:id="@+id/person_signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ltext="@string/person_signature"/>
+        </LinearLayout>
+    </ScrollView>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/person_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@mipmap/left_white_arrow"/>
+</RelativeLayout>

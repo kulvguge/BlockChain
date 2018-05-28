@@ -6,16 +6,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+import block.com.blockchain.fragment.BaseFragment;
+
 /**
  * Created by ts on 2018/5/12.
  */
 
 public class FragmentViewPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager mFragmentManager;
-    private List<Fragment> list;
+    private List<BaseFragment> list;
 
 
-    public FragmentViewPagerAdapter(FragmentManager fm, List<Fragment> list) {
+    public FragmentViewPagerAdapter(FragmentManager fm, List<BaseFragment> list) {
         super(fm);
         mFragmentManager = fm;
         this.list=list;

@@ -27,6 +27,7 @@
     <string name="register_get_code">获取验证码</string>
     <string name="register_to_login">登录</string>
     <string name="register_has_send_code">验证码已发送</string>
+    <string name="register_code_err">验证码发送失败</string>
     <string name="register_success">注册成功</string>
     <!--LoginActivity-->
     <string name="login_phone">输入手机号/账号</string>
@@ -46,6 +47,8 @@
     <string name="msg_new_friend">新的朋友</string>
     <string name="msg_permit">同意</string>
     <string name="msg_has_permit">已同意</string>
+    <string name="msg_other_apply">申请加我</string>
+    <string name="msg_i_apply">我申请的</string>
     <!--积分-->
     <string name="score_title">信誉积分</string>
     <string name="score_record">交易记录</string>

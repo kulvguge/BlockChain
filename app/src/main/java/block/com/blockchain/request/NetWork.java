@@ -42,7 +42,7 @@ public class NetWork {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl(HttpConstant.TOKENHTTP)
+                .baseUrl(HttpConstant.HTTPHOST)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
                 .build();

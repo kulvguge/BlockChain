@@ -4,109 +4,150 @@ package block.com.blockchain.bean;
  * Created by ts on 2018/5/17.
  */
 
-public class UserBean  extends BaseBean{
+public class UserBean extends BaseBean {
+    private int id;
+
+    private String account;
+
+    private String pic_url;
+
     private String nickname;
 
     private String mobile;
-    private String url;
-    private int sex;
-    private String  id_card;
-    private int  lock;
+
     private String self_sign;
 
     private String birthday;
 
     private int integral;
 
+    private int lock;
+
+    private String invite_code;
+
+    private int sex;
+
     private String real_name;
 
     private String enterprise;
-    public void setNickname(String nickname){
+
+    private String id_card;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAccount() {
+        return noEmpty(this.account);
+    }
+
+    public void setPic_url(String pic_url) {
+        this.pic_url = pic_url;
+    }
+
+    public String getPic_url() {
+        return noEmpty(this.pic_url);
+    }
+
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-    public String getNickname(){
-        if(nickname==null)
-            return "";
-        return this.nickname;
+
+    public String getNickname() {
+        return noEmpty(this.nickname);
     }
-    public void setMobile(String mobile){
+
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-    public String getMobile(){
-        if(mobile==null)
-            return "";
-        return this.mobile;
+
+    public String getMobile() {
+        return noEmpty(this.mobile);
     }
-    public void setSex(int sex){
-        this.sex = sex;
-    }
-    public int getSex(){
-        return this.sex;
-    }
-    public void setSelf_sign(String self_sign){
+
+    public void setSelf_sign(String self_sign) {
         this.self_sign = self_sign;
     }
-    public String getSelf_sign(){
-        if(self_sign==null)
-            return "";
-        return this.self_sign;
+
+    public String getSelf_sign() {
+        return noEmpty(this.self_sign);
     }
-    public void setBirthday(String birthday){
+
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
-    public String getBirthday(){
-        if(birthday==null)
-            return "";
-        return this.birthday;
+
+    public String getBirthday() {
+        return noEmpty(this.birthday);
     }
-    public void setIntegral(int integral){
+
+    public void setIntegral(int integral) {
         this.integral = integral;
     }
-    public int getIntegral(){
+
+    public int getIntegral() {
         return this.integral;
     }
 
-    public String getReal_name() {
-        if(real_name==null)
-            return "";
-        return real_name;
+    public void setLock(int lock) {
+        this.lock = lock;
+    }
+
+    public int getLock() {
+        return this.lock;
+    }
+
+    public void setInvite_code(String invite_code) {
+        this.invite_code = invite_code;
+    }
+
+    public String getInvite_code() {
+        return noEmpty(this.invite_code);
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getSex() {
+        return this.sex;
     }
 
     public void setReal_name(String real_name) {
         this.real_name = real_name;
     }
 
-    public String getEnterprise() {
-        if(enterprise==null)
-            return "";
-        return enterprise;
+    public String getReal_name() {
+        return noEmpty(this.real_name);
     }
 
     public void setEnterprise(String enterprise) {
         this.enterprise = enterprise;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getId_card() {
-        return id_card;
+    public String getEnterprise() {
+        return noEmpty(this.enterprise);
     }
 
     public void setId_card(String id_card) {
         this.id_card = id_card;
     }
 
-    public int getLock() {
-        return lock;
+    public String getId_card() {
+        return noEmpty(this.id_card);
     }
 
-    public void setLock(int lock) {
-        this.lock = lock;
+    private String noEmpty(String str) {
+        if (str == null)
+            return "";
+        return str;
     }
 }

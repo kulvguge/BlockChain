@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:singleLine="true"
-                android:text="ccc"
+                android:text=""
                 android:textColor="@color/gray"
                 android:textSize="12sp"/>
         </LinearLayout>

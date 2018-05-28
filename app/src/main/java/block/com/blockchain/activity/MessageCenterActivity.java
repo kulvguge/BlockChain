@@ -1,27 +1,24 @@
 package block.com.blockchain.activity;
 
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Toast;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import block.com.blockchain.R;
-import block.com.blockchain.adapter.MessageCenterAdapter;
-import block.com.blockchain.bean.MessageBean;
+import block.com.blockchain.bean.ApplyBean;
 import block.com.blockchain.bean.ResultInfo;
-import block.com.blockchain.bean.TokenBean;
-import block.com.blockchain.customview.SpaceDecoration;
-import block.com.blockchain.request.HttpConstant;
-import block.com.blockchain.request.NetWork;
-import block.com.blockchain.utils.SPUtils;
+import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.fragment.ApplyFragment;
+import block.com.blockchain.fragment.BaseFragment;
+import block.com.blockchain.mainpage.FragmentViewPagerAdapter;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,63 +29,53 @@ import butterknife.ButterKnife;
 public class MessageCenterActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_layout)
-    SwipeRefreshLayout swipeLayout;
-    MessageCenterAdapter adapter;
-    private List<MessageBean> list = new ArrayList<>();
+    @BindView(R.id.viewpager)
+    ViewPager viewpager;
+    private List<UserBean> listIApply = new ArrayList<>();
+    private List<UserBean> listOtherApply = new ArrayList<>();
+    private List<BaseFragment> list = new ArrayList<>();
+    private FragmentViewPagerAdapter adapter;
 
     @Override
     public void init() {
         setContentView(R.layout.activity_msg_center);
         ButterKnife.bind(this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.addItemDecoration(new SpaceDecoration(this));
-        getData();
-        adapter = new MessageCenterAdapter(this, list);
-        recyclerView.setAdapter(adapter);
+        list.add(new ApplyFragment(0));
+        list.add(new ApplyFragment(1));
+        adapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), list);
+        viewpager.setAdapter(adapter);
+        viewpager.setOffscreenPageLimit(2);
+        getApplyList();
+
     }
 
-    /**
-     * 获取数据
-     */
-    private void getData() {
-        list.add(new MessageBean("1"));
-        list.add(new MessageBean("2"));
-        list.add(new MessageBean("3"));
-        NetWork.ApiSubscribe(NetWork.getRequestApi().getApplyFriend(), observer);
+    private void getApplyList() {
+        AjaxParams params = new AjaxParams();
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.APPLY_LIST, new
+                AjaxCallBack<ResultInfo<ApplyBean>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<ApplyBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                        if (resultInfo.status.equals("success")) {
+                            if (resultInfo.data.one != null)
+                                listIApply.addAll(resultInfo.data.one);
+                            if (resultInfo.data.two != null)
+                                listOtherApply.addAll(resultInfo.data.two);
+                            list.get(0).setData(listOtherApply);
+                            list.get(1).setData(listIApply);
+                        } else {
+                            Toast.makeText(MessageCenterActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(MessageCenterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-    Subscriber<ResultInfo<MessageBean>> observer = new Subscriber<ResultInfo<MessageBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
 
-        @Override
-        public void onNext(ResultInfo<MessageBean> resultInfo) {
-            if (resultInfo.status.equals("success")) {
-                Toast.makeText(MessageCenterActivity.this, "拉取成功", Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(MessageCenterActivity.this,resultInfo.message, Toast
-                        .LENGTH_SHORT)
-                        .show();
-            }
-
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(MessageCenterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
 
 }

@@ -22,7 +22,7 @@ public interface RequestApi {
 
     @FormUrlEncoded
     @POST("oauth/token")
-    Flowable<TokenBean> getToken(@Field("client_id") int client_id, @Field("grant_type") String grant_type, @Field
+    Flowable<TokenBean> getToken(@Field("client_id") String client_id, @Field("grant_type") String grant_type, @Field
             ("client_secret") String client_secret, @Field("scope") String scope, @Field("username") String username,
                                  @Field("password") String password);
 
@@ -65,7 +65,7 @@ public interface RequestApi {
      */
     @FormUrlEncoded
     @POST("login")
-    Flowable<ResultInfo<UserBean>> loginPwd(@Field("type") int type, @Field("mobile") String mobile, @Field("pwd")
+    Flowable<ResultInfo<UserBean>> loginPwd(@Field("type") Integer type, @Field("mobile") String mobile, @Field("pwd")
             String pwd,@Field("valid_code") String valid);
 
     /**

@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
+
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -17,7 +20,8 @@ import block.com.blockchain.bean.CodeBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.TimeButton;
-import block.com.blockchain.request.NetWork;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,10 +65,37 @@ public class RegisterActivity extends BaseActivity {
 
         switch (view.getId()) {
             case R.id.register:
-                if (hasComplete())
-                    NetWork.ApiSubscribe(NetWork.getRequestApi().register(phone.getText().toString(), code.getText()
-                                    .toString(), null, psd.getText().toString(), psdAgain.getText().toString()),
-                            registerObserver);
+                if (!hasComplete())
+                    return;
+                AjaxParams paramsr = new AjaxParams();
+                paramsr.put("valid_code", code.getText().toString());
+                paramsr.put("pwd", psd.getText().toString());
+                paramsr.put("pwd_confirmation", psdAgain.getText().toString());
+                paramsr.put("mobile", phone.getText().toString());
+                HttpSendClass.getInstance().post(paramsr, SenUrlClass.REGISTER, new
+                        AjaxCallBack<ResultInfo<UserBean>>() {
+                            @Override
+                            public void onSuccess(ResultInfo<UserBean> messageBeanResultInfo) {
+                                super.onSuccess(messageBeanResultInfo);
+                                if (messageBeanResultInfo.status.equals("success")) {
+                                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string
+                                            .register_success), Toast
+                                            .LENGTH_SHORT)
+                                            .show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, messageBeanResultInfo.message, Toast
+                                            .LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t, String strMsg) {
+                                super.onFailure(t, strMsg);
+                                Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 return;
             case R.id.change_to_login:
                 intent = new Intent(this, LoginActivity.class);
@@ -77,7 +108,33 @@ public class RegisterActivity extends BaseActivity {
                 } else {
                     phoneLayout.setErrorEnabled(false);
                 }
-                NetWork.ApiSubscribe(NetWork.getRequestApi().getMsgCode(1, phone.getText().toString()), observer);
+                AjaxParams params = new AjaxParams();
+                params.put("type", "1");
+                params.put("mobile", phone.getText().toString());
+                HttpSendClass.getInstance().post(params, SenUrlClass.CODE_REGISTER, new
+                        AjaxCallBack<ResultInfo<CodeBean>>() {
+                            @Override
+                            public void onSuccess(ResultInfo<CodeBean> messageBeanResultInfo) {
+                                super.onSuccess(messageBeanResultInfo);
+                                if (messageBeanResultInfo.status != null && messageBeanResultInfo.status.equals
+                                        ("success")) {
+                                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string
+                                            .register_has_send_code), Toast
+                                            .LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string
+                                            .register_code_err), Toast
+                                            .LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t, String strMsg) {
+                                super.onFailure(t, strMsg);
+                                Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 return;
         }
         startActivity(intent);
@@ -157,14 +214,7 @@ public class RegisterActivity extends BaseActivity {
 
         @Override
         public void onNext(ResultInfo<UserBean> resultInfo) {
-            if (resultInfo.status.equals("success")) {
-                Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_success), Toast
-                        .LENGTH_SHORT)
-                        .show();
-                finish();
-            } else {
-                Toast.makeText(RegisterActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
-            }
+
 
         }
 

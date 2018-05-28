@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import block.com.blockchain.R;
-import block.com.blockchain.bean.MessageBean;
+import block.com.blockchain.bean.UserBean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
 
 public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdapter.MyHolder> {
 
-    private List<MessageBean> list;
+    private List<UserBean> list;
     private Context context;
 
-    public MessageCenterAdapter(Context context, List<MessageBean> list) {
+    public MessageCenterAdapter(Context context, List<UserBean> list) {
         this.list = list;
         this.context = context;
 
@@ -33,15 +33,20 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
 
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_message, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_message, parent, false);
 
         return new MyHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
-        MessageBean bean = list.get(position);
-        holder.msgName.setText(bean.nickName);
+        UserBean bean = list.get(position);
+        holder.msgName.setText(bean.getNickname());
+        if (bean.getSex() == 1) {
+            holder.msgSex.setImageResource(R.mipmap.man);
+        } else if (bean.getSex() == 2) {
+            holder.msgSex.setImageResource(R.mipmap.woman);
+        }
     }
 
     @Override
