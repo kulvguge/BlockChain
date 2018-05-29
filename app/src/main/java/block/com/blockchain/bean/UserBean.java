@@ -19,7 +19,7 @@ public class UserBean extends BaseBean {
 
     private String birthday;
 
-    private int integral;
+    private String integral;
 
     private int lock;
 
@@ -32,6 +32,17 @@ public class UserBean extends BaseBean {
     private String enterprise;
 
     private String id_card;
+
+    /**
+     * 申请好友额外字段
+     */
+    private int flog_id;
+    private String update_time;
+    private int status;//1待处理2已同意3已拒绝
+    /**
+     * 首字母
+     */
+    public String nameTag;
 
     public void setId(int id) {
         this.id = id;
@@ -89,12 +100,12 @@ public class UserBean extends BaseBean {
         return noEmpty(this.birthday);
     }
 
-    public void setIntegral(int integral) {
+    public void setIntegral(String integral) {
         this.integral = integral;
     }
 
-    public int getIntegral() {
-        return this.integral;
+    public String getIntegral() {
+        return noEmpty(this.integral);
     }
 
     public void setLock(int lock) {
@@ -143,6 +154,31 @@ public class UserBean extends BaseBean {
 
     public String getId_card() {
         return noEmpty(this.id_card);
+    }
+
+
+    public String getUpdate_time() {
+        return noEmpty(this.update_time);
+    }
+
+    public void setUpdate_time(String update_time) {
+        this.update_time = update_time;
+    }
+
+    public int getFlog_id() {
+        return flog_id;
+    }
+
+    public void setFlog_id(int flog_id) {
+        this.flog_id = flog_id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     private String noEmpty(String str) {

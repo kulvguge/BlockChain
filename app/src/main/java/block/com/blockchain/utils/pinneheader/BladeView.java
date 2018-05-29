@@ -1,8 +1,6 @@
 package block.com.blockchain.utils.pinneheader;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,7 +21,7 @@ public class BladeView extends View {
     private OnItemClickListener mOnItemClickListener;
     String[] b = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K",
-            "L", "MyInfoActivity", "N", "O", "P", "Q", "R", "S", "TokenBean", "U", "V", "W", "X",
+            "L", "M", "N", "O", "PowerBean", "Q", "R", "S", "T", "U", "V", "W", "X",
             "Y", "Z"};
     int choose = -1;
     Paint paint = new Paint();

@@ -8,13 +8,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
 
 import block.com.blockchain.R;
 import block.com.blockchain.activity.LoginActivity;
 import block.com.blockchain.activity.MyInfoActivity;
 import block.com.blockchain.activity.ScoreActivity;
+import block.com.blockchain.bean.ResultInfo;
+import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.callback.SelectListener;
 import block.com.blockchain.customview.CommonInfoView;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -107,5 +117,38 @@ public class PersonFragment extends BaseFragment {
                 startActivity(intentS);
                 break;
         }
+    }
+
+    private void getUserInfo() {
+        AjaxParams params = new AjaxParams();
+        params.put("type", 1 + "");
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+                AjaxCallBack<ResultInfo<UserBean>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<UserBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                        if (resultInfo.status.equals("success")) {
+                            dataSet(resultInfo.data);
+                        } else {
+                            Toast.makeText(getActivity(), resultInfo.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void dataSet(UserBean userBean) {
+        mineNick.setText(userBean.getNickname());
+        mineName.setText(userBean.getReal_name());
+        layoutPhone.setCenterText(userBean.getMobile());
+        layoutWork.setCenterText(userBean.getEnterprise());
+        score.setText(userBean.getIntegral());
+        Glide.with(this).load(userBean.getPic_url()).into(mineImg);
     }
 }

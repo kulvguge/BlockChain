@@ -15,4 +15,6 @@
     <color name="dialog_content">#666666</color>
     <color name="dialog_btn">#3E332C</color>
     <color name="text_color">#757575</color>
+
+    <color name="base_bg_color">#F4F5F7</color>
 </resources>

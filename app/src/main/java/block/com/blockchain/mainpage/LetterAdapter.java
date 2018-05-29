@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import block.com.blockchain.R;
-import block.com.blockchain.bean.PersonaBean;
+import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.callback.OnItemClickListener;
 import block.com.blockchain.utils.pinneheader.MySectionIndexer;
 
@@ -21,13 +21,13 @@ import block.com.blockchain.utils.pinneheader.MySectionIndexer;
  */
 
 public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> {
-    List<PersonaBean> list;
+    List<UserBean> list;
     Context context;
     private MySectionIndexer mIndexer;
-    private OnItemClickListener<PersonaBean> onItemClickListener;
+    private OnItemClickListener<UserBean> onItemClickListener;
     private List<View> listView = new ArrayList<>();
 
-    public LetterAdapter(Context context, List<PersonaBean> list) {
+    public LetterAdapter(Context context, List<UserBean> list) {
         this.list = list;
         this.context = context;
     }
@@ -41,10 +41,10 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
 
     @Override
     public void onBindViewHolder(MyHolder holder, final int position) {
-        final PersonaBean info = list.get(position);
-        holder.tvName.setText(info.nickName);
-        Log.i("letter_value=",info.nickName);
-        Log.i("letter_value_tag=",info.nameTag);
+        final UserBean info = list.get(position);
+        holder.tvName.setText(info.getNickname());
+        Log.i("letter_value=", info.getNickname());
+        Log.i("letter_value_tag=", info.nameTag);
         int section = 0;
         if (mIndexer != null) {
             section = mIndexer.getSectionForPosition(position);
@@ -88,7 +88,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener<PersonaBean> onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<UserBean> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 }

@@ -7,6 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import net.tsz.afinal.http.AjaxCallBack;
+import net.tsz.afinal.http.AjaxParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,10 +19,16 @@ import java.util.List;
 
 import block.com.blockchain.R;
 import block.com.blockchain.activity.MessageCenterActivity;
-import block.com.blockchain.bean.PersonaBean;
+import block.com.blockchain.bean.FriendData;
+import block.com.blockchain.bean.ResultInfo;
+import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.callback.OnItemClickListener;
 import block.com.blockchain.mainpage.LetterAdapter;
+import block.com.blockchain.request.HttpConstant;
+import block.com.blockchain.request.HttpSendClass;
+import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.GroupUtils;
+import block.com.blockchain.utils.SPUtils;
 import block.com.blockchain.utils.pinneheader.BladeView;
 import block.com.blockchain.utils.pinneheader.MySectionIndexer;
 import butterknife.BindView;
@@ -35,12 +45,12 @@ public class FriendFragment extends BaseFragment {
     @BindView(R.id.blade_view)
     BladeView bladeView;
     LetterAdapter adapter;
-    private List<PersonaBean> list = new ArrayList<>();
+    private List<UserBean> list = new ArrayList<>();
     private int[] counts;
     private MySectionIndexer mIndexer;
     private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "MyInfoActivity",
-            "N", "O", "P", "Q", "R", "S", "TokenBean", "U", "V", "W", "X", "Y", "Z"};
+    public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+            "N", "O", "PowerBean", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
 
@@ -71,42 +81,7 @@ public class FriendFragment extends BaseFragment {
         manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerAll.setLayoutManager(manager);
-        PersonaBean bean = new PersonaBean();
-        bean.nickName = "A";
-        PersonaBean bean5 = new PersonaBean();
-        bean5.nickName = "bbbbb";
-        PersonaBean bean1 = new PersonaBean();
-        bean1.nickName = "E";
-        PersonaBean bean2 = new PersonaBean();
-        bean2.nickName = "CC";
-        PersonaBean bean3 = new PersonaBean();
-        bean3.nickName = "E";
-        PersonaBean bean4 = new PersonaBean();
-        bean4.nickName = "G";
-        PersonaBean bean6 = new PersonaBean();
-        bean6.nickName = "CC";
-        PersonaBean bean7 = new PersonaBean();
-        bean7.nickName = "CC";
-        PersonaBean bean8 = new PersonaBean();
-        bean8.nickName = "中國";
-        list.add(bean);
-        list.add(bean1);
-        list.add(bean2);
-        list.add(bean3);
-        list.add(bean3);
-        list.add(bean3);
-        list.add(bean3);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean4);
-        list.add(bean5);
-        list.add(bean6);
-        list.add(bean7);
-        list.add(bean8);
+
         adapter = new LetterAdapter(getActivity(), list);
         recyclerAll.setAdapter(adapter);
         bladeView.setOnItemClickListener(new BladeView.OnItemClickListener() {
@@ -130,18 +105,57 @@ public class FriendFragment extends BaseFragment {
             }
         });
 
-        adapter.setOnItemClickListener(new OnItemClickListener<PersonaBean>() {
+        adapter.setOnItemClickListener(new OnItemClickListener<UserBean>() {
             @Override
-            public void onclik(PersonaBean personaBean) {
+            public void onclik(UserBean personaBean) {
 
             }
         });
-        getFriendData();
     }
 
     @Override
     public void onRefresh() {
+        AjaxParams params = new AjaxParams();
+        String moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
+        params.put("mobile", moblie);
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.FRIEND_LIST, new
+                AjaxCallBack<ResultInfo<FriendData>>() {
+                    @Override
+                    public void onSuccess(ResultInfo<FriendData> s) {
+                        super.onSuccess(s);
 
+                        if (s.status.equals("success")) {
+                            List<UserBean> listTemp = s.data.getData();
+                            if (listTemp != null)
+                                list.addAll(listTemp);
+                            virtualData();
+                            getFriendData();
+                        } else {
+                            Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void virtualData() {
+        UserBean userBean = new UserBean();
+        userBean.setNickname("aaa");
+        UserBean userBean1 = new UserBean();
+        userBean1.setNickname("c");
+        UserBean userBean2 = new UserBean();
+        userBean2.setNickname("四谛法");
+        UserBean userBean3 = new UserBean();
+        userBean3.setNickname("zs啊打发");
+        list.add(userBean);
+        list.add(userBean1);
+        list.add(userBean2);
+        list.add(userBean3);
     }
 
     /**
@@ -150,28 +164,28 @@ public class FriendFragment extends BaseFragment {
     private void getFriendData() {
 
         //获取首字母
-        for (PersonaBean cityInfo : list) {
-            if (cityInfo.nickName != null && cityInfo.nickName.trim().length() > 0) {
-                String firstLetter = GroupUtils.getInstance().getFirstLetter(cityInfo.nickName);
+        for (UserBean cityInfo : list) {
+            if (cityInfo.getNickname() != null && cityInfo.getNickname().trim().length() > 0) {
+                String firstLetter = GroupUtils.getInstance().getFirstLetter(cityInfo.getNickname());
                 if (firstLetter == null)
                     cityInfo.nameTag = "}";
                 cityInfo.nameTag = firstLetter;
             } else {
                 cityInfo.nameTag = "}";
             }
-            if (TextUtils.isEmpty(cityInfo.nickName)) {
+            if (TextUtils.isEmpty(cityInfo.getNickname())) {
                 cityInfo.nameTag = "{";
             }
         }
         //排序
-        Collections.sort(list, new Comparator<PersonaBean>() {
+        Collections.sort(list, new Comparator<UserBean>() {
             @Override
-            public int compare(PersonaBean lhs, PersonaBean rhs) {
+            public int compare(UserBean lhs, UserBean rhs) {
                 return lhs.nameTag.compareTo(rhs.nameTag);
             }
         });
         counts = new int[sections.length];
-        for (PersonaBean item : list) { // 计算首字母。
+        for (UserBean item : list) { // 计算首字母。
             String firstCharacter = item.nameTag;
             int index = ALL_CHARACTER.indexOf(firstCharacter);
             if (index == -1) {

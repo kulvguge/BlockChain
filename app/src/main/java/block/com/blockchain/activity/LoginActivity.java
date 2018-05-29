@@ -94,6 +94,7 @@ public class LoginActivity extends BaseActivity {
                         super.onSuccess(resultInfo);
                         if (resultInfo.getAccess_token() != null) {
                             SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
+                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, phone.getText().toString());
                             Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
                             beginLogin();
                         } else {

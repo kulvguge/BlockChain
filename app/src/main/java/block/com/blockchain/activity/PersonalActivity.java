@@ -57,7 +57,7 @@ public class PersonalActivity extends BaseActivity {
 
     private void getUserInfo() {
         AjaxParams params = new AjaxParams();
-        params.put("type", 2 + "");
+        params.put("type", 1+ "");
         params.put("mobile", moblie);
         HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
                 AjaxCallBack<ResultInfo<UserBean>>() {

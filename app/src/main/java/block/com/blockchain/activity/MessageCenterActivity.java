@@ -1,7 +1,9 @@
 package block.com.blockchain.activity;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.tsz.afinal.http.AjaxCallBack;
@@ -29,8 +31,12 @@ import butterknife.ButterKnife;
 public class MessageCenterActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.title)
+    TextView tvTitle;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
     private List<UserBean> listIApply = new ArrayList<>();
     private List<UserBean> listOtherApply = new ArrayList<>();
     private List<BaseFragment> list = new ArrayList<>();
@@ -46,7 +52,28 @@ public class MessageCenterActivity extends BaseActivity {
         viewpager.setAdapter(adapter);
         viewpager.setOffscreenPageLimit(2);
         getApplyList();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int tag =  tab.getPosition();
+                viewpager.setCurrentItem(tag);
+                if(tag==0){
+                    tvTitle.setText(R.string.msg_new_friend);
+                }else{
+                    tvTitle.setText(R.string.msg_new_i_apply);
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private void getApplyList() {

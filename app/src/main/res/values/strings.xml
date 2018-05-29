@@ -8,6 +8,8 @@
     <string name="title_help">帮助</string>
 
     <!--PersonalActivity-->
+    <string name="person_head">头像</string>
+    <string name="person_motify">修改资料</string>
     <string name="person_nick_name">昵称</string>
     <string name="person_name">真实姓名</string>
     <string name="person_phone">手机号码</string>
@@ -45,8 +47,12 @@
     <!--MessageCenterActivity-->
     <string name="msg_title">消息中心</string>
     <string name="msg_new_friend">新的朋友</string>
+    <string name="msg_new_i_apply">我的申请</string>
     <string name="msg_permit">同意</string>
+    <string name="msg_refuse">拒绝</string>
+    <string name="msg_has_refuse">已拒绝</string>
     <string name="msg_has_permit">已同意</string>
+    <string name="msg_wait_resolve">待处理</string>
     <string name="msg_other_apply">申请加我</string>
     <string name="msg_i_apply">我申请的</string>
     <!--积分-->
@@ -65,4 +71,8 @@
     <string name="warn_psd_agin">请再一次输入密码</string>
     <string name="warn_code">请输入验证码</string>
     <string name="warn_no_same">密码不一致</string>
+    <string name="no_permission">缺少相关权限</string>
+    <!--唯一Id-->
+    <item type="id" name="tag_permit" ></item>
+    <item type="id" name="tag_refuse" ></item>
 </resources>

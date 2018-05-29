@@ -14,23 +14,26 @@
         app:titleTextColor="@color/white">
 
     </android.support.v7.widget.Toolbar>
-    <android.support.design.widget.TabLayout android:layout_width="match_parent"
-                                             android:layout_height="50dp"
-                                             android:orientation="horizontal">
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
         <android.support.design.widget.TabItem
-            android:id="@+id/other_apply"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:tag="0"
             android:text="@string/msg_other_apply"
         />
         <android.support.design.widget.TabItem
-            android:id="@+id/i_apply"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:tag="1"
             android:text="@string/msg_i_apply"
         />
     </android.support.design.widget.TabLayout>
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray"

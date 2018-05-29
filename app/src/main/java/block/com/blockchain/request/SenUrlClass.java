@@ -12,7 +12,9 @@ public class SenUrlClass {
     public final static String USER_INFO = HttpConstant.HTTPHOST + "user/info";
     public final static String IS_SESSION = HttpConstant.HTTPHOST + "api/is_session";
     public final static String APPLY_LIST = HttpConstant.HTTPHOST + "api/friend/get_application";
-    public final static String ENERGY = "";
-    public final static String FRIEND_LIST = "";
-
+    public final static String FRIEND_REFUSE = HttpConstant.HTTPHOST + "api/friend/refused";
+    public final static String FRIEND_PERMIT= HttpConstant.HTTPHOST + "api/friend/add";
+    public final static String FRIEND_LIST =  HttpConstant.HTTPHOST +"api/friend/get";
+    public final static String POWER_LIST =  HttpConstant.HTTPHOST +"api/pool/count";
+    public final static String POWER_COLLECTION =  HttpConstant.HTTPHOST +"api/pool/collect";
 }
