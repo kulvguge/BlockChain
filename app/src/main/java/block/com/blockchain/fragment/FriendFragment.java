@@ -19,6 +19,7 @@ import java.util.List;
 
 import block.com.blockchain.R;
 import block.com.blockchain.activity.MessageCenterActivity;
+import block.com.blockchain.activity.PersonalActivity;
 import block.com.blockchain.bean.FriendData;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
@@ -27,6 +28,7 @@ import block.com.blockchain.mainpage.LetterAdapter;
 import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
+import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.GroupUtils;
 import block.com.blockchain.utils.SPUtils;
 import block.com.blockchain.utils.pinneheader.BladeView;
@@ -50,9 +52,10 @@ public class FriendFragment extends BaseFragment {
     private MySectionIndexer mIndexer;
     private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-            "N", "O", "PowerBean", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
+    private boolean isRequest = false;
 
     @Override
     public int getResView() {
@@ -108,7 +111,15 @@ public class FriendFragment extends BaseFragment {
         adapter.setOnItemClickListener(new OnItemClickListener<UserBean>() {
             @Override
             public void onclik(UserBean personaBean) {
-
+                Intent intent = new Intent(getActivity(), PersonalActivity.class);
+                intent.putExtra("moblie", personaBean.getMobile());
+                startActivity(intent);
+            }
+        });
+        adapter.setOnItemLongClickListener(new OnItemClickListener<UserBean>() {
+            @Override
+            public void onclik(UserBean userBean) {
+                showView("提示", "是否删除好友?", "确定", "取消", userBean);
             }
         });
     }
@@ -128,7 +139,6 @@ public class FriendFragment extends BaseFragment {
                             List<UserBean> listTemp = s.data.getData();
                             if (listTemp != null)
                                 list.addAll(listTemp);
-                            virtualData();
                             getFriendData();
                         } else {
                             Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
@@ -141,21 +151,6 @@ public class FriendFragment extends BaseFragment {
                         Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void virtualData() {
-        UserBean userBean = new UserBean();
-        userBean.setNickname("aaa");
-        UserBean userBean1 = new UserBean();
-        userBean1.setNickname("c");
-        UserBean userBean2 = new UserBean();
-        userBean2.setNickname("四谛法");
-        UserBean userBean3 = new UserBean();
-        userBean3.setNickname("zs啊打发");
-        list.add(userBean);
-        list.add(userBean1);
-        list.add(userBean2);
-        list.add(userBean3);
     }
 
     /**
@@ -203,5 +198,63 @@ public class FriendFragment extends BaseFragment {
         if (postion == -1) {
             postion = 0;
         }
+    }
+
+    /**
+     * 删除弹框
+     */
+    private void showView(String title, String count, String left, String right, final UserBean userBean) {
+
+        DialogUtil.showPromptDialog(getActivity(), title, count, left, null, right,
+                new DialogUtil.OnMenuClick() {
+
+                    @Override
+                    public void onRightMenuClick() {
+                    }
+
+                    @Override
+                    public void onLeftMenuClick() {
+                        delFriends(userBean);
+                    }
+
+                    @Override
+                    public void onCenterMenuClick() {
+
+
+                    }
+                }, "");
+    }
+
+    /**
+     * 删除好友
+     */
+    private void delFriends(final UserBean userBean) {
+        if (isRequest)
+            return;
+        isRequest = true;
+        AjaxParams params = new AjaxParams();
+        params.put("mobile", userBean.getMobile());
+        HttpSendClass.getInstance().postWithToken(params, SenUrlClass.FRIEND_DEL, new
+                AjaxCallBack<ResultInfo<FriendData>>() {
+
+                    @Override
+                    public void onSuccess(ResultInfo<FriendData> s) {
+                        super.onSuccess(s);
+                        isRequest = false;
+                        if (s.status.equals("success")) {
+                            list.remove(userBean);
+                            getFriendData();
+                        } else {
+                            Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                        isRequest = false;
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

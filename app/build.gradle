@@ -49,4 +49,5 @@ dependencies {
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation files('libs/protobuf-2.6.1.jar')
     implementation files('libs/afinal-0.3.31-bin.jar')
+    implementation files('libs/zxing-core-3.2.1.jar')
 }

@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@mipmap/left_white_arrow"
         app:title="@string/person_motify"
         app:titleTextColor="@color/white"/>
@@ -28,6 +30,7 @@
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="120dp"
                           android:gravity="center_vertical"
+                          android:paddingLeft="16dp"
                           android:orientation="horizontal">
                 <TextView android:layout_width="0dp"
                           android:layout_height="match_parent"
@@ -45,19 +48,17 @@
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_launcher"/>
             </LinearLayout>
-            <TextView
+            <block.com.blockchain.customview.BasicEditInfoView
                 android:id="@+id/person_nick_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/person_nick_name"/>
+                app:ltext="@string/person_nick_name"/>
             <block.com.blockchain.customview.BasicEditInfoView
                 android:id="@+id/person_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ltext="@string/person_name"/>
-            <block.com.blockchain.customview.BasicEditInfoView
+            <block.com.blockchain.customview.BasicInfoView
                 android:id="@+id/person_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

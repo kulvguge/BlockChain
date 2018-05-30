@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
@@ -46,7 +47,6 @@ public class PersonFragment extends BaseFragment {
     LinearLayout mineToPerson;
     @BindView(R.id.layout_score)
     LinearLayout layout_score;
-
     @BindView(R.id.score)
     TextView score;
     @BindView(R.id.right_icon)
@@ -73,6 +73,7 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void init() {
+        getUserInfo();
         mineTitle.inflateMenu(R.menu.mine);
         mineTitle.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -102,12 +103,12 @@ public class PersonFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.layout_phone:
                 break;
-            case R.id.layout_work:
-                break;
+
             case R.id.layout_qrcode:
+                DialogUtil.showQRCodeDialog("http://www.baidu.com", getActivity());
                 break;
             case R.id.layout_motify:
-                break;
+            case R.id.layout_work:
             case R.id.mine_to_person:
                 Intent intent = new Intent(getActivity(), MyInfoActivity.class);
                 startActivity(intent);
@@ -122,7 +123,7 @@ public class PersonFragment extends BaseFragment {
     private void getUserInfo() {
         AjaxParams params = new AjaxParams();
         params.put("type", 1 + "");
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.USER_INFO, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
@@ -149,6 +150,7 @@ public class PersonFragment extends BaseFragment {
         layoutPhone.setCenterText(userBean.getMobile());
         layoutWork.setCenterText(userBean.getEnterprise());
         score.setText(userBean.getIntegral());
-        Glide.with(this).load(userBean.getPic_url()).into(mineImg);
+        Glide.with(this).load(userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
+                .into(mineImg);
     }
 }

@@ -30,10 +30,11 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/fish_3"/>
+                android:src="@mipmap/default_head"/>
             <LinearLayout android:layout_width="0dp"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:layout_marginLeft="10dp"
                           android:orientation="vertical">
                 <TextView
                     android:id="@+id/mine_nick"
@@ -54,7 +55,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/right_gray_arrow"/>
+                android:src="@mipmap/right_white_arrow"/>
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout

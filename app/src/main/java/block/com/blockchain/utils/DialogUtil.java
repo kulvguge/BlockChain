@@ -34,7 +34,6 @@ public class DialogUtil {
     private static int timegap = -1;
 
 
-    
     public static void showDialog(Activity context, String title, String msg, String confirmMsg, String cancelMsg,
                                   final SelectListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT);
@@ -384,6 +383,29 @@ public class DialogUtil {
         }
     }
 
+    public static  void showQRCodeDialog(String url, Context context) {
+
+        Dialog diag = new Dialog(context);
+
+        final Dialog dialog = diag;
+        //去掉自定义dialog 在部分机型上出现的蓝色横线
+        int divierId = context.getResources().getIdentifier("o2o:id/titleDivider", null, null);
+        View divider = dialog.findViewById(divierId);
+        if (divider != null) {
+            divider.setBackgroundColor(Color.TRANSPARENT);
+        }
+        dialog.show();
+        View view = LayoutInflater.from(MyApp.mContext).inflate(R.layout.dialog_qr, null);
+        ImageView imageView = view.findViewById(R.id.qr_img);
+
+        imageView.setImageBitmap(QRUtils.createQRImage(url, DensityUtil.dip2px(context, 290), DensityUtil.dip2px
+                (context, 290)));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.setContentView(view);
+    }
+
     public static void showPromptDialog(Context activity, String title, String content, String leftMenu,
                                         String centerMenu, String rightMenu, final OnMenuClick onMenuClick, String
                                                 content2) {
@@ -626,7 +648,6 @@ public class DialogUtil {
             e.printStackTrace();
         }
     }
-
 
 
     public static Dialog showPromptDialogIcon(Activity activity, String title, String content, String leftMenu,

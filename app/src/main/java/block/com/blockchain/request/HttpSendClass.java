@@ -32,6 +32,8 @@ public class HttpSendClass {
 
     public <T> void post(AjaxParams params, String url, final AjaxCallBack<T>
             sendReturnDataListener) {
+        if (params != null)
+            Log.i("request_params", params.toString());
         getFinalHttp().post(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {
@@ -62,7 +64,8 @@ public class HttpSendClass {
 
     public <T> void get(AjaxParams params, String url, final AjaxCallBack<T>
             sendReturnDataListener) {
-
+        if (params != null)
+            Log.i("request_params", params.toString());
         getFinalHttp().get(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {
@@ -93,6 +96,8 @@ public class HttpSendClass {
 
     public <T> void getWithToken(AjaxParams params, String url, final AjaxCallBack<T>
             sendReturnDataListener) {
+        if (params != null)
+            Log.i("request_params", params.toString());
         String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
         getFinalHttp().addHeader("Authorization", "Bearer " + AUTH);
         getFinalHttp().get(url, params, new AjaxCallBack<String>() {
@@ -126,6 +131,8 @@ public class HttpSendClass {
 
     public <T> void postWithToken(AjaxParams params, String url, final AjaxCallBack<T>
             sendReturnDataListener) {
+        if (params != null)
+            Log.i("request_params", params.toString());
         String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
         getFinalHttp().addHeader("Authorization", "Bearer " + AUTH);
         getFinalHttp().post(url, params, new AjaxCallBack<String>() {

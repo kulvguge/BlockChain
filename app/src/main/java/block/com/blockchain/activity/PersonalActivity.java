@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
@@ -55,11 +56,14 @@ public class PersonalActivity extends BaseActivity {
         getUserInfo();
     }
 
+    /**
+     * 查询用户资料
+     */
     private void getUserInfo() {
         AjaxParams params = new AjaxParams();
-        params.put("type", 1+ "");
+        params.put("type", 2 + "");
         params.put("mobile", moblie);
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.USER_INFO, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
@@ -79,7 +83,6 @@ public class PersonalActivity extends BaseActivity {
                     }
                 });
     }
-
     private void dataSet(UserBean userBean) {
         personNickName.setText(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
@@ -92,7 +95,10 @@ public class PersonalActivity extends BaseActivity {
         personBirthday.setRightMsg(userBean.getBirthday());
         personWork.setRightMsg(userBean.getEnterprise());
         personSignature.setRightMsg(userBean.getSelf_sign());
-        Glide.with(this).load(userBean.getPic_url()).into(bigImg);
-        Glide.with(this).load(userBean.getPic_url()).into(smallImg);
+        RequestOptions options = new RequestOptions();
+        options.placeholder(R.mipmap.default_head);
+        options.error(R.mipmap.default_head);
+        Glide.with(this).load(userBean.getPic_url()).apply(options).into(bigImg);
+        Glide.with(this).load(userBean.getPic_url()).apply(options).into(smallImg);
     }
 }

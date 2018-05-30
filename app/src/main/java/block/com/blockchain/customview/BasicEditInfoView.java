@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class BasicEditInfoView extends LinearLayout {
     TextView leftMsg;
     @BindView(R.id.right_msg)
     EditText rightMsg;
+    TextWatcher textWatcher;
 
     public BasicEditInfoView(Context context) {
         super(context);
@@ -61,5 +63,10 @@ public class BasicEditInfoView extends LinearLayout {
 
     public void setRightMsg(@StringRes int msg) {
         rightMsg.setText(msg);
+    }
+
+    public void setOnEditChangeListener(TextWatcher textWatcher) {
+        this.textWatcher = textWatcher;
+        rightMsg.addTextChangedListener(textWatcher);
     }
 }

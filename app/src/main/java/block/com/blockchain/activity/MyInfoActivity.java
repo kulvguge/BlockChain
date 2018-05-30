@@ -8,24 +8,31 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.MotifyUserBean;
@@ -39,6 +46,7 @@ import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.FileUtils;
 import block.com.blockchain.utils.PhoneAdapterUtils;
 import block.com.blockchain.utils.SDCardUtils;
+import block.com.blockchain.utils.TimeUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -51,11 +59,11 @@ public class MyInfoActivity extends BaseActivity {
     @BindView(R.id.small_img)
     ImageView smallImg;
     @BindView(R.id.person_nick_name)
-    TextView personNickName;
+    BasicEditInfoView personNickName;
     @BindView(R.id.person_name)
     BasicEditInfoView personName;
     @BindView(R.id.person_phone)
-    BasicEditInfoView personPhone;
+    BasicInfoView personPhone;
     @BindView(R.id.person_sex)
     BasicInfoView personSex;
     @BindView(R.id.person_birthday)
@@ -65,13 +73,17 @@ public class MyInfoActivity extends BaseActivity {
     @BindView(R.id.person_signature)
     BasicEditInfoView personSignature;
     @BindView(R.id.person_title)
-    private Toolbar personTitle;
+    Toolbar personTitle;
     private File picFile;
     private String upLoadPath = "";
     private PopupWindow popupWindow;//性别选择弹框
     protected static final int IMAGE_ALBUM = 155;// 相册
     protected static final int IMAGE_TAK = 154; // 拍照
     private MotifyUserBean oldUserBean = null;
+    private AjaxParams motifyParams;//修改后的请求
+    private PopupWindow popupWindowDate;
+    private String date = "";
+    private String tempDate = "";
 
     @Override
     public void init() {
@@ -84,6 +96,33 @@ public class MyInfoActivity extends BaseActivity {
                 imgChoose();
             }
         });
+        personSex.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopwindow("男", "女", "取消", new OnPopWindowClickLisenter() {
+                    @Override
+                    public void onButtonOne() {
+                        oldUserBean.setHas_sex(true);
+                        oldUserBean.setSex(1);
+                        personSex.setRightMsg("男");
+                    }
+
+                    @Override
+                    public void onButtonTwo() {
+                        oldUserBean.setHas_sex(true);
+                        oldUserBean.setSex(2);
+                        personSex.setRightMsg("女");
+                    }
+                });
+            }
+        });
+        personBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePick();
+            }
+        });
+
     }
 
     /**
@@ -92,7 +131,7 @@ public class MyInfoActivity extends BaseActivity {
     private void getUserInfo() {
         AjaxParams params = new AjaxParams();
         params.put("type", 1 + "");
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.USER_INFO, new
                 AjaxCallBack<ResultInfo<MotifyUserBean>>() {
                     @Override
                     public void onSuccess(ResultInfo<MotifyUserBean> resultInfo) {
@@ -117,10 +156,8 @@ public class MyInfoActivity extends BaseActivity {
     /**
      * 修改资料
      */
-    private void motify() {
-        AjaxParams params = new AjaxParams();
-        params.put("type", 1 + "");
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.TOKEN, new
+    private void motify(AjaxParams ajaxParams) {
+        HttpSendClass.getInstance().postWithToken(ajaxParams, SenUrlClass.MOTIFY_USER, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
@@ -147,7 +184,7 @@ public class MyInfoActivity extends BaseActivity {
      * @param userBean
      */
     private void dataSet(UserBean userBean) {
-        personNickName.setText(userBean.getNickname());
+        personNickName.setRightMsg(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
         if (userBean.getSex() == 1) {
             personSex.setRightMsg(R.string.person_sex_man);
@@ -158,7 +195,44 @@ public class MyInfoActivity extends BaseActivity {
         personBirthday.setRightMsg(userBean.getBirthday());
         personWork.setRightMsg(userBean.getEnterprise());
         personSignature.setRightMsg(userBean.getSelf_sign());
-        Glide.with(this).load(userBean.getPic_url()).into(smallImg);
+
+        RequestOptions options = new RequestOptions();
+        options.placeholder(R.mipmap.default_head);
+        options.error(R.mipmap.default_head);
+        Glide.with(this).load(userBean.getPic_url()).apply(options).into(smallImg);
+
+        //放在后面是因为在组装数据时候会调用TEXTWater
+        personName.setOnEditChangeListener(new MyTextWatcher(personName));
+        personWork.setOnEditChangeListener(new MyTextWatcher(personWork));
+        personNickName.setOnEditChangeListener(new MyTextWatcher(personNickName));
+        personSignature.setOnEditChangeListener(new MyTextWatcher(personSignature));
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param id
+     * @param text
+     */
+    private void setHasChanged(@IdRes int id, String text) {
+        switch (id) {
+            case R.id.person_name:
+                oldUserBean.setHas_name(true);
+                oldUserBean.setReal_name(text);
+                break;
+            case R.id.person_work:
+                oldUserBean.setHas_work(true);
+                oldUserBean.setEnterprise(text);
+                break;
+            case R.id.person_nick_name:
+                oldUserBean.setHas_nick(true);
+                oldUserBean.setNickname(text);
+                break;
+            case R.id.person_signature:
+                oldUserBean.setHas_sign(true);
+                oldUserBean.setSelf_sign(text);
+                break;
+        }
     }
 
     /**
@@ -258,8 +332,37 @@ public class MyInfoActivity extends BaseActivity {
             case IMAGE_TAK:
                 if (resultCode == RESULT_OK) {
                     upLoadPath = getAbsPath(data);
+                    oldUserBean.setPic_url(upLoadPath);
+                    oldUserBean.setHas_url(true);
+                    Glide.with(this).load(oldUserBean.getPic_url()).into(smallImg);
                 }
                 break;
+        }
+    }
+
+    /**
+     * 文本监听
+     */
+    class MyTextWatcher implements TextWatcher {
+        View view;
+
+        public MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            setHasChanged(view.getId(), editable.toString());
         }
     }
 
@@ -347,14 +450,21 @@ public class MyInfoActivity extends BaseActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            showView("修改资料", "资料已经发生改变\n是否保存修改", "确定", "取消");
+            if (oldUserBean != null) {
+                motifyParams = oldUserBean.getMotifyParams();
+                if (motifyParams != null) {
+                    showView("修改资料", "资料已经发生改变\n是否保存修改", "确定", "取消");
+                    return true;
+                }
+
+            }
+
         }
         return super.onKeyUp(keyCode, event);
     }
 
     // 返回弹框
     private void showView(String title, String count, String left, String right) {
-
         DialogUtil.showPromptDialog(MyInfoActivity.this, title, count, left, null, right,
                 new DialogUtil.OnMenuClick() {
 
@@ -365,7 +475,7 @@ public class MyInfoActivity extends BaseActivity {
 
                     @Override
                     public void onLeftMenuClick() {
-
+                        motify(motifyParams);
                     }
 
                     @Override
@@ -375,4 +485,75 @@ public class MyInfoActivity extends BaseActivity {
                     }
                 }, "");
     }
+
+    /**
+     * 日期选择
+     */
+//新添头像弹出框
+    protected void showDatePick() {
+        DialogUtil.showPopupWindow(this, R.layout.date_picker_layout, new DialogUtil.OnEventListener() {
+            @Override
+            public void eventListener(View parentView, Object window) {
+                popupWindowDate = (PopupWindow) window;
+                DatePicker datePicker = (DatePicker) parentView.findViewById(R.id.datePicker);
+                TextView ensure = (TextView) parentView.findViewById(R.id.ensure);
+                TextView cancel = (TextView) parentView.findViewById(R.id.cancel);
+                Calendar calendar = Calendar.getInstance();
+                int year;
+                int mouth;
+                int day;
+                if (date != null) {
+                    Date dater = TimeUtils.formatTimeShort(date);
+                    if (dater != null)
+                        calendar.setTime(dater);
+                }
+                year = calendar.get(Calendar.YEAR);
+                mouth = calendar.get(Calendar.MONTH);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+                if (mouth + 1 < 10) {
+                    tempDate = year + "-0" + (mouth + 1);
+                } else {
+                    tempDate = year + "-" + (mouth + 1);
+                }
+                if (day < 10) {
+                    tempDate = tempDate + "-0" + day;
+                } else {
+                    tempDate = tempDate + "-" + day;
+                }
+                datePicker.init(year, mouth, day, new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if (monthOfYear + 1 < 10) {
+                            tempDate = year + "-0" + (monthOfYear + 1);
+                        } else {
+                            tempDate = year + "-" + (monthOfYear + 1);
+                        }
+                        if (dayOfMonth < 10) {
+                            tempDate = tempDate + "-0" + dayOfMonth;
+                        } else {
+                            tempDate = tempDate + "-" + dayOfMonth;
+                        }
+                    }
+                });
+
+                ensure.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        date = tempDate;
+                        personBirthday.setRightMsg(date);
+                        oldUserBean.setBirthday(date);
+                        oldUserBean.setHas_birth(true);
+                        popupWindowDate.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindowDate.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
 }

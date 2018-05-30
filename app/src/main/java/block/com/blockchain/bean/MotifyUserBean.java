@@ -130,6 +130,7 @@ public class MotifyUserBean extends UserBean {
             }
             if (changed)
                 return params;
+
             return null;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -24,7 +24,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     List<UserBean> list;
     Context context;
     private MySectionIndexer mIndexer;
-    private OnItemClickListener<UserBean> onItemClickListener;
+    private OnItemClickListener<UserBean> onItemClickListener,onItemLongClickListener;
     private List<View> listView = new ArrayList<>();
 
     public LetterAdapter(Context context, List<UserBean> list) {
@@ -63,6 +63,16 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
                 }
             }
         });
+        holder.tvName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (onItemLongClickListener != null) {
+                    onItemLongClickListener.onclik(info);
+                }
+                return false;
+            }
+        });
+
     }
 
     public View getView(int pos) {
@@ -90,5 +100,8 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
 
     public void setOnItemClickListener(OnItemClickListener<UserBean> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+    public void setOnItemLongClickListener(OnItemClickListener<UserBean> onItemClickListener) {
+        this.onItemLongClickListener = onItemClickListener;
     }
 }

@@ -17,4 +17,6 @@
     <color name="text_color">#757575</color>
 
     <color name="base_bg_color">#F4F5F7</color>
+    <color name="text1">#59B29C</color>
+    <color name="text2">#333333</color>
 </resources>
