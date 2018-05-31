@@ -47,7 +47,6 @@ public class LoginActivity extends BaseActivity {
     public void init() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        String auth = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
     }
 
     @OnClick({R.id.change_to_reg, R.id.login})

@@ -7,12 +7,13 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/person_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="@color/blue"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@mipmap/left_white_arrow"
+        app:navigationIcon="@mipmap/white_back"
         app:title="@string/person_motify"
+        app:titleTextAppearance="@style/ToolbarTitle"
         app:titleTextColor="@color/white"/>
     <View android:layout_width="match_parent" android:layout_height="10dp"
           android:background="@color/grayLine"></View>
@@ -28,10 +29,10 @@
             android:orientation="vertical"
         >
             <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="120dp"
+                          android:layout_height="100dp"
                           android:gravity="center_vertical"
-                          android:paddingLeft="16dp"
-                          android:orientation="horizontal">
+                          android:orientation="horizontal"
+                          android:paddingLeft="16dp">
                 <TextView android:layout_width="0dp"
                           android:layout_height="match_parent"
                           android:layout_weight="1"
@@ -39,14 +40,14 @@
                           android:text="@string/person_head"/>
                 <ImageView
                     android:id="@+id/small_img"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="@color/white"
                     android:padding="2dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:src="@mipmap/default_head"/>
             </LinearLayout>
             <block.com.blockchain.customview.BasicEditInfoView
                 android:id="@+id/person_nick_name"

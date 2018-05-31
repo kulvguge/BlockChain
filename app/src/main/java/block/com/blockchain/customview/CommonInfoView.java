@@ -62,4 +62,8 @@ public class CommonInfoView extends LinearLayout {
     public void setCenterText(String text) {
         tvText.setText(text);
     }
+
+    public String getRightText() {
+        return tvText.getText().toString();
+    }
 }

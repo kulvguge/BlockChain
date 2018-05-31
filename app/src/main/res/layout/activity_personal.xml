@@ -78,6 +78,6 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/person_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:navigationIcon="@mipmap/left_white_arrow"/>
+        android:layout_height="50dp"
+        app:navigationIcon="@mipmap/white_back"/>
 </RelativeLayout>

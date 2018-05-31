@@ -22,6 +22,7 @@
             android:id="@+id/center_text"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:hint="@string/no_info"
             android:text=""
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content" />

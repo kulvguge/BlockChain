@@ -1,8 +1,14 @@
 package block.com.blockchain.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,15 +24,17 @@ import net.tsz.afinal.http.AjaxParams;
 
 import block.com.blockchain.R;
 import block.com.blockchain.activity.LoginActivity;
+import block.com.blockchain.activity.MainActivity;
 import block.com.blockchain.activity.MyInfoActivity;
 import block.com.blockchain.activity.ScoreActivity;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
-import block.com.blockchain.callback.SelectListener;
 import block.com.blockchain.customview.CommonInfoView;
+import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
+import block.com.blockchain.utils.SPUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -59,7 +67,9 @@ public class PersonFragment extends BaseFragment {
     CommonInfoView layoutQrcode;
     @BindView(R.id.layout_motify)
     CommonInfoView layoutMotify;
-
+    private Intent intent;
+    private final int REQUEST_PHONE = 1;
+    private String url = "";
 
     @Override
     public int getResView() {
@@ -68,27 +78,34 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void onRefresh() {
-
+        getUserInfo();
     }
 
     @Override
     public void init() {
-        getUserInfo();
         mineTitle.inflateMenu(R.menu.mine);
         mineTitle.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                DialogUtil.showPromptDialog(getActivity(), null, "确定退出当前账号", "确定", null, "取消", new DialogUtil
+                        .OnMenuClick() {
 
-                DialogUtil.showDialog(getActivity(), "", "确定退出当前账号", "确定", "取消", new SelectListener() {
+
                     @Override
-                    public void confirm() {
+                    public void onLeftMenuClick() {
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
+                        SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, "");
                         getActivity().finish();
                     }
 
                     @Override
-                    public void cancel() {
+                    public void onCenterMenuClick() {
+
+                    }
+
+                    @Override
+                    public void onRightMenuClick() {
 
                     }
                 });
@@ -102,8 +119,10 @@ public class PersonFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_phone:
+                if (!TextUtils.isEmpty(layoutPhone.getRightText())) {
+                    checkPermission(layoutPhone.getRightText());
+                }
                 break;
-
             case R.id.layout_qrcode:
                 DialogUtil.showQRCodeDialog("http://www.baidu.com", getActivity());
                 break;
@@ -111,15 +130,44 @@ public class PersonFragment extends BaseFragment {
             case R.id.layout_work:
             case R.id.mine_to_person:
                 Intent intent = new Intent(getActivity(), MyInfoActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, MainActivity.USER_INFO);
                 break;
             case R.id.layout_score:
                 Intent intentS = new Intent(getActivity(), ScoreActivity.class);
+                intentS.putExtra("nickName", mineNick.getText().toString());
+                intentS.putExtra("url", url);
                 startActivity(intentS);
                 break;
         }
     }
 
+    /**
+     * 权限检测
+     */
+    private void checkPermission(String phone) {
+        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager
+                .PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
+                    REQUEST_PHONE);
+            return;
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PHONE && grantResults[0] == PackageManager
+                .PERMISSION_GRANTED) {
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 获取用户信息
+     */
     private void getUserInfo() {
         AjaxParams params = new AjaxParams();
         params.put("type", 1 + "");
@@ -150,6 +198,7 @@ public class PersonFragment extends BaseFragment {
         layoutPhone.setCenterText(userBean.getMobile());
         layoutWork.setCenterText(userBean.getEnterprise());
         score.setText(userBean.getIntegral());
+        url = userBean.getPic_url();
         Glide.with(this).load(userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
                 .into(mineImg);
     }

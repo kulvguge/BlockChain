@@ -122,7 +122,13 @@ public class MyInfoActivity extends BaseActivity {
                 showDatePick();
             }
         });
-
+        personTitle.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
     }
 
     /**

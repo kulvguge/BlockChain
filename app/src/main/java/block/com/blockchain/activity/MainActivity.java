@@ -1,5 +1,6 @@
 package block.com.blockchain.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +29,9 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView navigation;
     FragmentViewPagerAdapter adapter;
     FragmentManager manager;
-    List<BaseFragment> list=new ArrayList();
+    List<BaseFragment> list = new ArrayList();
+    public static final int SEARCH = 1;
+    public static final int USER_INFO = 2;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -51,21 +54,32 @@ public class MainActivity extends BaseActivity {
             return false;
         }
     };
+
     @Override
     public void init() {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomSheetViewHelper.disableShiftMode(navigation);
-        BottomSheetViewHelper.setColor(this,navigation);
-        manager=getSupportFragmentManager();
+        BottomSheetViewHelper.setColor(this, navigation);
+        manager = getSupportFragmentManager();
         list.add(new HomeFragment());
         list.add(new FriendFragment());
         list.add(new PersonFragment());
         list.add(new HelpFragment());
-        adapter=new FragmentViewPagerAdapter(manager,list);
+        adapter = new FragmentViewPagerAdapter(manager, list);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEARCH && resultCode == RESULT_OK) {
+            list.get(1).onRefresh();
+        } else if (requestCode == USER_INFO && resultCode == RESULT_OK) {
+            list.get(2).onRefresh();
+        }
     }
 }

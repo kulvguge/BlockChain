@@ -11,4 +11,5 @@ public class ResultInfo<T> {
     @SerializedName("msg")
     public String message;
     public String status;
+
 }

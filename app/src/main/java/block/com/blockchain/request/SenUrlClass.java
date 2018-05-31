@@ -19,4 +19,6 @@ public class SenUrlClass {
     public final static String FRIEND_LIST =  HttpConstant.HTTPHOST +"api/friend/get";
     public final static String POWER_LIST =  HttpConstant.HTTPHOST +"api/pool/count";
     public final static String POWER_COLLECTION =  HttpConstant.HTTPHOST +"api/pool/collect";
+    public final static String TRADE_TURNOVER =  HttpConstant.HTTPHOST +"api/user/integeallist";
+
 }

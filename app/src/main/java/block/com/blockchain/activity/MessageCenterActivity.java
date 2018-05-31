@@ -3,6 +3,7 @@ package block.com.blockchain.activity;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,12 @@ public class MessageCenterActivity extends BaseActivity {
         viewpager.setAdapter(adapter);
         viewpager.setOffscreenPageLimit(2);
         getApplyList();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

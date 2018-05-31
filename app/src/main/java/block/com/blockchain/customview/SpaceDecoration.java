@@ -20,7 +20,7 @@ public class SpaceDecoration extends RecyclerView.ItemDecoration {
 
     public SpaceDecoration(Context context) {
         dividerPaint = new Paint();
-        dividerPaint.setColor(context.getResources().getColor(R.color.colorAccent));
+        dividerPaint.setColor(context.getResources().getColor(R.color.grayLine));
         dividerHeight = context.getResources().getDimensionPixelSize(R.dimen.divider_height);
     }
 

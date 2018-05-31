@@ -12,14 +12,17 @@ import android.widget.Toast;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.activity.MainActivity;
 import block.com.blockchain.activity.MessageCenterActivity;
 import block.com.blockchain.activity.PersonalActivity;
+import block.com.blockchain.activity.SearchActivity;
 import block.com.blockchain.bean.FriendData;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
@@ -70,11 +73,17 @@ public class FriendFragment extends BaseFragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_search:
+                        Intent intent1 = new Intent();
+                        intent1.setClass(getActivity(), SearchActivity.class);
+                        intent1.putExtra("info", (Serializable) list);
+                        startActivityForResult(intent1, MainActivity.SEARCH);
+                        getActivity().overridePendingTransition(0, 0);
                         break;
                     case R.id.action_msg_center:
                         Intent intent = new Intent();
                         intent.setClass(getActivity(), MessageCenterActivity.class);
                         startActivity(intent);
+
                         break;
                 }
                 return false;
@@ -136,6 +145,7 @@ public class FriendFragment extends BaseFragment {
                         super.onSuccess(s);
 
                         if (s.status.equals("success")) {
+                            list.clear();
                             List<UserBean> listTemp = s.data.getData();
                             if (listTemp != null)
                                 list.addAll(listTemp);
