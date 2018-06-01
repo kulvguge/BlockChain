@@ -3,7 +3,10 @@ package block.com.blockchain.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -20,6 +23,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +36,7 @@ import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
+import java.lang.reflect.Field;
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.MotifyUserBean;
@@ -46,7 +50,6 @@ import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.FileUtils;
 import block.com.blockchain.utils.PhoneAdapterUtils;
 import block.com.blockchain.utils.SDCardUtils;
-import block.com.blockchain.utils.TimeUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -79,6 +82,7 @@ public class MyInfoActivity extends BaseActivity {
     private PopupWindow popupWindow;//性别选择弹框
     protected static final int IMAGE_ALBUM = 155;// 相册
     protected static final int IMAGE_TAK = 154; // 拍照
+    protected static final int DATE = 153; // 日期
     private MotifyUserBean oldUserBean = null;
     private AjaxParams motifyParams;//修改后的请求
     private PopupWindow popupWindowDate;
@@ -125,8 +129,19 @@ public class MyInfoActivity extends BaseActivity {
         personTitle.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                finish();
+
+                if (oldUserBean != null) {
+                    motifyParams = oldUserBean.getMotifyParams();
+                    if (motifyParams != null) {
+                        showView("修改资料", "资料已经发生改变\n是否保存修改", "确定", "取消");
+                    } else {
+                        finish();
+                    }
+
+                } else {
+                    finish();
+                }
+
             }
         });
     }
@@ -169,7 +184,12 @@ public class MyInfoActivity extends BaseActivity {
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
                         super.onSuccess(resultInfo);
                         if (resultInfo.status.equals("success")) {
-                            dataSet(resultInfo.data);
+                            setResult(RESULT_OK);
+                            finish();
+                            Toast.makeText(MyInfoActivity.this, getResources().getString(R.string.motify_success), Toast
+                                    .LENGTH_SHORT)
+                                    .show();
+//                            dataSet(resultInfo.data);
                         } else {
                             Toast.makeText(MyInfoActivity.this, resultInfo.message, Toast.LENGTH_SHORT).show();
                         }
@@ -254,7 +274,6 @@ public class MyInfoActivity extends BaseActivity {
                     picFile = FileUtils.createFile(filePath);
                 }
                 if (Build.VERSION.SDK_INT >= 23) {
-
                     if (PackageManager.PERMISSION_GRANTED == ContextCompat
                             .checkSelfPermission(MyInfoActivity.this,
                                     Manifest.permission.CAMERA)) {
@@ -341,6 +360,14 @@ public class MyInfoActivity extends BaseActivity {
                     oldUserBean.setPic_url(upLoadPath);
                     oldUserBean.setHas_url(true);
                     Glide.with(this).load(oldUserBean.getPic_url()).into(smallImg);
+                }
+                break;
+            case DATE:
+                if (resultCode == RESULT_OK) {
+                    date = data.getStringExtra("date");
+                    personBirthday.setRightMsg(date);
+                    oldUserBean.setBirthday(date);
+                    oldUserBean.setHas_birth(true);
                 }
                 break;
         }
@@ -495,71 +522,109 @@ public class MyInfoActivity extends BaseActivity {
     /**
      * 日期选择
      */
-//新添头像弹出框
     protected void showDatePick() {
-        DialogUtil.showPopupWindow(this, R.layout.date_picker_layout, new DialogUtil.OnEventListener() {
-            @Override
-            public void eventListener(View parentView, Object window) {
-                popupWindowDate = (PopupWindow) window;
-                DatePicker datePicker = (DatePicker) parentView.findViewById(R.id.datePicker);
-                TextView ensure = (TextView) parentView.findViewById(R.id.ensure);
-                TextView cancel = (TextView) parentView.findViewById(R.id.cancel);
-                Calendar calendar = Calendar.getInstance();
-                int year;
-                int mouth;
-                int day;
-                if (date != null) {
-                    Date dater = TimeUtils.formatTimeShort(date);
-                    if (dater != null)
-                        calendar.setTime(dater);
-                }
-                year = calendar.get(Calendar.YEAR);
-                mouth = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_MONTH);
-                if (mouth + 1 < 10) {
-                    tempDate = year + "-0" + (mouth + 1);
-                } else {
-                    tempDate = year + "-" + (mouth + 1);
-                }
-                if (day < 10) {
-                    tempDate = tempDate + "-0" + day;
-                } else {
-                    tempDate = tempDate + "-" + day;
-                }
-                datePicker.init(year, mouth, day, new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (monthOfYear + 1 < 10) {
-                            tempDate = year + "-0" + (monthOfYear + 1);
-                        } else {
-                            tempDate = year + "-" + (monthOfYear + 1);
-                        }
-                        if (dayOfMonth < 10) {
-                            tempDate = tempDate + "-0" + dayOfMonth;
-                        } else {
-                            tempDate = tempDate + "-" + dayOfMonth;
-                        }
-                    }
-                });
-
-                ensure.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        date = tempDate;
-                        personBirthday.setRightMsg(date);
-                        oldUserBean.setBirthday(date);
-                        oldUserBean.setHas_birth(true);
-                        popupWindowDate.dismiss();
-                    }
-                });
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindowDate.dismiss();
-                    }
-                });
-            }
-        });
+        Intent intent = new Intent();
+        intent.putExtra("date", date);
+        intent.setClass(this, DialogActivity.class);
+        startActivityForResult(intent, DATE);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//        DialogUtil.showPopupWindow(this, R.layout.date_picker_layout, new DialogUtil.OnEventListener() {
+//            @Override
+//            public void eventListener(View parentView, Object window) {
+//                popupWindowDate = (PopupWindow) window;
+//                DatePicker datePicker = (DatePicker) parentView.findViewById(R.id.datePicker);
+//                TextView ensure = (TextView) parentView.findViewById(R.id.ensure);
+//                TextView cancel = (TextView) parentView.findViewById(R.id.cancel);
+//                Calendar calendar = Calendar.getInstance();
+//                int year;
+//                int mouth;
+//                int day;
+//                if (date != null) {
+//                    Date dater = TimeUtils.formatTimeShort(date);
+//                    if (dater != null)
+//                        calendar.setTime(dater);
+//                }
+//                year = calendar.get(Calendar.YEAR);
+//                mouth = calendar.get(Calendar.MONTH);
+//                day = calendar.get(Calendar.DAY_OF_MONTH);
+//                if (mouth + 1 < 10) {
+//                    tempDate = year + "-0" + (mouth + 1);
+//                } else {
+//                    tempDate = year + "-" + (mouth + 1);
+//                }
+//                if (day < 10) {
+//                    tempDate = tempDate + "-0" + day;
+//                } else {
+//                    tempDate = tempDate + "-" + day;
+//                }
+//                datePicker.init(year, mouth, day, new DatePicker.OnDateChangedListener() {
+//                    @Override
+//                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        if (monthOfYear + 1 < 10) {
+//                            tempDate = year + "-0" + (monthOfYear + 1);
+//                        } else {
+//                            tempDate = year + "-" + (monthOfYear + 1);
+//                        }
+//                        if (dayOfMonth < 10) {
+//                            tempDate = tempDate + "-0" + dayOfMonth;
+//                        } else {
+//                            tempDate = tempDate + "-" + dayOfMonth;
+//                        }
+//                    }
+//                });
+//
+//                ensure.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        date = tempDate;
+//
+//                        popupWindowDate.dismiss();
+//                    }
+//                });
+//                cancel.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindowDate.dismiss();
+//                    }
+//                });
+//            }
+//        });
     }
 
+
+    private void setDatePickerDividerColor(DatePicker datePicker) {
+        LinearLayout llFirst = (LinearLayout) datePicker.getChildAt(0);
+
+        LinearLayout mSpinners = (LinearLayout) llFirst.getChildAt(0);
+        for (int i = 0; i < mSpinners.getChildCount(); i++) {
+            NumberPicker picker = (NumberPicker) mSpinners.getChildAt(i);
+            Field[] pickerFields = picker.getClass().getDeclaredFields();
+            for (Field pf : pickerFields) {
+//                Log.i("mDelegate_field:", pf.getName());
+//                Log.i("mDelegate_field:", pf.getDeclaringClass().getSimpleName());
+//                if (pf.getName().equals("mInputText")) {
+//                    try {
+//                        EditText editText = (EditText) pf.get(picker);
+//                        editText.setTextColor(getResources().getColor(R.color.blue));
+//                        pf.set(picker, editText);
+//                    } catch (IllegalAccessException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    try {
+                        pf.set(picker, new ColorDrawable(Color.parseColor("#cccccc")));//设置分割线颜色
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }

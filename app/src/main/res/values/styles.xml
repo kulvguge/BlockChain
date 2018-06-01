@@ -22,6 +22,8 @@
     <style name="AnimBottom" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+        <item name="android:textColorPrimary">@color/blue</item>
+        <item name="android:textColor">@color/blue</item>
     </style>
     <style name="line_style">
         <item name="android:layout_width">fill_parent</item>
@@ -35,5 +37,42 @@
         <item name="android:layout_height">1px</item>
         <item name="android:background">@color/gray</item>
         <item name="android:gravity">center</item>
+    </style>
+    <style name="datePickerTheme" parent="@android:style/Widget.DeviceDefault.DatePicker">
+        <item name="android:divider">@color/blue</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+
+    <style name="CustomProgressDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="DialogActivity" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/no_color</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+        <item name="android:divider">@color/blue</item>
+        <item name="android:textColorPrimary">@color/blue</item>
+    </style>
+    <style name="noAnimation" parent="@style/DialogActivity">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+        <item name="android:taskOpenEnterAnimation">@null</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@null</item>
+        <item name="android:taskToFrontEnterAnimation">@null</item>
+        <item name="android:taskToFrontExitAnimation">@null</item>
+        <item name="android:taskToBackEnterAnimation">@null</item>
+        <item name="android:taskToBackExitAnimation">@null</item>
+
     </style>
 </resources>

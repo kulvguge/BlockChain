@@ -52,6 +52,22 @@ public class MessageCenterActivity extends BaseActivity {
         adapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), list);
         viewpager.setAdapter(adapter);
         viewpager.setOffscreenPageLimit(2);
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.getTabAt(position).select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         getApplyList();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,11 +78,11 @@ public class MessageCenterActivity extends BaseActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tag =  tab.getPosition();
+                int tag = tab.getPosition();
                 viewpager.setCurrentItem(tag);
-                if(tag==0){
+                if (tag == 0) {
                     tvTitle.setText(R.string.msg_new_friend);
-                }else{
+                } else {
                     tvTitle.setText(R.string.msg_new_i_apply);
                 }
             }

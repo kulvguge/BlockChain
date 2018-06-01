@@ -45,10 +45,11 @@
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:calendarViewShown="false"
         style="@style/datePickerTheme"
         android:datePickerMode="spinner"
-        android:headerBackground="@color/white"/>
+        />
     <!--<LinearLayout android:layout_width="match_parent"-->
     <!--android:orientation="horizontal"-->
     <!--android:background="@color/white"-->

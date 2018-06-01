@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import net.tsz.afinal.http.AjaxCallBack;
@@ -49,12 +50,15 @@ public class FriendFragment extends BaseFragment {
     RecyclerView recyclerAll;
     @BindView(R.id.blade_view)
     BladeView bladeView;
+    @BindView(R.id.parent_layout)
+    LinearLayout parent_layout;
+
     LetterAdapter adapter;
     private List<UserBean> list = new ArrayList<>();
     private int[] counts;
     private MySectionIndexer mIndexer;
     private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public String[] sections = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    public String[] sections = {"A", "B", "C", "F", "E", "F", "G", "H", "I", "J", "K", "L", "M",
             "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
@@ -67,6 +71,7 @@ public class FriendFragment extends BaseFragment {
 
     @Override
     public void init() {
+        parent_layout.setPadding(0, HttpConstant.PhoneInfo.STATUS_HEIGHT, 0, 0);
         toolbar.inflateMenu(R.menu.friend_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -93,7 +98,6 @@ public class FriendFragment extends BaseFragment {
         manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerAll.setLayoutManager(manager);
-
         adapter = new LetterAdapter(getActivity(), list);
         recyclerAll.setAdapter(adapter);
         bladeView.setOnItemClickListener(new BladeView.OnItemClickListener() {

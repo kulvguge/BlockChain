@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void init() {
+        noStatusBar();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -70,7 +71,22 @@ public class MainActivity extends BaseActivity {
         adapter = new FragmentViewPagerAdapter(manager, list);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                navigation.setSelectedItemId(navigation.getMenu().getItem(position).getItemId());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

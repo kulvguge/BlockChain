@@ -73,7 +73,9 @@
     <string name="warn_no_same">密码不一致</string>
     <string name="no_permission">缺少相关权限</string>
     <string name="no_info">暂无</string>
+    <string name="motify_success">资料更新成功</string>
     <string name="no_search_data">未搜索到数据</string>
+    <string name="loading">正在登录</string>
     <!--唯一Id-->
     <item type="id" name="tag_permit" ></item>
     <item type="id" name="tag_refuse" ></item>

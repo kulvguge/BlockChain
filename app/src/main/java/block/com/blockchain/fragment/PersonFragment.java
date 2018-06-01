@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,9 @@ public class PersonFragment extends BaseFragment {
     CommonInfoView layoutQrcode;
     @BindView(R.id.layout_motify)
     CommonInfoView layoutMotify;
+    @BindView(R.id.parent_layout)
+    RelativeLayout parent_layout;
+
     private Intent intent;
     private final int REQUEST_PHONE = 1;
     private String url = "";
@@ -83,6 +87,7 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void init() {
+        parent_layout.setPadding(0, HttpConstant.PhoneInfo.STATUS_HEIGHT, 0, 0);
         mineTitle.inflateMenu(R.menu.mine);
         mineTitle.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

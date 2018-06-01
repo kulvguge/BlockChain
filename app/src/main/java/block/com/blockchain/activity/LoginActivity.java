@@ -42,11 +42,21 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.change_to_reg)
     TextView to_reg;
     private Intent intent = null;
+    private String password = "";
+    private String userName = "";
+    private String auth = "";
 
     @Override
     public void init() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        auth = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
+
+        userName = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
+        password = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PSD, "");
+        if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(userName)) {
+            getToken();
+        }
     }
 
     @OnClick({R.id.change_to_reg, R.id.login})
@@ -58,14 +68,16 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.login:
-                if (TextUtils.isEmpty(phone.getText().toString())) {
+                password = psd.getText().toString();
+                userName = phone.getText().toString();
+                if (TextUtils.isEmpty(userName)) {
                     phoneLayout.setErrorEnabled(true);
                     phoneLayout.setError(this.getResources().getString(R.string.warn_phone));
                     return;
                 } else {
                     phoneLayout.setErrorEnabled(false);
                 }
-                if (TextUtils.isEmpty(psd.getText().toString())) {
+                if (TextUtils.isEmpty(password)) {
                     psdLayout.setErrorEnabled(true);
                     psdLayout.setError(this.getResources().getString(R.string.warn_psd));
                     return;
@@ -79,13 +91,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getToken() {
+        login.setEnabled(false);
+        startProgressDialog();
         AjaxParams params = new AjaxParams();
         params.put("client_id", 2 + "");
         params.put("grant_type", "password");
         params.put("client_secret", "MBXnuUcWOpdxvWfjTxLu2QR7nHt2Fdk7BHtpwks6");
         params.put("scope", "*");
-        params.put("username", phone.getText().toString());
-        params.put("password", psd.getText().toString());
+        params.put("username", userName);
+        params.put("password", password);
         HttpSendClass.getInstance().post(params, SenUrlClass.TOKEN, new
                 AjaxCallBack<TokenBean>() {
                     @Override
@@ -93,15 +107,16 @@ public class LoginActivity extends BaseActivity {
                         super.onSuccess(resultInfo);
                         if (resultInfo.getAccess_token() != null) {
                             SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
-                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, phone.getText().toString());
                             Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
                             beginLogin();
                         } else {
+                            login.setEnabled(true);
                             Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R
                                     .string
                                     .login_failure), Toast
                                     .LENGTH_SHORT)
                                     .show();
+                            stopProgressDialog();
                         }
 
                     }
@@ -109,6 +124,8 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
+                        login.setEnabled(true);
+                        stopProgressDialog();
                         Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -117,8 +134,8 @@ public class LoginActivity extends BaseActivity {
     private void beginLogin() {
         AjaxParams params = new AjaxParams();
         params.put("type", 2 + "");
-        params.put("mobile", phone.getText().toString());
-        params.put("pwd", psd.getText().toString());
+        params.put("mobile", userName);
+        params.put("pwd", password);
         HttpSendClass.getInstance().post(params, SenUrlClass.LOGIN, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
                     @Override
@@ -127,6 +144,8 @@ public class LoginActivity extends BaseActivity {
                         if (resultInfo.status.equals("success")) {
                             seesion();
                         } else {
+                            stopProgressDialog();
+                            login.setEnabled(true);
                             Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
                                     .login_failure), Toast
                                     .LENGTH_SHORT)
@@ -138,6 +157,8 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
+                        login.setEnabled(true);
+                        stopProgressDialog();
                         Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -150,10 +171,15 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> s) {
                         super.onSuccess(s);
+                        login.setEnabled(true);
+                        stopProgressDialog();
                         if (s.status.equals("success")) {
+                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, userName);
+                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PSD, password);
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
+
                         } else {
                             Toast.makeText(LoginActivity.this, "登录异常", Toast.LENGTH_SHORT).show();
                         }
@@ -162,9 +188,9 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
+                        login.setEnabled(true);
+                        stopProgressDialog();
                     }
                 });
     }
-
-
 }
