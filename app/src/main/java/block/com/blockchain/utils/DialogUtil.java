@@ -126,7 +126,7 @@ public class DialogUtil {
             final Dialog dialog = diag;
             //去掉自定义dialog 在部分机型上出现的蓝色横线
             Context context = dialog.getContext();
-            int divierId = context.getResources().getIdentifier("o2o:id/titleDivider", null, null);
+            int divierId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
             View divider = dialog.findViewById(divierId);
             if (divider != null) {
                 divider.setBackgroundColor(Color.TRANSPARENT);
@@ -260,12 +260,11 @@ public class DialogUtil {
             final Dialog dialog = diag;
             //去掉自定义dialog 在部分机型上出现的蓝色横线
             Context context = dialog.getContext();
-            int divierId = context.getResources().getIdentifier("o2o:id/titleDivider", null, null);
+            int divierId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
             View divider = dialog.findViewById(divierId);
             if (divider != null) {
                 divider.setBackgroundColor(Color.TRANSPARENT);
             }
-
 
             dialog.show();
 
@@ -389,7 +388,7 @@ public class DialogUtil {
 
         final Dialog dialog = diag;
         //去掉自定义dialog 在部分机型上出现的蓝色横线
-        int divierId = context.getResources().getIdentifier("o2o:id/titleDivider", null, null);
+        int divierId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
         View divider = dialog.findViewById(divierId);
         if (divider != null) {
             divider.setBackgroundColor(Color.TRANSPARENT);

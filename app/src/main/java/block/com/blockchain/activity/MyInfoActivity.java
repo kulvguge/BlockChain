@@ -37,13 +37,13 @@ import net.tsz.afinal.http.AjaxParams;
 
 import java.io.File;
 import java.lang.reflect.Field;
-
 import block.com.blockchain.R;
 import block.com.blockchain.bean.MotifyUserBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.BasicEditInfoView;
 import block.com.blockchain.customview.BasicInfoView;
+
 import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
@@ -88,7 +88,6 @@ public class MyInfoActivity extends BaseActivity {
     private PopupWindow popupWindowDate;
     private String date = "";
     private String tempDate = "";
-
     @Override
     public void init() {
         setContentView(R.layout.activity_my_info);
@@ -221,7 +220,6 @@ public class MyInfoActivity extends BaseActivity {
         personBirthday.setRightMsg(userBean.getBirthday());
         personWork.setRightMsg(userBean.getEnterprise());
         personSignature.setRightMsg(userBean.getSelf_sign());
-
         RequestOptions options = new RequestOptions();
         options.placeholder(R.mipmap.default_head);
         options.error(R.mipmap.default_head);
@@ -528,103 +526,7 @@ public class MyInfoActivity extends BaseActivity {
         intent.setClass(this, DialogActivity.class);
         startActivityForResult(intent, DATE);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        DialogUtil.showPopupWindow(this, R.layout.date_picker_layout, new DialogUtil.OnEventListener() {
-//            @Override
-//            public void eventListener(View parentView, Object window) {
-//                popupWindowDate = (PopupWindow) window;
-//                DatePicker datePicker = (DatePicker) parentView.findViewById(R.id.datePicker);
-//                TextView ensure = (TextView) parentView.findViewById(R.id.ensure);
-//                TextView cancel = (TextView) parentView.findViewById(R.id.cancel);
-//                Calendar calendar = Calendar.getInstance();
-//                int year;
-//                int mouth;
-//                int day;
-//                if (date != null) {
-//                    Date dater = TimeUtils.formatTimeShort(date);
-//                    if (dater != null)
-//                        calendar.setTime(dater);
-//                }
-//                year = calendar.get(Calendar.YEAR);
-//                mouth = calendar.get(Calendar.MONTH);
-//                day = calendar.get(Calendar.DAY_OF_MONTH);
-//                if (mouth + 1 < 10) {
-//                    tempDate = year + "-0" + (mouth + 1);
-//                } else {
-//                    tempDate = year + "-" + (mouth + 1);
-//                }
-//                if (day < 10) {
-//                    tempDate = tempDate + "-0" + day;
-//                } else {
-//                    tempDate = tempDate + "-" + day;
-//                }
-//                datePicker.init(year, mouth, day, new DatePicker.OnDateChangedListener() {
-//                    @Override
-//                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                        if (monthOfYear + 1 < 10) {
-//                            tempDate = year + "-0" + (monthOfYear + 1);
-//                        } else {
-//                            tempDate = year + "-" + (monthOfYear + 1);
-//                        }
-//                        if (dayOfMonth < 10) {
-//                            tempDate = tempDate + "-0" + dayOfMonth;
-//                        } else {
-//                            tempDate = tempDate + "-" + dayOfMonth;
-//                        }
-//                    }
-//                });
-//
-//                ensure.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        date = tempDate;
-//
-//                        popupWindowDate.dismiss();
-//                    }
-//                });
-//                cancel.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        popupWindowDate.dismiss();
-//                    }
-//                });
-//            }
-//        });
     }
 
 
-    private void setDatePickerDividerColor(DatePicker datePicker) {
-        LinearLayout llFirst = (LinearLayout) datePicker.getChildAt(0);
-
-        LinearLayout mSpinners = (LinearLayout) llFirst.getChildAt(0);
-        for (int i = 0; i < mSpinners.getChildCount(); i++) {
-            NumberPicker picker = (NumberPicker) mSpinners.getChildAt(i);
-            Field[] pickerFields = picker.getClass().getDeclaredFields();
-            for (Field pf : pickerFields) {
-//                Log.i("mDelegate_field:", pf.getName());
-//                Log.i("mDelegate_field:", pf.getDeclaringClass().getSimpleName());
-//                if (pf.getName().equals("mInputText")) {
-//                    try {
-//                        EditText editText = (EditText) pf.get(picker);
-//                        editText.setTextColor(getResources().getColor(R.color.blue));
-//                        pf.set(picker, editText);
-//                    } catch (IllegalAccessException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-                if (pf.getName().equals("mSelectionDivider")) {
-                    pf.setAccessible(true);
-                    try {
-                        pf.set(picker, new ColorDrawable(Color.parseColor("#cccccc")));//设置分割线颜色
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (Resources.NotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
-            }
-        }
-    }
 }

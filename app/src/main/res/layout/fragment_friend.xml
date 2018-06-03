@@ -39,6 +39,8 @@
         <block.com.blockchain.utils.pinneheader.BladeView
             android:id="@+id/blade_view"
             android:layout_width="35dp"
+
+            android:layout_marginBottom="10dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="#00000000"/>

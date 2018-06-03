@@ -1,5 +1,6 @@
 package block.com.blockchain.activity;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,7 +41,13 @@ public class BaseActivity extends FragmentActivity {
             if (progressDialog.isShowing()) {
                 progressDialog.cancel();
             }
+            int divierId =progressDialog.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+            View divider = progressDialog.findViewById(divierId);
+            if (divider != null) {
+                divider.setBackgroundColor(Color.TRANSPARENT);
+            }
             progressDialog.show();
+
         } catch (Exception e) {
         }
 

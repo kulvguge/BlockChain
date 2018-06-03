@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,12 @@ public class ScoreActivity extends BaseActivity {
             Glide.with(this).load(url).apply(new RequestOptions().placeholder(R.mipmap.default_head))
                     .into(scoreImg);
         getData();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    finish();
+            }
+        });
     }
 
     private void getData() {

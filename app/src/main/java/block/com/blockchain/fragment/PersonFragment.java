@@ -74,6 +74,7 @@ public class PersonFragment extends BaseFragment {
     private Intent intent;
     private final int REQUEST_PHONE = 1;
     private String url = "";
+    private String inviteCode="-1";
 
     @Override
     public int getResView() {
@@ -129,7 +130,15 @@ public class PersonFragment extends BaseFragment {
                 }
                 break;
             case R.id.layout_qrcode:
-                DialogUtil.showQRCodeDialog("http://www.baidu.com", getActivity());
+                if(TextUtils.isEmpty(inviteCode)){
+                    Toast.makeText(getActivity(), getResources().getString(R.string.mine_no_invite), Toast.LENGTH_SHORT).show();
+                }else{
+                    if("-1".equals(inviteCode)){
+                        Toast.makeText(getActivity(), getResources().getString(R.string.mine_date_err), Toast.LENGTH_SHORT).show();
+                    }else{
+                        DialogUtil.showQRCodeDialog(inviteCode, getActivity());
+                    }
+                }
                 break;
             case R.id.layout_motify:
             case R.id.layout_work:
@@ -204,6 +213,7 @@ public class PersonFragment extends BaseFragment {
         layoutWork.setCenterText(userBean.getEnterprise());
         score.setText(userBean.getIntegral());
         url = userBean.getPic_url();
+        inviteCode=userBean.getInvite_code();
         Glide.with(this).load(userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
                 .into(mineImg);
     }

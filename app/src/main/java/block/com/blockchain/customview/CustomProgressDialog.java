@@ -2,8 +2,10 @@ package block.com.blockchain.customview;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.Gravity;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -43,6 +45,7 @@ public class CustomProgressDialog extends Dialog {
     public static CustomProgressDialog createDialog(Context context) {
         customProgressDialog = new CustomProgressDialog(context,
                 R.style.CustomProgressDialog);
+
         customProgressDialog.setContentView(R.layout.customprogressdialog);
         customProgressDialog.getWindow().getAttributes().gravity = Gravity.CENTER;
 

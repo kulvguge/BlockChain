@@ -41,6 +41,8 @@
     <string name="mine_title">我的</string>
     <string name="mine_work">技术岗位</string>
     <string name="mine_qr">点击二维码获取邀请码</string>
+    <string name="mine_no_invite">此账户没有邀请码</string>
+    <string name="mine_date_err">邀请码信息获取失败</string>
     <string name="mine_motify">修改个人信息</string>
     <!--friendFragment-->
     <string name="friend_list">好友列表</string>
