@@ -30,7 +30,7 @@ public class TurnAdapter extends RecyclerView.Adapter<TurnAdapter.MyHolder> {
 
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_score, parent, false);
+        View view = LayoutInflater.from(context).inflate (R.layout.item_score, parent, false);
         return new MyHolder(view);
     }
 

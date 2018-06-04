@@ -55,6 +55,8 @@ public class LoginActivity extends BaseActivity {
         userName = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
         password = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PSD, "");
         if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(userName)) {
+            phone.setText(userName);
+            psd.setText(password);
             getToken();
         }
     }
@@ -105,6 +107,8 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(TokenBean resultInfo) {
                         super.onSuccess(resultInfo);
+                        Log.i("resultToken_", resultInfo.getExpires_in() + "");
+                        Log.i("resultToken_", resultInfo.getAccess_token());
                         if (resultInfo.getAccess_token() != null) {
                             SPUtils.saveToApp(HttpConstant.UserInfo.AUTH, resultInfo.getAccess_token());
                             Log.e("Object_接收=responseUrl=", "(" + resultInfo.getAccess_token() + ")");
@@ -141,6 +145,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
                         super.onSuccess(resultInfo);
+
                         if (resultInfo.status.equals("success")) {
                             seesion();
                         } else {

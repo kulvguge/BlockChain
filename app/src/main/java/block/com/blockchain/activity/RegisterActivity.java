@@ -12,8 +12,7 @@ import android.widget.Toast;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+
 
 import block.com.blockchain.R;
 import block.com.blockchain.bean.CodeBean;
@@ -183,49 +182,5 @@ public class RegisterActivity extends BaseActivity {
         return true;
     }
 
-    Subscriber<ResultInfo<CodeBean>> observer = new Subscriber<ResultInfo<CodeBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
 
-        @Override
-        public void onNext(ResultInfo<CodeBean> resultInfo) {
-            Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_has_send_code), Toast
-                    .LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
-
-    Subscriber<ResultInfo<UserBean>> registerObserver = new Subscriber<ResultInfo<UserBean>>() {
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1);
-        }
-
-        @Override
-        public void onNext(ResultInfo<UserBean> resultInfo) {
-
-
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    };
 }

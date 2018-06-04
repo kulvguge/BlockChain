@@ -38,6 +38,7 @@ public class HttpSendClass {
             @Override
             public void onSuccess(String s) {
                 super.onSuccess(s);
+                Log.i("string_response", s);
                 Type type = sendReturnDataListener.getClass().getGenericSuperclass();
                 ParameterizedType parameterized = (ParameterizedType) type;
                 Type genType = $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
@@ -70,6 +71,7 @@ public class HttpSendClass {
             @Override
             public void onSuccess(String s) {
                 super.onSuccess(s);
+                Log.i("string_response", s);
                 Type type = sendReturnDataListener.getClass().getGenericSuperclass();
                 ParameterizedType parameterized = (ParameterizedType) type;
                 Type genType = $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
@@ -139,6 +141,7 @@ public class HttpSendClass {
             @Override
             public void onSuccess(String s) {
                 super.onSuccess(s);
+                Log.i("string_response", s);
                 Type type = sendReturnDataListener.getClass().getGenericSuperclass();
                 ParameterizedType parameterized = (ParameterizedType) type;
                 Type genType = $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);

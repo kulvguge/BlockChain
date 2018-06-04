@@ -3,7 +3,8 @@ package block.com.blockchain.bean;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018/5/28.
+ * Created by ts on 2018/5/28.
+ * 好友信息列表
  */
 
 public class ApplyBean extends BaseBean {

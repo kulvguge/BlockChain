@@ -17,7 +17,6 @@ import block.com.blockchain.request.HttpConstant;
 
 public class BaseActivity extends FragmentActivity {
     CustomProgressDialog progressDialog;
-    public static int heightPx = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
