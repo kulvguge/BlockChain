@@ -36,6 +36,7 @@ public class MessageCenterActivity extends BaseActivity {
     @BindView(R.id.title)
     TextView tvTitle;
     @BindView(R.id.viewpager)
+
     ViewPager viewpager;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
