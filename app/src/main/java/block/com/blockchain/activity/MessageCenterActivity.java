@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class MessageCenterActivity extends BaseActivity {
     ViewPager viewpager;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+    @BindView(R.id.parent_layout)
+    LinearLayout parentLayout;
     private List<UserBean> listIApply = new ArrayList<>();
     private List<UserBean> listOtherApply = new ArrayList<>();
     private List<BaseFragment> list = new ArrayList<>();
@@ -49,10 +52,13 @@ public class MessageCenterActivity extends BaseActivity {
         ButterKnife.bind(this);
         list.add(new ApplyFragment(0));
         list.add(new ApplyFragment(1));
-        adapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), list);
+        adapter = new
+                FragmentViewPagerAdapter(getSupportFragmentManager(), list);
         viewpager.setAdapter(adapter);
         viewpager.setOffscreenPageLimit(2);
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+
+        {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -68,14 +74,19 @@ public class MessageCenterActivity extends BaseActivity {
 
             }
         });
+
         getApplyList();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+
+        {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int tag = tab.getPosition();
@@ -98,6 +109,7 @@ public class MessageCenterActivity extends BaseActivity {
             }
         });
     }
+
 
     private void getApplyList() {
         AjaxParams params = new AjaxParams();
@@ -127,5 +139,9 @@ public class MessageCenterActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+    }
 }

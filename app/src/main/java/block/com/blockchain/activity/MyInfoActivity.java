@@ -3,10 +3,7 @@ package block.com.blockchain.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,10 +18,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +31,14 @@ import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
 import java.io.File;
-import java.lang.reflect.Field;
+
 import block.com.blockchain.R;
 import block.com.blockchain.bean.MotifyUserBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.BasicEditInfoView;
 import block.com.blockchain.customview.BasicInfoView;
-
+import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
@@ -77,6 +72,9 @@ public class MyInfoActivity extends BaseActivity {
     BasicEditInfoView personSignature;
     @BindView(R.id.person_title)
     Toolbar personTitle;
+    @BindView(R.id.parent_layout)
+    LinearLayout parent_layout;
+
     private File picFile;
     private String upLoadPath = "";
     private PopupWindow popupWindow;//性别选择弹框
@@ -88,11 +86,19 @@ public class MyInfoActivity extends BaseActivity {
     private PopupWindow popupWindowDate;
     private String date = "";
     private String tempDate = "";
+
     @Override
     public void init() {
+        noStatusBar();
         setContentView(R.layout.activity_my_info);
         ButterKnife.bind(this);
-        getUserInfo();
+        parent_layout.setPadding(0, HttpConstant.PhoneInfo.STATUS_HEIGHT, 0, 0);
+        oldUserBean = (MotifyUserBean) getIntent().getSerializableExtra("user_info");
+        if(oldUserBean!=null){
+            dataSet(oldUserBean);
+        }else{
+            getUserInfo();
+        }
         smallImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -81,20 +81,19 @@ public class FriendFragment extends BaseFragment {
                         Intent intent1 = new Intent();
                         intent1.setClass(getActivity(), SearchActivity.class);
                         intent1.putExtra("info", (Serializable) list);
-                        startActivityForResult(intent1, MainActivity.SEARCH);
-                        getActivity().overridePendingTransition(0, 0);
+                        getActivity().startActivityForResult(intent1, MainActivity.SEARCH);
+
                         break;
                     case R.id.action_msg_center:
                         Intent intent = new Intent();
                         intent.setClass(getActivity(), MessageCenterActivity.class);
-                        startActivity(intent);
+                        getActivity(). startActivity(intent);
 
                         break;
                 }
                 return false;
             }
         });
-
         manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerAll.setLayoutManager(manager);

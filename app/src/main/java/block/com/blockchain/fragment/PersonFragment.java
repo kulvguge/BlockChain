@@ -2,13 +2,16 @@ package block.com.blockchain.fragment;
 
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,8 +31,8 @@ import block.com.blockchain.activity.LoginActivity;
 import block.com.blockchain.activity.MainActivity;
 import block.com.blockchain.activity.MyInfoActivity;
 import block.com.blockchain.activity.ScoreActivity;
+import block.com.blockchain.bean.MotifyUserBean;
 import block.com.blockchain.bean.ResultInfo;
-import block.com.blockchain.bean.UserBean;
 import block.com.blockchain.customview.CommonInfoView;
 import block.com.blockchain.request.HttpConstant;
 import block.com.blockchain.request.HttpSendClass;
@@ -74,8 +77,8 @@ public class PersonFragment extends BaseFragment {
     private Intent intent;
     private final int REQUEST_PHONE = 1;
     private String url = "";
-    private String inviteCode="-1";
-
+    private String inviteCode = "-1";
+    private MotifyUserBean userBean;
     @Override
     public int getResView() {
         return R.layout.fragment_person;
@@ -130,12 +133,14 @@ public class PersonFragment extends BaseFragment {
                 }
                 break;
             case R.id.layout_qrcode:
-                if(TextUtils.isEmpty(inviteCode)){
-                    Toast.makeText(getActivity(), getResources().getString(R.string.mine_no_invite), Toast.LENGTH_SHORT).show();
-                }else{
-                    if("-1".equals(inviteCode)){
-                        Toast.makeText(getActivity(), getResources().getString(R.string.mine_date_err), Toast.LENGTH_SHORT).show();
-                    }else{
+                if (TextUtils.isEmpty(inviteCode)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.mine_no_invite), Toast
+                            .LENGTH_SHORT).show();
+                } else {
+                    if ("-1".equals(inviteCode)) {
+                        Toast.makeText(getActivity(), getResources().getString(R.string.mine_date_err), Toast
+                                .LENGTH_SHORT).show();
+                    } else {
                         DialogUtil.showQRCodeDialog(inviteCode, getActivity());
                     }
                 }
@@ -144,7 +149,15 @@ public class PersonFragment extends BaseFragment {
             case R.id.layout_work:
             case R.id.mine_to_person:
                 Intent intent = new Intent(getActivity(), MyInfoActivity.class);
-                startActivityForResult(intent, MainActivity.USER_INFO);
+                intent.putExtra("user_info",userBean);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Pair pair = new Pair<View, String>(mineImg, "btn1");
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pair);
+                    startActivityForResult(intent, MainActivity.USER_INFO, options.toBundle());
+                } else {
+                    startActivityForResult(intent, MainActivity.USER_INFO);
+                }
+
                 break;
             case R.id.layout_score:
                 Intent intentS = new Intent(getActivity(), ScoreActivity.class);
@@ -178,7 +191,6 @@ public class PersonFragment extends BaseFragment {
             startActivity(intent);
         }
     }
-
     /**
      * 获取用户信息
      */
@@ -186,11 +198,12 @@ public class PersonFragment extends BaseFragment {
         AjaxParams params = new AjaxParams();
         params.put("type", 1 + "");
         HttpSendClass.getInstance().getWithToken(params, SenUrlClass.USER_INFO, new
-                AjaxCallBack<ResultInfo<UserBean>>() {
+                AjaxCallBack<ResultInfo<MotifyUserBean>>() {
                     @Override
-                    public void onSuccess(ResultInfo<UserBean> resultInfo) {
+                    public void onSuccess(ResultInfo<MotifyUserBean> resultInfo) {
                         super.onSuccess(resultInfo);
                         if (resultInfo.status.equals("success")) {
+                            userBean=resultInfo.data;
                             dataSet(resultInfo.data);
                         } else {
                             Toast.makeText(getActivity(), resultInfo.message, Toast.LENGTH_SHORT).show();
@@ -206,14 +219,14 @@ public class PersonFragment extends BaseFragment {
                 });
     }
 
-    private void dataSet(UserBean userBean) {
+    private void dataSet(MotifyUserBean userBean) {
         mineNick.setText(userBean.getNickname());
         mineName.setText(userBean.getReal_name());
         layoutPhone.setCenterText(userBean.getMobile());
         layoutWork.setCenterText(userBean.getEnterprise());
         score.setText(userBean.getIntegral());
         url = userBean.getPic_url();
-        inviteCode=userBean.getInvite_code();
+        inviteCode = userBean.getInvite_code();
         Glide.with(this).load(userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
                 .into(mineImg);
     }
