@@ -24,7 +24,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     List<UserBean> list;
     Context context;
     private MySectionIndexer mIndexer;
-    private OnItemClickListener<UserBean> onItemClickListener,onItemLongClickListener;
+    private OnItemClickListener<UserBean> onItemClickListener, onItemLongClickListener;
     private List<View> listView = new ArrayList<>();
 
     public LetterAdapter(Context context, List<UserBean> list) {
@@ -40,7 +40,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, final int position) {
+    public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean info = list.get(position);
         holder.tvName.setText(info.getNickname());
         Log.i("letter_value=", info.getNickname());
@@ -101,6 +101,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     public void setOnItemClickListener(OnItemClickListener<UserBean> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
     public void setOnItemLongClickListener(OnItemClickListener<UserBean> onItemClickListener) {
         this.onItemLongClickListener = onItemClickListener;
     }

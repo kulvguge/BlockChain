@@ -127,11 +127,11 @@ public class PersonFragment extends BaseFragment {
             .layout_score})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.layout_phone:
-                if (!TextUtils.isEmpty(layoutPhone.getRightText())) {
-                    checkPermission(layoutPhone.getRightText());
-                }
-                break;
+//            case R.id.layout_phone:
+//                if (!TextUtils.isEmpty(layoutPhone.getRightText())) {
+//                    checkPermission(layoutPhone.getRightText());
+//                }
+//                break;
             case R.id.layout_qrcode:
                 if (TextUtils.isEmpty(inviteCode)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.mine_no_invite), Toast
@@ -145,6 +145,7 @@ public class PersonFragment extends BaseFragment {
                     }
                 }
                 break;
+            case R.id.layout_phone:
             case R.id.layout_motify:
             case R.id.layout_work:
             case R.id.mine_to_person:

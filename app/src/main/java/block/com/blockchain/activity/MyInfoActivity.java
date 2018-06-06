@@ -1,6 +1,8 @@
 package block.com.blockchain.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -150,7 +152,12 @@ public class MyInfoActivity extends BaseActivity {
             }
         });
     }
-
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private static void assertNotDestroyed(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) {
+            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
+        }
+    }
     /**
      * 获取资料
      */

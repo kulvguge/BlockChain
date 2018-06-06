@@ -145,12 +145,16 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(ResultInfo<UserBean> resultInfo) {
                         super.onSuccess(resultInfo);
-
+                        login.setEnabled(true);
+                        stopProgressDialog();
                         if (resultInfo.status.equals("success")) {
-                            seesion();
+                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, userName);
+                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PSD, password);
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                         //   seesion();
                         } else {
-                            stopProgressDialog();
-                            login.setEnabled(true);
                             Toast.makeText(LoginActivity.this, LoginActivity.this.getResources().getString(R.string
                                     .login_failure), Toast
                                     .LENGTH_SHORT)
@@ -179,11 +183,7 @@ public class LoginActivity extends BaseActivity {
                         login.setEnabled(true);
                         stopProgressDialog();
                         if (s.status.equals("success")) {
-                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, userName);
-                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PSD, password);
-                            intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+
 
                         } else {
                             Toast.makeText(LoginActivity.this, "登录异常", Toast.LENGTH_SHORT).show();

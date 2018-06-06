@@ -52,7 +52,7 @@ public class PersonalActivity extends BaseActivity {
     public void init() {
         setContentView(R.layout.activity_personal);
         ButterKnife.bind(this);
-        moblie = getIntent().getStringExtra("intent");
+        moblie = getIntent().getStringExtra("moblie");
         getUserInfo();
     }
 

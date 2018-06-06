@@ -34,7 +34,6 @@ import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.GroupUtils;
-import block.com.blockchain.utils.SPUtils;
 import block.com.blockchain.utils.pinneheader.BladeView;
 import block.com.blockchain.utils.pinneheader.MySectionIndexer;
 import butterknife.BindView;
@@ -121,6 +120,7 @@ public class FriendFragment extends BaseFragment {
         });
 
         adapter.setOnItemClickListener(new OnItemClickListener<UserBean>() {
+
             @Override
             public void onclik(UserBean personaBean) {
                 Intent intent = new Intent(getActivity(), PersonalActivity.class);
@@ -139,8 +139,8 @@ public class FriendFragment extends BaseFragment {
     @Override
     public void onRefresh() {
         AjaxParams params = new AjaxParams();
-        String moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
-        params.put("mobile", moblie);
+//        String moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
+//        params.put("mobile", moblie);
         HttpSendClass.getInstance().getWithToken(params, SenUrlClass.FRIEND_LIST, new
                 AjaxCallBack<ResultInfo<FriendData>>() {
                     @Override
