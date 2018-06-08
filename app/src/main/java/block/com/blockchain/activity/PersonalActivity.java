@@ -50,6 +50,7 @@ public class PersonalActivity extends BaseActivity {
     BasicInfoView personBirthday;
     @BindView(R.id.person_work)
     BasicInfoView personWork;
+
     @BindView(R.id.person_signature)
     BasicInfoView personSignature;
     @BindView(R.id.person_title)
