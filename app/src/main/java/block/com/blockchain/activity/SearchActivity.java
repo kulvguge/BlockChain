@@ -63,6 +63,7 @@ public class SearchActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerSearch.setLayoutManager(manager);
+        recyclerSearch.setAdapter(adapter);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

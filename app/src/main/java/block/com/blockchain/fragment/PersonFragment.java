@@ -1,14 +1,9 @@
 package block.com.blockchain.fragment;
 
 
-import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -73,9 +68,6 @@ public class PersonFragment extends BaseFragment {
     CommonInfoView layoutMotify;
     @BindView(R.id.parent_layout)
     RelativeLayout parent_layout;
-
-    private Intent intent;
-    private final int REQUEST_PHONE = 1;
     private String url = "";
     private String inviteCode = "-1";
     private MotifyUserBean userBean;
@@ -169,29 +161,7 @@ public class PersonFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 权限检测
-     */
-    private void checkPermission(String phone) {
-        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager
-                .PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                    REQUEST_PHONE);
-            return;
-        }
-        startActivity(intent);
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PHONE && grantResults[0] == PackageManager
-                .PERMISSION_GRANTED) {
-            startActivity(intent);
-        }
-    }
     /**
      * 获取用户信息
      */

@@ -1,7 +1,12 @@
 package block.com.blockchain.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.activity.PersonalActivity;
 import block.com.blockchain.bean.UserBean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +35,14 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
     private Context context;
     private View.OnClickListener onClickListener;
     private int type = 0;//0:别人申请1:我申请
+    private RequestOptions options;
 
     public MessageCenterAdapter(Context context, List<UserBean> list) {
         this.list = list;
         this.context = context;
-
+        options = new RequestOptions();
+        options.placeholder(R.mipmap.default_head);
+        options.error(R.mipmap.default_head);
     }
 
     public void setType(int type) {
@@ -45,7 +57,7 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, final int position) {
+    public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean bean = list.get(position);
         holder.msgName.setText(bean.getNickname());
         if (bean.getSex() == 1) {
@@ -54,6 +66,7 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
             holder.msgSex.setImageResource(R.mipmap.woman);
         }
         holder.msgDate.setText(bean.getUpdate_time());
+        Glide.with(context).load(bean.getPic_url()).apply(options).into(holder.msgIcon);
         if (type == 0) {
             if (bean.getStatus() == 1) {
                 holder.layoutWaitPermit.setVisibility(View.VISIBLE);
@@ -87,6 +100,21 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
                         onClickListener.onClick(view);
                     }
 
+                }
+            });
+            holder.parent_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(context, PersonalActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        Pair pair = new Pair<View, String>(holder.msgIcon, "btn2");
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context,
+                                pair);
+                        context.startActivity(intent, options.toBundle());
+                    } else {
+                        context.startActivity(intent);
+                    }
                 }
             });
         } else {
@@ -134,6 +162,8 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
         LinearLayout layoutWaitPermit;
         @BindView(R.id.msg_wait_refuse)
         TextView msg_wait_refuse;
+        @BindView(R.id.parent_layout)
+        LinearLayout parent_layout;
 
         public MyHolder(View itemView) {
             super(itemView);

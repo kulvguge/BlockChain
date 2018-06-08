@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +42,8 @@ public class BasicInfoView extends LinearLayout {
     }
 
     public void init(Context context, AttributeSet set) {
-        View view = LayoutInflater.from(context).inflate(R.layout.basic_view,null);
-        ButterKnife.bind(this,view);
+        View view = LayoutInflater.from(context).inflate(R.layout.basic_view, null);
+        ButterKnife.bind(this, view);
         TypedArray typedArray = context.obtainStyledAttributes(set,
                 R.styleable.BasicInfoView);
         String ltext = typedArray.getString(R.styleable.BasicInfoView_ltext);
@@ -55,10 +56,23 @@ public class BasicInfoView extends LinearLayout {
             typedArray.recycle();
         addView(view);
     }
-    public void setRightMsg(String msg){
+
+    public void setRightMsg(String msg) {
         rightMsg.setText(msg);
     }
-    public void setRightMsg(@StringRes int  msg){
+
+    public void setRightMsg(@StringRes int msg) {
         rightMsg.setText(msg);
+    }
+
+    public String getRightMsg() {
+        return rightMsg.getText().toString();
+    }
+
+    public boolean isEmpty() {
+        if (TextUtils.isEmpty(rightMsg.getText().toString().trim())) {
+            return true;
+        }
+        return false;
     }
 }

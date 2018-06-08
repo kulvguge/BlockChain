@@ -1,6 +1,14 @@
 package block.com.blockchain.activity;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +55,8 @@ public class PersonalActivity extends BaseActivity {
     @BindView(R.id.person_title)
     Toolbar personTitle;
     private String moblie = "";
+    private Intent intent;
+    private final int REQUEST_PHONE = 1;
 
     @Override
     public void init() {
@@ -54,6 +64,19 @@ public class PersonalActivity extends BaseActivity {
         ButterKnife.bind(this);
         moblie = getIntent().getStringExtra("moblie");
         getUserInfo();
+        personPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!personPhone.isEmpty())
+                    checkPermission(personPhone.getRightMsg());
+            }
+        });
+        personTitle.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -83,6 +106,7 @@ public class PersonalActivity extends BaseActivity {
                     }
                 });
     }
+
     private void dataSet(UserBean userBean) {
         personNickName.setText(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
@@ -100,5 +124,31 @@ public class PersonalActivity extends BaseActivity {
         options.error(R.mipmap.default_head);
         Glide.with(this).load(userBean.getPic_url()).apply(options).into(bigImg);
         Glide.with(this).load(userBean.getPic_url()).apply(options).into(smallImg);
+    }
+
+    /**
+     * 权限检测
+     */
+    private void checkPermission(String phone) {
+        intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager
+                    .PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                        REQUEST_PHONE);
+                return;
+            }
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PHONE && grantResults[0] == PackageManager
+                .PERMISSION_GRANTED) {
+            startActivity(intent);
+        }
     }
 }
