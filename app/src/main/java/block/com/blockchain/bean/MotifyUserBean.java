@@ -19,7 +19,6 @@ public class MotifyUserBean extends UserBean {
     private boolean has_birth;
     private boolean has_work;
     private boolean has_sign;
-
     public boolean isHas_url() {
         return has_url;
     }

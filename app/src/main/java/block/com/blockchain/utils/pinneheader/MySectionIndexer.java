@@ -34,7 +34,7 @@ public class MySectionIndexer implements SectionIndexer {
             
             mPositions[i] = position;
             position += counts[i];
-            
+            Log.i("MySectionIndexer", " mPositions["+i+"]:"+mPositions[i]);
             Log.i("MySectionIndexer", "counts["+i+"]:"+counts[i]);
         }
         mCount = position;

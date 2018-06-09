@@ -19,7 +19,7 @@ import block.com.blockchain.utils.ScreenUtils;
 
 public class BladeView extends View {
     private OnItemClickListener mOnItemClickListener;
-    String[] b = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    String[] b = { "#","A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K",
             "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
             "Y", "Z"};
@@ -46,17 +46,17 @@ public class BladeView extends View {
         this.context = context;
     }
 
-    public void setData(String[] bb) {
-
-        String[] aa = new String[1];
-        aa[0] = "*";
-        // 合并两个数组
-        String[] dd = new String[aa.length + bb.length];
-        System.arraycopy(aa, 0, dd, 0, aa.length);
-        System.arraycopy(bb, 0, dd, aa.length, bb.length);
-        b = dd;
-        invalidate();
-    }
+//    public void setData(String[] bb) {
+//
+//        String[] aa = new String[1];
+//        aa[0] = "*";
+//        // 合并两个数组
+//        String[] dd = new String[aa.length + bb.length];
+//        System.arraycopy(aa, 0, dd, 0, aa.length);
+//        System.arraycopy(bb, 0, dd, aa.length, bb.length);
+//        b = dd;
+//        invalidate();
+//    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -206,8 +206,6 @@ public class BladeView extends View {
             if (item != 0) {
                 showPopup(item);
             }
-
-
         }
     }
 

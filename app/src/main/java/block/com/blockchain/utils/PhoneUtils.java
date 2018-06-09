@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import block.com.blockchain.bean.ContactsBean;
+import block.com.blockchain.bean.UserBean;
 
 /**
  * Created by Administrator on 2018/6/8.
@@ -19,7 +20,8 @@ import block.com.blockchain.bean.ContactsBean;
 
 public class PhoneUtils {
 
-    public static void getContactsInfo(Context context) {
+    public static  List<UserBean> getContactsInfo(Context context) {
+        List<UserBean> list = new ArrayList<>();
         try {
             Uri contactUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
             Cursor cursor = context.getContentResolver().query(contactUri,
@@ -28,16 +30,17 @@ public class PhoneUtils {
             String contactName;
             String contactNumber;
             String contactSortKey;
-            int contactId;
-            List<ContactsBean> list = new ArrayList<>();
+//            int contactId;
             while (cursor.moveToNext()) {
                 contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
                         .DISPLAY_NAME));
                 contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+               // contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                 contactSortKey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
                         .SORT_KEY_PRIMARY));
-                ContactsBean contactsInfo = new ContactsBean(contactName, contactNumber, contactSortKey, contactId);
+                UserBean contactsInfo = new UserBean();
+                contactsInfo.setNickname(contactName);
+                contactsInfo.setMobile(contactNumber);
                 if (contactName != null)
                     list.add(contactsInfo);
             }
@@ -47,6 +50,7 @@ public class PhoneUtils {
             e.printStackTrace();
         } finally {
             context = null;
+            return list;
         }
     }
     // 一个添加联系人信息的例子

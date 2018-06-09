@@ -1,6 +1,14 @@
 package block.com.blockchain.fragment;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +30,7 @@ import java.util.List;
 import block.com.blockchain.R;
 import block.com.blockchain.activity.MainActivity;
 import block.com.blockchain.activity.MessageCenterActivity;
+import block.com.blockchain.activity.MyInfoActivity;
 import block.com.blockchain.activity.PersonalActivity;
 import block.com.blockchain.activity.SearchActivity;
 import block.com.blockchain.bean.FriendData;
@@ -34,6 +43,7 @@ import block.com.blockchain.request.HttpSendClass;
 import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.GroupUtils;
+import block.com.blockchain.utils.PhoneUtils;
 import block.com.blockchain.utils.pinneheader.BladeView;
 import block.com.blockchain.utils.pinneheader.MySectionIndexer;
 import butterknife.BindView;
@@ -56,13 +66,14 @@ public class FriendFragment extends BaseFragment {
     private List<UserBean> list = new ArrayList<>();
     private int[] counts;
     private MySectionIndexer mIndexer;
-    private String ALL_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public String[] sections = {"A", "B", "C", "F", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    private String ALL_CHARACTER = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public String[] sections = {"#","A", "B", "C","D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
             "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public LinearLayoutManager manager;
     private int postion = -1;
+    private final int CONTACTS=121;
     private boolean isRequest = false;
-
+    private  List<UserBean> listContacts;
     @Override
     public int getResView() {
         return R.layout.fragment_friend;
@@ -138,34 +149,57 @@ public class FriendFragment extends BaseFragment {
 
     @Override
     public void onRefresh() {
-        AjaxParams params = new AjaxParams();
-//        String moblie = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
-//        params.put("mobile", moblie);
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.FRIEND_LIST, new
-                AjaxCallBack<ResultInfo<FriendData>>() {
-                    @Override
-                    public void onSuccess(ResultInfo<FriendData> s) {
-                        super.onSuccess(s);
-
-                        if (s.status.equals("success")) {
-                            list.clear();
-                            List<UserBean> listTemp = s.data.getData();
-                            if (listTemp != null)
-                                list.addAll(listTemp);
-                            getFriendData();
-                        } else {
-                            Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t, String strMsg) {
-                        super.onFailure(t, strMsg);
-                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        checkPermission();
     }
+   public void requestFriendInfo(){
+       AjaxParams params = new AjaxParams();
+       HttpSendClass.getInstance().getWithToken(params, SenUrlClass.FRIEND_LIST, new
+               AjaxCallBack<ResultInfo<FriendData>>() {
+                   @Override
+                   public void onSuccess(ResultInfo<FriendData> s) {
+                       super.onSuccess(s);
 
+                       if (s.status.equals("success")) {
+                           list.clear();
+                           List<UserBean> listTemp = s.data.getData();
+                           if (listTemp != null){
+                               if(listContacts!=null){
+                                   removeHas(listTemp,listContacts);
+                                   list.addAll(listTemp);
+                                   list.addAll(listContacts);
+                               }else{
+                                   list.addAll(listTemp);
+                               }
+                           }else{
+                               list.addAll(listContacts);
+                           }
+                           getFriendData();
+                       } else {
+                           Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
+                       }
+                   }
+
+                   @Override
+                   public void onFailure(Throwable t, String strMsg) {
+                       super.onFailure(t, strMsg);
+                       Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                   }
+               });
+   }
+    /**
+     * 去重
+     * @param lis1
+     * @param lis2
+     */
+   private void removeHas(List<UserBean> lis1,List<UserBean> lis2){
+        for(UserBean userBean1:lis1){
+            for(UserBean userBean2:lis2){
+                       if(userBean1.getNickname()!=null &&userBean1.getNickname().equals(userBean2.getNickname())){
+                           lis2.remove(userBean2);
+                       }
+            }
+        }
+   }
     /**
      * 获取好友数据
      */
@@ -175,14 +209,16 @@ public class FriendFragment extends BaseFragment {
         for (UserBean cityInfo : list) {
             if (cityInfo.getNickname() != null && cityInfo.getNickname().trim().length() > 0) {
                 String firstLetter = GroupUtils.getInstance().getFirstLetter(cityInfo.getNickname());
-                if (firstLetter == null)
-                    cityInfo.nameTag = "}";
-                cityInfo.nameTag = firstLetter;
+                if (firstLetter == null){
+                    cityInfo.nameTag = "#";
+                }else{
+                    cityInfo.nameTag = firstLetter;
+                }
             } else {
-                cityInfo.nameTag = "}";
+                cityInfo.nameTag = "#";
             }
             if (TextUtils.isEmpty(cityInfo.getNickname())) {
-                cityInfo.nameTag = "{";
+                cityInfo.nameTag = "#";
             }
         }
         //排序
@@ -197,8 +233,8 @@ public class FriendFragment extends BaseFragment {
             String firstCharacter = item.nameTag;
             int index = ALL_CHARACTER.indexOf(firstCharacter);
             if (index == -1) {
-                index = sections.length - 1;
-                item.nameTag = sections[sections.length - 1];
+                index = 0;
+                item.nameTag = "#";
             }
             counts[index]++;
         }
@@ -212,7 +248,23 @@ public class FriendFragment extends BaseFragment {
             postion = 0;
         }
     }
-
+   public void checkPermission(){
+       if (Build.VERSION.SDK_INT >= 23) {
+           if (PackageManager.PERMISSION_GRANTED == ContextCompat
+                   .checkSelfPermission(getActivity(),Manifest.permission.READ_CONTACTS)) {
+               listContacts=  PhoneUtils.getContactsInfo(getActivity());
+               requestFriendInfo();
+           }
+           else {
+               FriendFragment.this.requestPermissions( new String[]{Manifest.permission
+                       .READ_CONTACTS}, CONTACTS);
+               return;
+           }
+       }else{
+        listContacts=  PhoneUtils.getContactsInfo(getActivity());
+           requestFriendInfo();
+       }
+   }
     /**
      * 删除弹框
      */
@@ -269,5 +321,16 @@ public class FriendFragment extends BaseFragment {
                         Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                 if(requestCode==CONTACTS&& grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                     listContacts=  PhoneUtils.getContactsInfo(getActivity());
+                     requestFriendInfo();
+                 }else if(requestCode==1&& grantResults[0]==PackageManager.PERMISSION_DENIED){
+                     requestFriendInfo();
+                 }
     }
 }

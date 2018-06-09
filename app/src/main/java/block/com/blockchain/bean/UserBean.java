@@ -1,5 +1,7 @@
 package block.com.blockchain.bean;
 
+import block.com.blockchain.utils.PhoneUtils;
+
 /**
  * Created by ts on 2018/5/17.
  */
@@ -43,7 +45,6 @@ public class UserBean extends BaseBean {
      * 首字母
      */
     public String nameTag;
-
     public void setId(int id) {
         this.id = id;
     }

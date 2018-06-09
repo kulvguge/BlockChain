@@ -44,17 +44,22 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
         final UserBean info = list.get(position);
         holder.tvName.setText(info.getNickname());
         Log.i("letter_value=", info.getNickname());
-        Log.i("letter_value_tag=", info.nameTag);
+        Log.i("letter__tag=", info.nameTag);
+
         int section = 0;
         if (mIndexer != null) {
             section = mIndexer.getSectionForPosition(position);
         }
+        Log.i("letter__tag_section=",section+"");
+
         if (mIndexer.getPositionForSection(section) == position) {
+            Log.i("letter__tag_position=",position+"");
             holder.tvTag.setVisibility(View.VISIBLE);
             holder.tvTag.setText(info.nameTag);
         } else {
             holder.tvTag.setVisibility(View.GONE);
         }
+
         holder.tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
