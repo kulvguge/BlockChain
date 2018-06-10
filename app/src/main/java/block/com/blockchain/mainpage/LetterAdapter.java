@@ -51,7 +51,6 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
             section = mIndexer.getSectionForPosition(position);
         }
         Log.i("letter__tag_section=",section+"");
-
         if (mIndexer.getPositionForSection(section) == position) {
             Log.i("letter__tag_position=",position+"");
             holder.tvTag.setVisibility(View.VISIBLE);
