@@ -14,6 +14,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -96,9 +97,9 @@ public class MyInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
         parent_layout.setPadding(0, HttpConstant.PhoneInfo.STATUS_HEIGHT, 0, 0);
         oldUserBean = (MotifyUserBean) getIntent().getSerializableExtra("user_info");
-        if(oldUserBean!=null){
+        if (oldUserBean != null) {
             dataSet(oldUserBean);
-        }else{
+        } else {
             getUserInfo();
         }
         smallImg.setOnClickListener(new View.OnClickListener() {
@@ -114,14 +115,14 @@ public class MyInfoActivity extends BaseActivity {
                     @Override
                     public void onButtonOne() {
                         oldUserBean.setHas_sex(true);
-                        oldUserBean.setSex(1);
+                        oldUserBean.setSex(0);
                         personSex.setRightMsg("男");
                     }
 
                     @Override
                     public void onButtonTwo() {
                         oldUserBean.setHas_sex(true);
-                        oldUserBean.setSex(2);
+                        oldUserBean.setSex(1);
                         personSex.setRightMsg("女");
                     }
                 });
@@ -152,12 +153,14 @@ public class MyInfoActivity extends BaseActivity {
             }
         });
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static void assertNotDestroyed(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) {
             throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
         }
     }
+
     /**
      * 获取资料
      */
@@ -224,10 +227,12 @@ public class MyInfoActivity extends BaseActivity {
     private void dataSet(UserBean userBean) {
         personNickName.setRightMsg(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
-        if (userBean.getSex() == 1) {
+        if (userBean.getSex() == 0) {
             personSex.setRightMsg(R.string.person_sex_man);
-        } else if (userBean.getSex() == 2) {
+        } else if (userBean.getSex() == 1) {
             personSex.setRightMsg(R.string.person_sex_woman);
+        } else {
+            personSex.setRightMsg("");
         }
         personPhone.setRightMsg(userBean.getMobile());
         personBirthday.setRightMsg(userBean.getBirthday());
@@ -290,7 +295,10 @@ public class MyInfoActivity extends BaseActivity {
                                     Manifest.permission.CAMERA)) {
                         // 启动拍照,并保存到临时文件
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(picFile));
+                        Uri photoURI = FileProvider.getUriForFile(MyInfoActivity.this, getApplicationContext()
+                                .getPackageName
+                                        () + ".provider", picFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(intent, IMAGE_TAK);
                     } else {
                         ActivityCompat.requestPermissions(MyInfoActivity.this, new String[]{Manifest.permission
@@ -341,9 +349,11 @@ public class MyInfoActivity extends BaseActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 启动拍照,并保存到临时文件
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(picFile));
+                Uri photoURI = FileProvider.getUriForFile(MyInfoActivity.this, getApplicationContext()
+                        .getPackageName
+                                () + ".provider",picFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, IMAGE_TAK);
-
             } else {
                 Toast.makeText(MyInfoActivity.this, this.getResources().getString(R.string.app_name), Toast
                         .LENGTH_SHORT).show();

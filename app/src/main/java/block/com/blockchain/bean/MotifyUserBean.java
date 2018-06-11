@@ -19,6 +19,7 @@ public class MotifyUserBean extends UserBean {
     private boolean has_birth;
     private boolean has_work;
     private boolean has_sign;
+
     public boolean isHas_url() {
         return has_url;
     }
@@ -107,7 +108,7 @@ public class MotifyUserBean extends UserBean {
                 changed = true;
             }
 
-            if (has_sex) {
+            if (getSex() != -1) {
                 params.put("sex", getSex() + "");
                 changed = true;
             }

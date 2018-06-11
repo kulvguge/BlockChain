@@ -60,9 +60,9 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
     public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean bean = list.get(position);
         holder.msgName.setText(bean.getNickname());
-        if (bean.getSex() == 1) {
+        if (bean.getSex() == 0) {
             holder.msgSex.setImageResource(R.mipmap.man);
-        } else if (bean.getSex() == 2) {
+        } else if (bean.getSex() == 1) {
             holder.msgSex.setImageResource(R.mipmap.woman);
         }
         holder.msgDate.setText(bean.getUpdate_time());
@@ -107,6 +107,7 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(context, PersonalActivity.class);
+                    intent.putExtra("moblie",bean.getMobile());
                     if (Build.VERSION.SDK_INT >= 21) {
                         Pair pair = new Pair<View, String>(holder.msgIcon, "btn2");
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context,

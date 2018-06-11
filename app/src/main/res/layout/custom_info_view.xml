@@ -13,10 +13,10 @@
         android:layout_height="50dp">
 <ImageView
     android:id="@+id/left_icon"
-    android:layout_width="24dp"
+    android:layout_width="20dp"
     android:scaleType="fitXY"
     android:layout_marginLeft="16dp"
-    android:layout_height="24dp" />
+    android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/center_text"
@@ -28,11 +28,11 @@
             android:layout_height="wrap_content" />
 
     <ImageView
-        android:layout_width="24dp"
+        android:layout_width="20dp"
         android:id="@+id/right_icon"
         android:layout_marginRight="16dp"
         android:scaleType="fitXY"
-        android:layout_height="24dp" />
+        android:layout_height="20dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
