@@ -110,9 +110,7 @@ public class MotifyUserBean extends UserBean {
 
             if (getSex() != -1) {
                 params.put("sex", getSex() + "");
-                changed = true;
             }
-
             //后台目前没有这个修改功能
             if (has_phone) {
                 params.put("moblie", getMobile());

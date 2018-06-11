@@ -76,7 +76,7 @@ public class MessageCenterActivity extends BaseActivity {
             }
         });
 
-        getApplyList();
+      //  getApplyList();
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
 
         {
@@ -114,7 +114,7 @@ public class MessageCenterActivity extends BaseActivity {
 
     private void getApplyList() {
         AjaxParams params = new AjaxParams();
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.APPLY_LIST, new
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.APPLY_I, new
                 AjaxCallBack<ResultInfo<ApplyBean>>() {
                     @Override
                     public void onSuccess(ResultInfo<ApplyBean> resultInfo) {

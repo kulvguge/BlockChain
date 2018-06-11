@@ -111,9 +111,9 @@ public class PersonalActivity extends BaseActivity {
     private void dataSet(UserBean userBean) {
         personNickName.setText(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
-        if (userBean.getSex() == 0) {
+        if (userBean.getSex() == 1) {
             personSex.setRightMsg(R.string.person_sex_man);
-        } else if (userBean.getSex() == 1) {
+        } else if (userBean.getSex() == 0) {
             personSex.setRightMsg(R.string.person_sex_woman);
         }
         personPhone.setRightMsg(userBean.getMobile());

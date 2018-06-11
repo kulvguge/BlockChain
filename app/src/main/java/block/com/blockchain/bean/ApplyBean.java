@@ -10,4 +10,5 @@ import java.util.List;
 public class ApplyBean extends BaseBean {
     public List<UserBean> one;
     public List<UserBean> two;
+    public List<UserBean> data;
 }

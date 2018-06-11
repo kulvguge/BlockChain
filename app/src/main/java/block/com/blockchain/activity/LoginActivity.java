@@ -52,12 +52,17 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         auth = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
 
-        userName = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
-        password = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PSD, "");
-        if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(userName)) {
-            phone.setText(userName);
-            psd.setText(password);
-            getToken();
+      //  userName = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
+    //    password = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PSD, "");
+//        if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(userName)) {
+//            phone.setText(userName);
+//            psd.setText(password);
+//            getToken();
+//        }
+        if (!TextUtils.isEmpty(auth)) {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -148,8 +153,8 @@ public class LoginActivity extends BaseActivity {
                         login.setEnabled(true);
                         stopProgressDialog();
                         if (resultInfo.status.equals("success")) {
-                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, userName);
-                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PSD, password);
+//                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PHONE, userName);
+//                            SPUtils.saveToApp(HttpConstant.UserInfo.USER_PSD, password);
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();

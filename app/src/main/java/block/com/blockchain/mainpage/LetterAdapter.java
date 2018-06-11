@@ -70,9 +70,9 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
         holder.tvName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (onItemLongClickListener != null) {
-                    onItemLongClickListener.onclik(info);
-                }
+//                if (onItemLongClickListener != null) {
+//                    onItemLongClickListener.onclik(info);
+//                }
                 return false;
             }
         });

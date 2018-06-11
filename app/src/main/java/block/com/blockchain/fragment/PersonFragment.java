@@ -4,6 +4,7 @@ package block.com.blockchain.fragment;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -146,9 +147,9 @@ public class PersonFragment extends BaseFragment {
                 if (Build.VERSION.SDK_INT >= 21) {
                     Pair pair = new Pair<View, String>(mineImg, "btn1");
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pair);
-                    startActivityForResult(intent, MainActivity.USER_INFO, options.toBundle());
+                    this.startActivityForResult(intent, MainActivity.USER_INFO, options.toBundle());
                 } else {
-                    startActivityForResult(intent, MainActivity.USER_INFO);
+                    this.startActivityForResult(intent, MainActivity.USER_INFO);
                 }
 
                 break;

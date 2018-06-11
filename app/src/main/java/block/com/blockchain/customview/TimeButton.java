@@ -54,6 +54,7 @@ public class TimeButton extends TextView {
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
+
         }
         if (timer != null) {
             timer.cancel();
@@ -96,5 +97,6 @@ public class TimeButton extends TextView {
         clearTimer();
         TimeButton.this.setText(textBefore);
         TimeButton.this.setBackgroundResource(R.drawable.btn_common_round_stroke_blue);
+
     }
 }

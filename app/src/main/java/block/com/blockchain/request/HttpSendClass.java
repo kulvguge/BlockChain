@@ -34,6 +34,7 @@ public class HttpSendClass {
             sendReturnDataListener) {
         if (params != null)
             Log.i("request_params", params.toString());
+        sendReturnDataListener.onStart();
         getFinalHttp().post(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {
@@ -67,6 +68,7 @@ public class HttpSendClass {
             sendReturnDataListener) {
         if (params != null)
             Log.i("request_params", params.toString());
+        sendReturnDataListener.onStart();
         getFinalHttp().get(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {
@@ -102,6 +104,7 @@ public class HttpSendClass {
             Log.i("request_params", params.toString());
         String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
         getFinalHttp().addHeader("Authorization", "Bearer " + AUTH);
+        sendReturnDataListener.onStart();
         getFinalHttp().get(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {
@@ -137,6 +140,7 @@ public class HttpSendClass {
             Log.i("request_params", params.toString());
         String AUTH = (String) SPUtils.getFromApp(HttpConstant.UserInfo.AUTH, "");
         getFinalHttp().addHeader("Authorization", "Bearer " + AUTH);
+        sendReturnDataListener.onStart();
         getFinalHttp().post(url, params, new AjaxCallBack<String>() {
             @Override
             public void onSuccess(String s) {

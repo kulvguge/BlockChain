@@ -99,7 +99,7 @@ public class MyInfoActivity extends BaseActivity {
         oldUserBean = (MotifyUserBean) getIntent().getSerializableExtra("user_info");
         if (oldUserBean != null) {
             dataSet(oldUserBean);
-        } else {
+        }else{
             getUserInfo();
         }
         smallImg.setOnClickListener(new View.OnClickListener() {
@@ -115,14 +115,14 @@ public class MyInfoActivity extends BaseActivity {
                     @Override
                     public void onButtonOne() {
                         oldUserBean.setHas_sex(true);
-                        oldUserBean.setSex(0);
+                        oldUserBean.setSex(1);
                         personSex.setRightMsg("男");
                     }
 
                     @Override
                     public void onButtonTwo() {
                         oldUserBean.setHas_sex(true);
-                        oldUserBean.setSex(1);
+                        oldUserBean.setSex(0);
                         personSex.setRightMsg("女");
                     }
                 });
@@ -152,13 +152,6 @@ public class MyInfoActivity extends BaseActivity {
 
             }
         });
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private static void assertNotDestroyed(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) {
-            throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
-        }
     }
 
     /**
@@ -227,9 +220,9 @@ public class MyInfoActivity extends BaseActivity {
     private void dataSet(UserBean userBean) {
         personNickName.setRightMsg(userBean.getNickname());
         personName.setRightMsg(userBean.getReal_name());
-        if (userBean.getSex() == 0) {
+        if (userBean.getSex() == 1) {
             personSex.setRightMsg(R.string.person_sex_man);
-        } else if (userBean.getSex() == 1) {
+        } else if (userBean.getSex() == 0) {
             personSex.setRightMsg(R.string.person_sex_woman);
         } else {
             personSex.setRightMsg("");
@@ -510,7 +503,6 @@ public class MyInfoActivity extends BaseActivity {
                     showView("修改资料", "资料已经发生改变\n是否保存修改", "确定", "取消");
                     return true;
                 }
-
             }
 
         }

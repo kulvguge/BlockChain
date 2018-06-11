@@ -1,12 +1,13 @@
 package block.com.blockchain.activity;
 
+
 import android.content.Intent;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -97,5 +97,11 @@ public class MainActivity extends BaseActivity {
         } else if (requestCode == USER_INFO && resultCode == RESULT_OK) {
             list.get(2).onRefresh();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        list.get(2).onRefresh();
     }
 }

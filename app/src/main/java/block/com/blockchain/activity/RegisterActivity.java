@@ -103,6 +103,7 @@ public class RegisterActivity extends BaseActivity {
                 if (TextUtils.isEmpty(phone.getText().toString())) {
                     phoneLayout.setErrorEnabled(true);
                     phoneLayout.setError(this.getResources().getString(R.string.warn_phone));
+                    timeBtn.reset();
                     return;
                 } else {
                     phoneLayout.setErrorEnabled(false);

@@ -1,8 +1,12 @@
 package block.com.blockchain.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,7 +18,9 @@ import java.util.Collection;
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.activity.MessageCenterActivity;
 import block.com.blockchain.adapter.MessageCenterAdapter;
+import block.com.blockchain.bean.ApplyBean;
 import block.com.blockchain.bean.BaseBean;
 import block.com.blockchain.bean.ResultInfo;
 import block.com.blockchain.bean.UserBean;
@@ -30,15 +36,21 @@ import butterknife.Unbinder;
 
 @SuppressLint("ValidFragment")
 public class ApplyFragment extends BaseFragment {
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout refresh;
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+
     Unbinder unbinder;
     MessageCenterAdapter adapter;
     private List<UserBean> list = new ArrayList<>();
     private int index;
-    private boolean enable = true;
-
-    @SuppressLint("ValidFragment")
+    private boolean refreshing = false;
+    private boolean enable = false;
+    private int pageNum=1;
+    private LinearLayoutManager manager;
+    private int lastPostion=0;
+    
     public ApplyFragment(int index) {
         this.index = index;
     }
@@ -48,20 +60,67 @@ public class ApplyFragment extends BaseFragment {
         return R.layout.fragment_apply;
     }
 
+
     @Override
     public void onRefresh() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+      manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.addItemDecoration(new SpaceDecoration(getActivity()));
         adapter = new MessageCenterAdapter(getActivity(), list);
         adapter.setType(index);
         recyclerView.setAdapter(adapter);
+        if(index==0){
+            getOtherList();
+        }else if(index==1){
+            getApplyList();
+        }
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(refreshing){
+                }else{
+                    pageNum=1;
+                    if(index==0){
+                        getOtherList();
+                    }else if(index==1){
+                        getApplyList();
+                    }
+                }
+
+            }
+        });
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.i("ApplayFragment",newState+"");
+                if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastPostion + 1 ==adapter.getItemCount()) {
+                        if(lastPostion-manager.findFirstVisibleItemPosition()+1<adapter.getItemCount()){
+                            if(index==0){
+                                getOtherList();
+                            }else if(index==1){
+                                getApplyList();
+                            }
+                        }
+
+                }
+                }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastPostion=manager.findLastVisibleItemPosition();
+            }
+        });
         adapter.setOnItemClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = -1;
                 Object permit = view.getTag(R.id.tag_permit);
+                if(!enable)
+                    return;
                 if (permit == null) {
                     Object refuse = view.getTag(R.id.tag_refuse);
                     if (refuse != null) {
@@ -76,7 +135,92 @@ public class ApplyFragment extends BaseFragment {
             }
         });
     }
+    /**
+     * 获取我申請的数据
+     */
+    private void getApplyList() {
+        AjaxParams params = new AjaxParams();
+        params.put("page",pageNum+"");
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.APPLY_I, new
+                AjaxCallBack<ResultInfo<ApplyBean>>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        refreshing=true;
+                    }
 
+                    @Override
+                    public void onSuccess(ResultInfo<ApplyBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                           refreshing=false;
+                        refresh.setRefreshing(refreshing);
+                        if (resultInfo.status.equals("success")) {
+                            if(pageNum==1)
+                                list.clear();
+                            pageNum++;
+                            if(resultInfo.data!=null&&resultInfo.data.data!=null)
+                                list.addAll(resultInfo.data.data);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), resultInfo.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                           refreshing=false;
+                        refresh.setRefreshing(refreshing);
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    /**
+     * 获取我申請的数据
+     */
+    private void getOtherList() {
+        AjaxParams params = new AjaxParams();
+        params.put("page",pageNum+"");
+        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.APPLY_OTHER, new
+                AjaxCallBack<ResultInfo<ApplyBean>>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        refreshing=true;
+                    }
+
+                    @Override
+                    public void onSuccess(ResultInfo<ApplyBean> resultInfo) {
+                        super.onSuccess(resultInfo);
+                           refreshing=false;
+                           refresh.setRefreshing(refreshing);
+                        if (resultInfo.status.equals("success")) {
+                            if(pageNum==1)
+                                list.clear();
+                            pageNum++;
+                            if(resultInfo.data!=null&&resultInfo.data.data!=null)
+                                list.addAll(resultInfo.data.data);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), resultInfo.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, String strMsg) {
+                        super.onFailure(t, strMsg);
+                           refreshing=false;
+                        refresh.setRefreshing(refreshing);
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    /**
+     * 同意申请
+     * @param userBean
+     */
     private void permit(final UserBean userBean) {
         enable = false;
         AjaxParams params = new AjaxParams();
