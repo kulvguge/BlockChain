@@ -21,5 +21,6 @@ public class SenUrlClass {
     public final static String POWER_LIST =  HttpConstant.HTTPHOST +"api/pool/count";
     public final static String POWER_COLLECTION =  HttpConstant.HTTPHOST +"api/pool/collect";
     public final static String TRADE_TURNOVER =  HttpConstant.HTTPHOST +"api/user/integeallist";
-
+    public final static String CONTACTS_DOWN =  HttpConstant.HTTPHOST +"api/phone_list/download";
+    public final static String CONTACTS_UP=  HttpConstant.HTTPHOST +"api/phone_list/download";
 }

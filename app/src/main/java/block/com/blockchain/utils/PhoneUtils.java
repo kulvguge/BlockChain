@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import block.com.blockchain.bean.ContactsBean;
 import block.com.blockchain.bean.UserBean;
 
 /**
@@ -40,6 +39,7 @@ public class PhoneUtils {
                         .SORT_KEY_PRIMARY));
                 UserBean contactsInfo = new UserBean();
                 contactsInfo.setNickname(contactName);
+                contactsInfo.setReal_name(contactName);
                 contactsInfo.setMobile(contactNumber);
                 if (contactName != null)
                     list.add(contactsInfo);

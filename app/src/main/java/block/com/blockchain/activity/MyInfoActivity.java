@@ -1,11 +1,10 @@
 package block.com.blockchain.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -19,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,6 +48,7 @@ import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.FileUtils;
 import block.com.blockchain.utils.PhoneAdapterUtils;
 import block.com.blockchain.utils.SDCardUtils;
+import block.com.blockchain.utils.ScreenUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -83,12 +84,15 @@ public class MyInfoActivity extends BaseActivity {
     private PopupWindow popupWindow;//性别选择弹框
     protected static final int IMAGE_ALBUM = 155;// 相册
     protected static final int IMAGE_TAK = 154; // 拍照
+    protected static final int IMAGE_CUT = 152; // 裁剪
     protected static final int DATE = 153; // 日期
+
     private MotifyUserBean oldUserBean = null;
     private AjaxParams motifyParams;//修改后的请求
     private PopupWindow popupWindowDate;
     private String date = "";
     private String tempDate = "";
+    private String cutPicPath = "";
 
     @Override
     public void init() {
@@ -99,7 +103,7 @@ public class MyInfoActivity extends BaseActivity {
         oldUserBean = (MotifyUserBean) getIntent().getSerializableExtra("user_info");
         if (oldUserBean != null) {
             dataSet(oldUserBean);
-        }else{
+        } else {
             getUserInfo();
         }
         smallImg.setOnClickListener(new View.OnClickListener() {
@@ -344,7 +348,7 @@ public class MyInfoActivity extends BaseActivity {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Uri photoURI = FileProvider.getUriForFile(MyInfoActivity.this, getApplicationContext()
                         .getPackageName
-                                () + ".provider",picFile);
+                                () + ".provider", picFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, IMAGE_TAK);
             } else {
@@ -370,7 +374,14 @@ public class MyInfoActivity extends BaseActivity {
             case IMAGE_ALBUM:
             case IMAGE_TAK:
                 if (resultCode == RESULT_OK) {
-                    upLoadPath = getAbsPath(data);
+                    Uri uri = PhoneAdapterUtils.geturi(data, this);
+                    startPhotoZoom(uri, 999, 998);
+                }
+                break;
+            case IMAGE_CUT:
+                if (resultCode == RESULT_OK) {
+                    Log.i("MyInfoActivity_", upLoadPath);
+                    FileUtils.getPathSize(upLoadPath);
                     oldUserBean.setPic_url(upLoadPath);
                     oldUserBean.setHas_url(true);
                     Glide.with(this).load(oldUserBean.getPic_url()).into(smallImg);
@@ -426,7 +437,6 @@ public class MyInfoActivity extends BaseActivity {
 
         Uri uri = PhoneAdapterUtils.geturi(data, this);
         String[] proj = {MediaStore.Images.Media.DATA};
-
         // 好像是android多媒体数据库的封装接口，具体的看Android文档
         Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
         // 按我个人理解 这个是获得用户选择的图片的索引值
@@ -543,5 +553,25 @@ public class MyInfoActivity extends BaseActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-
+    protected void startPhotoZoom(Uri uri, int width, int height) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // 下面这个crop=true是设置在开启的Int1111ent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", height);
+        intent.putExtra("aspectY", width);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", ScreenUtils.getScreenDispaly(this)[0] * height / width);
+        intent.putExtra("outputY", ScreenUtils.getScreenDispaly(this)[0]);
+        intent.putExtra("scale", true);//黑边
+        intent.putExtra("scaleUpIfNeeded", true);//黑边
+        intent.putExtra("return-data", false);// 是否返回数据
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        upLoadPath = SDCardUtils.getCacheDir(this) + "/" + System.currentTimeMillis() + ".jpg";
+        File file = FileUtils.createFile(upLoadPath);
+        Uri cutPathUri = Uri.fromFile(file);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cutPathUri);  // 指定目标文件
+        startActivityForResult(intent, IMAGE_CUT);
+    }
 }

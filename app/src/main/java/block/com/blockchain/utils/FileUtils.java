@@ -19,10 +19,13 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +33,8 @@ import block.com.blockchain.app.MyApp;
 
 @SuppressLint("NewApi")
 public class FileUtils {
+
+    private final static String TAG = "FileUtils:";
     /**
      * sd卡的根目录
      */
@@ -135,6 +140,38 @@ public class FileUtils {
     }
 
     /**
+     * 将图片存储为文件
+     *
+     * @param bitmap 图片
+     */
+    public static String savePic(Bitmap bitmap, String filename) {
+
+        File f = createFile(cacheDir + pathDiv + filename);
+        Log.e("图片压缩.", "f.path=" + f.getAbsolutePath());
+        try {
+            if (f != null) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                byte[] bitmapdata = bos.toByteArray();
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+            } else {
+                Log.e("图片压缩.", "创建文件路径失败");
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e("图片压缩.", "create file error" + e);
+        }
+        if (f.exists()) {
+            return f.getAbsolutePath();
+        }
+        Log.e("图片压缩.", "压缩图片路径不存在");
+        return null;
+    }
+
+    /**
      * @param context
      * @return
      */
@@ -227,7 +264,7 @@ public class FileUtils {
                 fos.close();
             }
         } catch (IOException e) {
-            Log.e("TAG", "create file error" + e);
+            Log.e(TAG, "create file error" + e);
         }
         if (f.exists()) {
             return f.getAbsolutePath();
@@ -250,7 +287,7 @@ public class FileUtils {
                 fos.close();
             }
         } catch (IOException e) {
-            Log.e("TAG", "create file error" + e);
+            Log.e(TAG, "create file error" + e);
         }
     }
 
@@ -276,7 +313,7 @@ public class FileUtils {
                         Uri uri = Uri.fromFile(f);
                         intent.setData(uri);
                         /*
-						 * MediaStore.Images.Media.insertImage(context.
+                         * MediaStore.Images.Media.insertImage(context.
 						 * getContentResolver(), bmp, fileName, null);
 						 */
                         // // 最后通知图库更新
@@ -284,7 +321,7 @@ public class FileUtils {
                         return true;
                     }
                 } catch (IOException e) {
-                    Log.e("TAG", "create file error" + e);
+                    Log.e(TAG, "create file error" + e);
                     return false;
                 }
             }
@@ -450,5 +487,60 @@ public class FileUtils {
             }
         }
         return picFile;
+    }
+
+    /**
+     * 获取指定文件大小
+     *
+     * @return
+     * @throws Exception
+     */
+    public static long getPathSize(String pathy ) {
+        long size = 0;
+        File file=new File(pathy);
+        try {
+            if (file.exists()) {
+                FileInputStream fis = null;
+                fis = new FileInputStream(file);
+                size = fis.available();
+            } else {
+                file.createNewFile();
+                Log.e(TAG, "获取文件大小不存在!");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Log.e(TAG, "文件大小=" + size);
+            return size;
+        }
+
+    }
+
+    /**
+     * 转换文件大小
+     *
+     * @param fileS
+     * @return
+     */
+    public static String formetFileSize(long fileS) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String fileSizeString = "";
+        String wrongSize = "0B";
+        if (fileS == 0) {
+            return wrongSize;
+        }
+        if (fileS < 1024) {
+            fileSizeString = df.format((double) fileS) + "B";
+        } else if (fileS < 1048576) {
+            fileSizeString = df.format((double) fileS / 1024) + "KB";
+        } else if (fileS < 1073741824) {
+            fileSizeString = df.format((double) fileS / 1048576) + "MB";
+        } else {
+            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
+        }
+        Log.e(TAG, "文件大小=" + fileSizeString);
+        return fileSizeString;
     }
 }
