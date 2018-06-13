@@ -4,7 +4,6 @@ package block.com.blockchain.fragment;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -199,7 +198,7 @@ public class PersonFragment extends BaseFragment {
         score.setText(userBean.getIntegral());
         url = userBean.getPic_url();
         inviteCode = userBean.getInvite_code();
-        Glide.with(this).load(userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
+        Glide.with(this).load(HttpConstant.HTTPHOST+userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
                 .into(mineImg);
     }
 }

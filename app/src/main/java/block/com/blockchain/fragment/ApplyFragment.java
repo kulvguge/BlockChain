@@ -1,8 +1,6 @@
 package block.com.blockchain.fragment;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import block.com.blockchain.R;
-import block.com.blockchain.activity.MessageCenterActivity;
 import block.com.blockchain.adapter.MessageCenterAdapter;
 import block.com.blockchain.bean.ApplyBean;
 import block.com.blockchain.bean.BaseBean;
@@ -46,10 +43,12 @@ public class ApplyFragment extends BaseFragment {
     private List<UserBean> list = new ArrayList<>();
     private int index;
     private boolean refreshing = false;
-    private boolean enable = false;
-    private int pageNum=1;
-    private LinearLayoutManager manager;
+
     private int lastPostion=0;
+    private int pageNum=1;
+    private boolean enable = false;
+    private LinearLayoutManager manager;
+
     
     public ApplyFragment(int index) {
         this.index = index;

@@ -161,7 +161,6 @@ public class FriendFragment extends BaseFragment {
                         super.onSuccess(s);
 
                         if (s.status.equals("success")) {
-                            list.clear();
                             List<UserBean> listTemp = s.data.getData();
                             if (listTemp != null)
                                 listRequest.addAll(listTemp);

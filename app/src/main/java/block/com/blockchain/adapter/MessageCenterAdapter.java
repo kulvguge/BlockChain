@@ -22,6 +22,7 @@ import java.util.List;
 import block.com.blockchain.R;
 import block.com.blockchain.activity.PersonalActivity;
 import block.com.blockchain.bean.UserBean;
+import block.com.blockchain.request.HttpConstant;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -66,7 +67,7 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
             holder.msgSex.setImageResource(R.mipmap.woman);
         }
         holder.msgDate.setText(bean.getUpdate_time());
-        Glide.with(context).load(bean.getPic_url()).apply(options).into(holder.msgIcon);
+        Glide.with(context).load(HttpConstant.HTTPHOST+bean.getPic_url()).apply(options).into(holder.msgIcon);
         if (type == 0) {
             if (bean.getStatus() == 1) {
                 holder.layoutWaitPermit.setVisibility(View.VISIBLE);

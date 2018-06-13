@@ -107,8 +107,10 @@ public class MotifyUserBean extends UserBean {
                 params.put("nick_name", getNickname());
                 changed = true;
             }
-
-            if (getSex() != -1) {
+            if (has_sex) {
+                params.put("sex", getSex() + "");
+                changed = true;
+            } else {
                 params.put("sex", getSex() + "");
             }
             //后台目前没有这个修改功能

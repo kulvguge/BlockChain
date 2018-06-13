@@ -238,7 +238,7 @@ public class MyInfoActivity extends BaseActivity {
         RequestOptions options = new RequestOptions();
         options.placeholder(R.mipmap.default_head);
         options.error(R.mipmap.default_head);
-        Glide.with(this).load(userBean.getPic_url()).apply(options).into(smallImg);
+        Glide.with(this).load(HttpConstant.HTTPHOST+userBean.getPic_url()).apply(options).into(smallImg);
 
         //放在后面是因为在组装数据时候会调用TEXTWater
         personName.setOnEditChangeListener(new MyTextWatcher(personName));
