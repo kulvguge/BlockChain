@@ -75,7 +75,7 @@ public class PicUtils  {
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
         } else {
             Log.i("图片大小信息 原图=", "不需要压缩");
-            return null;
+            return image;
         }
         Log.i("图片大小信息 压缩=", baos.toByteArray().length + "byte");
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中

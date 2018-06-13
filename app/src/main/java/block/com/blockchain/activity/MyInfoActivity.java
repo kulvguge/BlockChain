@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -47,6 +48,7 @@ import block.com.blockchain.request.SenUrlClass;
 import block.com.blockchain.utils.DialogUtil;
 import block.com.blockchain.utils.FileUtils;
 import block.com.blockchain.utils.PhoneAdapterUtils;
+import block.com.blockchain.utils.PicUtils;
 import block.com.blockchain.utils.SDCardUtils;
 import block.com.blockchain.utils.ScreenUtils;
 import butterknife.BindView;
@@ -381,10 +383,20 @@ public class MyInfoActivity extends BaseActivity {
             case IMAGE_CUT:
                 if (resultCode == RESULT_OK) {
                     Log.i("MyInfoActivity_", upLoadPath);
-                    FileUtils.getPathSize(upLoadPath);
+                   Bitmap bitmap= BitmapFactory.decodeFile(upLoadPath);
+                    long size= FileUtils.getPathSize(upLoadPath);
+                    float sale=size/(1024f*1024);
+                    if(sale>1){
+                        Bitmap bitmap1= PicUtils.compressImage(bitmap,1/sale);
+                        upLoadPath= FileUtils.savePic(bitmap1,"blockTemp.jpg");
+                        if(upLoadPath==null){
+                            Toast.makeText(this, "获取图片失败", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     oldUserBean.setPic_url(upLoadPath);
                     oldUserBean.setHas_url(true);
-                    Glide.with(this).load(oldUserBean.getPic_url()).into(smallImg);
+                    Glide.with(this).load(upLoadPath).into(smallImg);
                 }
                 break;
             case DATE:

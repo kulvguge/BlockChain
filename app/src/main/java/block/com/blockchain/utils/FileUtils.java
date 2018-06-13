@@ -151,7 +151,7 @@ public class FileUtils {
         try {
             if (f != null) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                bitmap.compress(CompressFormat.JPEG, 100, bos);
                 byte[] bitmapdata = bos.toByteArray();
                 FileOutputStream fos = new FileOutputStream(f);
                 fos.write(bitmapdata);
@@ -503,6 +503,7 @@ public class FileUtils {
                 FileInputStream fis = null;
                 fis = new FileInputStream(file);
                 size = fis.available();
+                fis.close();
             } else {
                 file.createNewFile();
                 Log.e(TAG, "获取文件大小不存在!");
