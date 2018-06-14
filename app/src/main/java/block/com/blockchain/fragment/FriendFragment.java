@@ -71,6 +71,7 @@ public class FriendFragment extends BaseFragment {
     private int postion = -1;
     private final int CONTACTS = 121;
     private boolean isRequest = false;
+    private boolean isUpLoad = false;
     private List<UserBean> listContacts;
     private List<UserBean> listRequest = new ArrayList<>();
 
@@ -99,6 +100,30 @@ public class FriendFragment extends BaseFragment {
                         intent.setClass(getActivity(), MessageCenterActivity.class);
                         getActivity().startActivity(intent);
 
+                        break;
+                    case R.id.action_upload:
+                        if (isUpLoad)
+                            return false;
+                        DialogUtil.showPromptDialog(getActivity(), null, "是否同步本机联系人", "确定", null, "取消", new
+                                DialogUtil
+                                        .OnMenuClick() {
+
+
+                                    @Override
+                                    public void onLeftMenuClick() {
+                                        uploadContacts();
+                                    }
+
+                                    @Override
+                                    public void onCenterMenuClick() {
+
+                                    }
+
+                                    @Override
+                                    public void onRightMenuClick() {
+
+                                    }
+                                });
                         break;
                 }
                 return false;
@@ -359,28 +384,26 @@ public class FriendFragment extends BaseFragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.has_upload), Toast.LENGTH_SHORT).show();
             return;
         }
+        isUpLoad = true;
         AjaxParams params = new AjaxParams();
         String phone = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
         params.put("mobile", phone);
         params.put("mobile_list", JsonUtils.getJSONArrayByList(listContacts).toString());
-        HttpSendClass.getInstance().getWithToken(params, SenUrlClass.CONTACTS_UP, new
+        HttpSendClass.getInstance().postWithToken(params, SenUrlClass.CONTACTS_UP, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
 
                     @Override
                     public void onSuccess(ResultInfo<UserBean> s) {
                         super.onSuccess(s);
-                        isRequest = false;
-                        if (s.status.equals("success")) {
-                            Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
-                        }
+                        isUpLoad = false;
+                        Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
-                        isRequest = false;
+                        isUpLoad = false;
                         Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });

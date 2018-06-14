@@ -15,5 +15,11 @@
         android:orderInCategory="100"
         android:title=""
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_upload"
+        android:icon="@mipmap/upload"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="ifRoom"/>
 </menu>
 

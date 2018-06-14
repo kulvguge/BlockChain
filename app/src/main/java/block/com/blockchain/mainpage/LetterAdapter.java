@@ -49,8 +49,6 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
         } else {
             holder.tvName.setText(info.getNickname());
         }
-
-
         int section = 0;
         if (mIndexer != null) {
             section = mIndexer.getSectionForPosition(position);
