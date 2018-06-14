@@ -154,6 +154,7 @@ public class FileUtils {
                 bitmap.compress(CompressFormat.JPEG, 100, bos);
                 byte[] bitmapdata = bos.toByteArray();
                 FileOutputStream fos = new FileOutputStream(f);
+                Log.e("图片压缩.", "压缩后图片大小" + bitmapdata.length);
                 fos.write(bitmapdata);
                 fos.flush();
                 fos.close();
@@ -168,6 +169,34 @@ public class FileUtils {
             return f.getAbsolutePath();
         }
         Log.e("图片压缩.", "压缩图片路径不存在");
+        return null;
+    }
+
+    /**
+     * 保存文件
+     */
+    public static String savePic(byte[] bitmapdata, String filename) {
+
+        File f = createFile(cacheDir + pathDiv + filename);
+        Log.e(TAG, "f.path=" + f.getAbsolutePath());
+        try {
+            if (f != null) {
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+            } else {
+                Log.e(TAG, "创建文件路径失败");
+                return null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "create file error" + e);
+            return null;
+        }
+        if (f.exists()) {
+            return f.getAbsolutePath();
+        }
+        Log.e(TAG, "压缩图片路径不存在");
         return null;
     }
 
@@ -495,9 +524,9 @@ public class FileUtils {
      * @return
      * @throws Exception
      */
-    public static long getPathSize(String pathy ) {
+    public static long getPathSize(String pathy) {
         long size = 0;
-        File file=new File(pathy);
+        File file = new File(pathy);
         try {
             if (file.exists()) {
                 FileInputStream fis = null;
@@ -510,9 +539,12 @@ public class FileUtils {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Log.e(TAG, "Exception=" + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(TAG, "Exception=" + e.toString());
         } finally {
+
             Log.e(TAG, "文件大小=" + size);
             return size;
         }

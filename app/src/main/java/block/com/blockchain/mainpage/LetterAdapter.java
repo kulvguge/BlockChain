@@ -43,8 +43,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean info = list.get(position);
         holder.tvName.setText(info.getNickname());
-        Log.i("letter_value=", info.getNickname());
-        Log.i("letter__tag=", info.nameTag);
+      
 
         int section = 0;
         if (mIndexer != null) {

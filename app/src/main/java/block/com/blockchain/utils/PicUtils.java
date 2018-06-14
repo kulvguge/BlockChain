@@ -13,7 +13,7 @@ import java.io.IOException;
  * Created by Administrator on 2018/6/12.
  */
 
-public class PicUtils  {
+public class PicUtils {
     public static String getQualityPic(String srcPath, Context context) {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
 //开始读入图片，此时把options.inJustDecodeBounds 设回true了
@@ -54,6 +54,7 @@ public class PicUtils  {
             return srcPath;
         return srcp;
     }
+
     /**
      * 压缩图片小于size M
      *
@@ -79,7 +80,7 @@ public class PicUtils  {
         }
         Log.i("图片大小信息 压缩=", baos.toByteArray().length + "byte");
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm);// 把ByteArrayInputStream数据生成图片
         if (baos != null) {
             try {
                 baos.close();
@@ -93,4 +94,32 @@ public class PicUtils  {
         return bitmap;
     }
 
+    /**
+     * 压缩图片小于size M
+     *
+     * @param image
+     * @return
+     */
+    public static String compressAndSave(Bitmap image, float size) {
+        if (image == null) {
+            return null;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int bytes = baos.toByteArray().length / 1024;
+        Log.i("图片大小信息 原图=", baos.toByteArray().length + "byte");
+        int KBsize = (int) (size * 1024);
+        int options = KBsize * 100 / bytes; // 运算出需要的压缩比例。
+        if (options < 100) { // 说明许需要压缩
+            baos.reset();
+            Log.i("图片大小信息 option=", options + "");
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+        } else {
+            Log.i("图片大小信息 原图=", "不需要压缩");
+            return null;
+        }
+        Log.i("图片大小信息 压缩=", baos.toByteArray().length + "byte");
+        String path = FileUtils.savePic(baos.toByteArray(), System.currentTimeMillis() + "blockTemp.jpg");
+        return path;
+    }
 }

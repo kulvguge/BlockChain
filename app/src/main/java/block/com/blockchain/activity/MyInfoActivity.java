@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -95,6 +94,7 @@ public class MyInfoActivity extends BaseActivity {
     private String date = "";
     private String tempDate = "";
     private String cutPicPath = "";
+    private Uri photoURI = null;
 
     @Override
     public void init() {
@@ -240,7 +240,7 @@ public class MyInfoActivity extends BaseActivity {
         RequestOptions options = new RequestOptions();
         options.placeholder(R.mipmap.default_head);
         options.error(R.mipmap.default_head);
-        Glide.with(this).load(HttpConstant.HTTPHOST+userBean.getPic_url()).apply(options).into(smallImg);
+        Glide.with(this).load(HttpConstant.HTTPHOST + userBean.getPic_url()).apply(options).into(smallImg);
 
         //放在后面是因为在组装数据时候会调用TEXTWater
         personName.setOnEditChangeListener(new MyTextWatcher(personName));
@@ -294,7 +294,7 @@ public class MyInfoActivity extends BaseActivity {
                                     Manifest.permission.CAMERA)) {
                         // 启动拍照,并保存到临时文件
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        Uri photoURI = FileProvider.getUriForFile(MyInfoActivity.this, getApplicationContext()
+                        photoURI = FileProvider.getUriForFile(MyInfoActivity.this, getApplicationContext()
                                 .getPackageName
                                         () + ".provider", picFile);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -374,27 +374,29 @@ public class MyInfoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case IMAGE_ALBUM:
-            case IMAGE_TAK:
                 if (resultCode == RESULT_OK) {
                     Uri uri = PhoneAdapterUtils.geturi(data, this);
                     startPhotoZoom(uri, 999, 998);
                 }
                 break;
+            case IMAGE_TAK:
+                if (resultCode == RESULT_OK) {
+                    startPhotoZoom(photoURI, 999, 998);
+                }
+                break;
             case IMAGE_CUT:
                 if (resultCode == RESULT_OK) {
-                    Log.i("MyInfoActivity_", upLoadPath);
-                   Bitmap bitmap= BitmapFactory.decodeFile(upLoadPath);
-                    long size= FileUtils.getPathSize(upLoadPath);
-                    float sale=size/(1024f*1024);
-                    if(sale>1){
-                        Bitmap bitmap1= PicUtils.compressImage(bitmap,1/sale);
-                        upLoadPath= FileUtils.savePic(bitmap1,"blockTemp.jpg");
-                        if(upLoadPath==null){
-                            Toast.makeText(this, "获取图片失败", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    Bitmap bitmap = BitmapFactory.decodeFile(upLoadPath);
+                    String path = null;
+                    if (bitmap != null) {
+                        path = PicUtils.compressAndSave(bitmap, 1f);
+                        bitmap.recycle();
                     }
-                    oldUserBean.setPic_url(upLoadPath);
+                    if (path != null) {
+                        oldUserBean.setPic_url(path);
+                    } else {
+                        oldUserBean.setPic_url(upLoadPath);
+                    }
                     oldUserBean.setHas_url(true);
                     Glide.with(this).load(upLoadPath).into(smallImg);
                 }
@@ -457,7 +459,9 @@ public class MyInfoActivity extends BaseActivity {
         cursor.moveToFirst();
         // 最后根据索引值获取图片路径
         String path = cursor.getString(column_index);
-
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        if (bitmap != null)
+            Toast.makeText(this, "bitmap!=null", Toast.LENGTH_SHORT).show();
         return path;
     }
 
@@ -566,7 +570,11 @@ public class MyInfoActivity extends BaseActivity {
     }
 
     protected void startPhotoZoom(Uri uri, int width, int height) {
+
         Intent intent = new Intent("com.android.camera.action.CROP");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+        }
         intent.setDataAndType(uri, "image/*");
         // 下面这个crop=true是设置在开启的Int1111ent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");

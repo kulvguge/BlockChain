@@ -393,6 +393,7 @@ public class FriendFragment extends BaseFragment {
         if (requestCode == CONTACTS && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             listContacts = PhoneUtils.getContactsInfo(getActivity());
             list.addAll(listContacts);
+            getFriendData();
             adapter.notifyDataSetChanged();
             requestFriendInfo();
         } else if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
