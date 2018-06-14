@@ -32,7 +32,7 @@ public class JsonUtils {
                 if (TextUtils.isEmpty(o.getReal_name()) || TextUtils.isEmpty(o.getMobile()))
                     continue;
                 JSONObject ob = new JSONObject();
-                ob.put("name", o.getReal_name());
+                ob.put("nickname", o.getReal_name());
                 ob.put("mobile", o.getMobile());
                 jsonArray.put(ob);
             }
