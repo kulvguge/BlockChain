@@ -396,7 +396,7 @@ public class FriendFragment extends BaseFragment {
             getFriendData();
             adapter.notifyDataSetChanged();
             requestFriendInfo();
-        } else if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+        } else if (requestCode == CONTACTS && grantResults[0] == PackageManager.PERMISSION_DENIED) {
             requestFriendInfo();
         }
     }

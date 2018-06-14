@@ -2,6 +2,7 @@ package block.com.blockchain.mainpage;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,16 +43,21 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     @Override
     public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean info = list.get(position);
-        holder.tvName.setText(info.getNickname());
-      
+        if (TextUtils.isEmpty(info.getNickname())) {
+            if (!TextUtils.isEmpty(info.getReal_name()))
+                holder.tvName.setText(info.getNickname());
+        } else {
+            holder.tvName.setText(info.getNickname());
+        }
+
 
         int section = 0;
         if (mIndexer != null) {
             section = mIndexer.getSectionForPosition(position);
         }
-        Log.i("letter__tag_section=",section+"");
+        Log.i("letter__tag_section=", section + "");
         if (mIndexer.getPositionForSection(section) == position) {
-            Log.i("letter__tag_position=",position+"");
+            Log.i("letter__tag_position=", position + "");
             holder.tvTag.setVisibility(View.VISIBLE);
             holder.tvTag.setText(info.nameTag);
         } else {
