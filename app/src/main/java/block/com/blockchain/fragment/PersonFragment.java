@@ -71,6 +71,8 @@ public class PersonFragment extends BaseFragment {
     private String url = "";
     private String inviteCode = "-1";
     private MotifyUserBean userBean;
+    private boolean success = false;
+
     @Override
     public int getResView() {
         return R.layout.fragment_person;
@@ -79,6 +81,12 @@ public class PersonFragment extends BaseFragment {
     @Override
     public void onRefresh() {
         getUserInfo();
+    }
+
+    @Override
+    public void onNetCanUse() {
+        if (!success)
+            getUserInfo();
     }
 
     @Override
@@ -142,7 +150,7 @@ public class PersonFragment extends BaseFragment {
             case R.id.layout_work:
             case R.id.mine_to_person:
                 Intent intent = new Intent(getActivity(), MyInfoActivity.class);
-                intent.putExtra("user_info",userBean);
+                intent.putExtra("user_info", userBean);
                 if (Build.VERSION.SDK_INT >= 21) {
                     Pair pair = new Pair<View, String>(mineImg, "btn1");
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pair);
@@ -174,7 +182,8 @@ public class PersonFragment extends BaseFragment {
                     public void onSuccess(ResultInfo<MotifyUserBean> resultInfo) {
                         super.onSuccess(resultInfo);
                         if (resultInfo.status.equals("success")) {
-                            userBean=resultInfo.data;
+                            success = true;
+                            userBean = resultInfo.data;
                             dataSet(resultInfo.data);
                         } else {
                             Toast.makeText(getActivity(), resultInfo.message, Toast.LENGTH_SHORT).show();
@@ -185,7 +194,7 @@ public class PersonFragment extends BaseFragment {
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
-                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                        //            Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -198,7 +207,8 @@ public class PersonFragment extends BaseFragment {
         score.setText(userBean.getIntegral());
         url = userBean.getPic_url();
         inviteCode = userBean.getInvite_code();
-        Glide.with(this).load(HttpConstant.HTTPHOST+userBean.getPic_url()).apply(new RequestOptions().placeholder(R.mipmap.default_head))
+        Glide.with(this).load(HttpConstant.HTTPHOST + userBean.getPic_url()).apply(new RequestOptions().placeholder(R
+                .mipmap.default_head))
                 .into(mineImg);
     }
 }

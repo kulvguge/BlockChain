@@ -134,6 +134,12 @@ public class ApplyFragment extends BaseFragment {
             }
         });
     }
+
+    @Override
+    public void onNetCanUse() {
+
+    }
+
     /**
      * 获取我申請的数据
      */

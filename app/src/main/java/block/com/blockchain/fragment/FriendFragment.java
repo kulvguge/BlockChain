@@ -59,7 +59,6 @@ public class FriendFragment extends BaseFragment {
     BladeView bladeView;
     @BindView(R.id.parent_layout)
     LinearLayout parent_layout;
-
     LetterAdapter adapter;
     private List<UserBean> list = new ArrayList<>();
     private int[] counts;
@@ -74,6 +73,7 @@ public class FriendFragment extends BaseFragment {
     private boolean isUpLoad = false;
     private List<UserBean> listContacts;
     private List<UserBean> listRequest = new ArrayList<>();
+    private boolean success = false;
 
     @Override
     public int getResView() {
@@ -84,6 +84,7 @@ public class FriendFragment extends BaseFragment {
     public void init() {
         parent_layout.setPadding(0, HttpConstant.PhoneInfo.STATUS_HEIGHT, 0, 0);
         toolbar.inflateMenu(R.menu.friend_menu);
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -177,6 +178,12 @@ public class FriendFragment extends BaseFragment {
         checkPermission();
     }
 
+    @Override
+    public void onNetCanUse() {
+        if (!success)
+            requestFriendInfo();
+    }
+
     public void requestFriendInfo() {
         AjaxParams params = new AjaxParams();
         HttpSendClass.getInstance().getWithToken(params, SenUrlClass.FRIEND_LIST, new
@@ -184,8 +191,8 @@ public class FriendFragment extends BaseFragment {
                     @Override
                     public void onSuccess(ResultInfo<FriendData> s) {
                         super.onSuccess(s);
-
                         if (s.status.equals("success")) {
+                            success = true;
                             List<UserBean> listTemp = s.data.getData();
                             if (listTemp != null)
                                 listRequest.addAll(listTemp);
@@ -388,7 +395,27 @@ public class FriendFragment extends BaseFragment {
         AjaxParams params = new AjaxParams();
         String phone = (String) SPUtils.getFromApp(HttpConstant.UserInfo.USER_PHONE, "");
         params.put("mobile", phone);
-        params.put("mobile_list", JsonUtils.getJSONArrayByList(listContacts).toString());
+//        JSONArray array = new JSONArray();
+//        JSONObject ob = new JSONObject();
+//        try {
+//            ob.put("nickname", "me");
+//            ob.put("mobile", "18523170409");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        JSONObject ob1 = new JSONObject();
+//        try {
+//            ob1.put("nickname", "me1");
+//            ob1.put("mobile", "18523170411");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        array.put(ob1);
+//        array.put(ob);
+//        params.put("mobile_list", array.toString());
+
+         params.put("mobile_list", JsonUtils.getJSONArrayByList(listContacts).toString());
         HttpSendClass.getInstance().postWithToken(params, SenUrlClass.CONTACTS_UP, new
                 AjaxCallBack<ResultInfo<UserBean>>() {
 
@@ -423,4 +450,6 @@ public class FriendFragment extends BaseFragment {
             requestFriendInfo();
         }
     }
+
+
 }

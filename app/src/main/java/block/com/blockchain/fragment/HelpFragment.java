@@ -49,6 +49,11 @@ public class HelpFragment extends BaseFragment {
         mWebView.loadUrl(URL);
     }
 
+    @Override
+    public void onNetCanUse() {
+
+    }
+
     final static class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

@@ -44,6 +44,7 @@ public class LetterAdapter extends RecyclerView.Adapter<LetterAdapter.MyHolder> 
     public void onBindViewHolder(final MyHolder holder, final int position) {
         final UserBean info = list.get(position);
         if (TextUtils.isEmpty(info.getNickname())) {
+            holder.tvName.setText("");
             if (!TextUtils.isEmpty(info.getReal_name()))
                 holder.tvName.setText(info.getNickname());
         } else {

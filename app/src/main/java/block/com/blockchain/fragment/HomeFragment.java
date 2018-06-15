@@ -42,6 +42,7 @@ public class HomeFragment extends BaseFragment {
     List<PowerBean> list = new ArrayList<>();
     List<PowerBean> listTemp = new ArrayList<>();
     private int maxSize = 8;
+    private static boolean success = false;
 
     @Override
     public int getResView() {
@@ -130,6 +131,7 @@ public class HomeFragment extends BaseFragment {
                     public void onSuccess(ResultInfo<List<PowerBean>> s) {
                         super.onSuccess(s);
                         if (s.status.equals("success")) {
+                            success = true;
                             List<PowerBean> powerBeanList = s.data;
                             if (powerBeanList != null) {
                                 list.addAll(powerBeanList);
@@ -137,6 +139,7 @@ public class HomeFragment extends BaseFragment {
                             }
 
                         } else {
+                            success = false;
                             Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -144,6 +147,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onFailure(Throwable t, String strMsg) {
                         super.onFailure(t, strMsg);
+                        success = false;
                         Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
 
                     }
@@ -210,4 +214,10 @@ public class HomeFragment extends BaseFragment {
         objectAnimator.start();
     }
 
+    @Override
+    public void onNetCanUse() {
+        if (!success) {
+            getPowerList();
+        }
+    }
 }

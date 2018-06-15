@@ -389,7 +389,7 @@ public class MyInfoActivity extends BaseActivity {
                     Bitmap bitmap = BitmapFactory.decodeFile(upLoadPath);
                     String path = null;
                     if (bitmap != null) {
-                        path = PicUtils.compressAndSave(bitmap, 1f);
+                        path = PicUtils.compressAndSave(bitmap, 0.8f);
                         bitmap.recycle();
                     }
                     if (path != null) {

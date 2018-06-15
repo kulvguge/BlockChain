@@ -2,16 +2,19 @@ package block.com.blockchain.activity;
 
 
 import android.content.Intent;
-
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import block.com.blockchain.R;
+import block.com.blockchain.app.NetBroadCastReceiver;
 import block.com.blockchain.fragment.BaseFragment;
 import block.com.blockchain.fragment.FriendFragment;
 import block.com.blockchain.fragment.HelpFragment;
@@ -33,6 +36,7 @@ public class MainActivity extends BaseActivity {
     List<BaseFragment> list = new ArrayList();
     public static final int SEARCH = 1;
     public static final int USER_INFO = 2;
+    private NetBroadCastReceiver netBroadCastReceiver = new NetBroadCastReceiver();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -61,6 +65,9 @@ public class MainActivity extends BaseActivity {
         noStatusBar();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netBroadCastReceiver, intentFilter);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomSheetViewHelper.disableShiftMode(navigation);
         BottomSheetViewHelper.setColor(this, navigation);
@@ -89,6 +96,7 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,5 +111,13 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         list.get(2).onRefresh();
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netBroadCastReceiver);
     }
 }
