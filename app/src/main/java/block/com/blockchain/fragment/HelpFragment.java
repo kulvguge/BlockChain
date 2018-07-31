@@ -26,7 +26,7 @@ public class HelpFragment extends BaseFragment {
     @BindView(R.id.parent_layout)
     LinearLayout parentLayout;
 
-    public static final String URL = "http://www.baidu.com";
+    public static final String URL = "file:///android_asset/userNotice.html";
 
     @Override
     public int getResView() {
